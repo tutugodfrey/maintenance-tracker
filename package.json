@@ -1,0 +1,23 @@
+{
+  "name": "maintenance-tracker",
+  "version": "1.0.0",
+  "description": "Application for making maintenance/ repair request and tracking the progress on such request",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tutugodfrey/maintenance-tracker.git"
+  },
+  "keywords": [
+    "nodejs",
+    "javasrcript"
+  ],
+  "author": "Tutu Godfrey",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tutugodfrey/maintenance-tracker/issues"
+  },
+  "homepage": "https://github.com/tutugodfrey/maintenance-tracker#readme"
+}

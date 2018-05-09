@@ -5,6 +5,13 @@ body {
   margin:0px;
 }
 
+.bg-primary {
+
+}
+.bg-secondary {
+  background-color:#ffffff;
+}
+
 .container {
   width:100%;
 }
@@ -23,13 +30,25 @@ button {
   border-style: none;
   font-size:20px;
   padding:6px 12px;
+  margin:3px;
   color:#ffffff;
   border-radius:2px;
+  margin-top:20px;
+}
+button.btn-large {
+  padding:6px 55px;
 }
 
 input {
   height:30px;
   border-style:none;
+  padding:6px;
+  border-radius:2px;
+  margin-bottom:15px;
+}
+input.bg-outline {
+  height:30px;
+  border:1px solid #7dcc46;
   padding:6px;
   border-radius:2px;
 }
@@ -60,7 +79,7 @@ input {
   font-size:60px;
 }
 
-#signin-button {
+#signin-button, #signup-button {
   background-color:#7dcc46;
 }
 
@@ -126,7 +145,7 @@ right:100px;
 }
 
 /* styles link elements */
-.signup-link {
+.signup-link, #signin-link {
   text-decoration:none;
   color:#7dcc46;
   border:1px solid #7dcc46;
@@ -183,4 +202,33 @@ right:100px;
 #manage-request-list li {
 padding-left:10px;
 padding-top:12px;
+}
+
+
+/* style for forms */
+.required {
+  color:red
+}
+
+form > button.btn-center {
+  position:relative;
+  left:15%;
+  
+}
+
+/* style signup page and form  */
+#singnup-head {
+  height:50vh;
+  background-color:#7dcc46;
+}
+#signiup-form-container {
+  width:25%;
+  position:relative;
+  left:40%;
+  top:-150px;
+  background-color:#ffffff;
+  border:2px solid #7dcc46;
+  border-radius:5px;
+  padding:30px 15px;
+  margin:40px 10px;
 }

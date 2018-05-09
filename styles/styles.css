@@ -213,7 +213,14 @@ padding-top:12px;
 form > button.btn-center {
   position:relative;
   left:15%;
-  
+}
+
+.form-title {
+  position:relative;
+  left:20%;
+}
+.form-label {
+  margin:3px;
 }
 
 /* style signup page and form  */

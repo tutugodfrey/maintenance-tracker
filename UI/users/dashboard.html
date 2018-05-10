@@ -8,7 +8,7 @@
   </head>
   <body>
     <div id = "body-div" class = "container bg-secondary">
-      <div id="user-dashboard" class="page-header container">
+      <div id="user-dashboard" class="page-header container shadow-bottom">
         <div id="top-nav-layer" class="">
           <ul>
             <li>
@@ -42,7 +42,7 @@
       </div>
       <div id="content-area" class="container">
         <div id="request-repair" class="tab-item">
-          <div id="request-form-container" class="form-container">
+          <div id="request-form-container" class="form-container shadow">
             <form action="" class="form-block">
               <h1 class="form-title">Request</h1>
               <label for="problem-type" class="form-label">Problem Type</label><br/>
@@ -66,24 +66,96 @@
         </div>
         <div id="view-requests" class="tab-item">  
           <div id="request1" class="requests">
-            <dl>
-              <dt>Issue Date:</dt>
-              <dd>11-05-2018</dd>
-              <dt>Problem Caterogy:</dt>
-              <dd>Electrical</dd>
-              <dt>Description:</dt>
-              <dd>Wall Socket get burn and need replacement</dd>
-              <dt>Urgency:</dt>
-              <dd>urgent</dd>
-              <dt>Status:</dt>
-              <dd>Approved</dd>
-            </dl>
-            <form action="" class="form-inline">
-              <input type="hidden" class="form-control" id = "user-id" value="3"  >
-              <input type="hidden" class="form-control" id = "request-id" value="1"  >
-              <button type="reset" id="reset-request" class="submit-button bg-outline btn-large">edit Request</button>
-              <button type="reset" id="reset-request" class="submit-button bg-outline btn-large">Cancel Request</button>
-            </form>
+            <div class="request-head"></div>
+            <div class="request-content">
+              <dl class="request-details">
+                <dt>Issue Date</dt>
+                <dd>11-05-2018</dd>
+                <dt>Problem Caterogy</dt>
+                <dd>Electrical</dd>
+                <dt>Description</dt>
+                <dd>Wall Socket get burn and need replacement</dd>
+                <dt>Urgency</dt>
+                <dd>urgent</dd>
+                <dt>Status</dt>
+                <dd>Approved</dd>
+              </dl>
+              <form action="" class="form-inline">
+                <input type="hidden" class="form-control" id = "user-id" value="3"  >
+                <input type="hidden" class="form-control" id = "request-id" value="1"  >
+                <button type="reset" id="reset-request" class="submit-button bg-outline btn-large">Edit Request</button>
+                <button type="reset" id="reset-request" class="submit-button bg-outline btn-large">Cancel Request</button>
+              </form>
+            </div>
+          </div>
+          <div id="request1" class="requests">
+            <div class="request-head"></div>
+            <div class="request-content">
+              <dl class="request-details">
+                <dt>Issue Date</dt>
+                <dd>11-05-2018</dd>
+                <dt>Problem Caterogy</dt>
+                <dd>Electrical</dd>
+                <dt>Description</dt>
+                <dd>Wall Socket get burn and need replacement</dd>
+                <dt>Urgency</dt>
+                <dd>urgent</dd>
+                <dt>Status</dt>
+                <dd>Approved</dd>
+              </dl>
+              <form action="" class="form-inline">
+                <input type="hidden" class="form-control" id = "user-id" value="3"  >
+                <input type="hidden" class="form-control" id = "request-id" value="1"  >
+                <button type="reset" id="reset-request" class="submit-button bg-outline btn-large">Edit Request</button>
+                <button type="reset" id="reset-request" class="submit-button bg-outline btn-large">Cancel Request</button>
+              </form>
+            </div>
+          </div>
+          <div id="request1" class="requests">
+            <div class="request-head"></div>
+            <div class="request-content">
+              <dl class="request-details">
+                <dt>Issue Date</dt>
+                <dd>11-05-2018</dd>
+                <dt>Problem Caterogy</dt>
+                <dd>Electrical</dd>
+                <dt>Description</dt>
+                <dd>Wall Socket get burn and need replacement</dd>
+                <dt>Urgency</dt>
+                <dd>urgent</dd>
+                <dt>Status</dt>
+                <dd>Resolved</dd>
+              </dl>
+              <form action="" class="form-inline">
+                <input type="hidden" class="form-control" id = "user-id" value="3"  >
+                <input type="hidden" class="form-control" id = "request-id" value="1"  >
+                <button type="reset" id="reset-request" class="submit-button bg-outline btn-large">Edit Request</button>
+                <button type="reset" id="reset-request" class="submit-button bg-outline btn-large">Cancel Request</button>
+              </form>
+            </div>
+          </div>
+          <div id="request1" class="requests">
+            <div class="request-head"></div>
+            <div class="request-content">
+              <dl class="request-details">
+                <dt>Issue Date</dt>
+                <dd>11-05-2018</dd>
+                <dt>Problem Caterogy</dt>
+                <dd>Electrical</dd>
+                <dt>Description</dt>
+                <dd>Wall Socket get burn and need replacement</dd>
+                <dt>Urgency</dt>
+                <dd>urgent</dd>
+                <dt>Status</dt>
+                <dd>Rejected</dd>
+              </dl>
+              <form action="" class="form-inline">
+                <input type="hidden" class="form-control" id = "user-id" value="3"  >
+                <input type="hidden" class="form-control" id = "request-id" value="1"  >
+                <button type="reset" id="reset-request" class="submit-button bg-outline btn-large">Edit Request</button>
+                <button type="reset" id="reset-request" class="submit-button bg-outline btn-large">Cancel Request</button>
+              </form>
+            </div>
           </div>
         </div>
       </div>

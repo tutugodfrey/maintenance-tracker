@@ -69,7 +69,22 @@ input.bg-outline-lg, button.bg-outline-lg, select.bg-outline-lg {
   padding:6px 30px;
   border-radius:2px;
 }
-
+.bg-outline-white {
+  height:30px;
+  border:1px solid #ffffff;
+  color:#ffffff;
+  background-color:#7dcc46;
+  padding:2px 10px;
+  border-radius:2px;
+}
+.bg-outline-lg-white {
+  height:30px;
+  border:1px solid #ffffff;
+  color:#ffffff;
+  background-color:#7dcc46;
+  padding:6px 30px;
+  border-radius:2px;
+}
 textarea.bg-outline {
   border:1px solid #7dcc46;
   padding:6px;
@@ -80,8 +95,8 @@ textarea.bg-outline {
   text-decoration:none;
   color:#7dcc46;
   background-color:#ffffff;
-
 }
+
 #index-head {
   background:url("./../images/background2.jpeg");
   background-repeat:no-repeat;
@@ -109,7 +124,7 @@ textarea.bg-outline {
   font-size:60px;
 }
 
-#signin-button, #signup-button, #request-button {
+#signin-button, #signup-button, #request-button  {
   background-color:#7dcc46;
 }
 
@@ -338,6 +353,21 @@ form > button.btn-center {
   top:-15px;
 }
 
+.admin#bottom-nav-layer > div > ul {
+  list-style:none;
+  position:relative;
+  width:70%;
+  top:-15px;
+  left:-10%;
+}
+
+#search-form-container {
+  position:relative;
+  top:-90px;
+  left:73%;
+}
+
+
 #bottom-nav-layer > div > ul > li{
   display:inline-block;
   padding:5px 10px;
@@ -421,6 +451,12 @@ form > button.btn-center {
   position:relative;
   top:200px;
   margin:50px 10px;
+}
+
+/* admin */
+#search-button {
+  position:relative;
+  top:3px;
 }
 .shadow {
   box-shadow: 4px 7px 0 0 rgba(0, 0, 0, 0.3);

@@ -44,18 +44,25 @@ button.btn-large {
   padding:6px 55px;
 }
 
-input {
+input, select {
   height:30px;
   border-style:none;
   padding:6px;
   border-radius:2px;
   margin-bottom:15px;
 }
-input.bg-outline {
+input.bg-outline, button.bg-outline, select.bg-outline {
   height:30px;
   border:1px solid #7dcc46;
   padding:6px;
   border-radius:2px;
+}
+
+.signup-link, #signin-link, #reset-request {
+  text-decoration:none;
+  color:#7dcc46;
+  background-color:#ffffff;
+
 }
 #index-head {
   background:url("./../images/background2.jpeg");
@@ -84,7 +91,7 @@ input.bg-outline {
   font-size:60px;
 }
 
-#signin-button, #signup-button {
+#signin-button, #signup-button, #request-button {
   background-color:#7dcc46;
 }
 
@@ -159,7 +166,6 @@ right:100px;
   height:60px;
   padding:6px 70px;
   font-size:20px;
-  
 }
 
 #big-signup-btn {
@@ -233,7 +239,7 @@ form > button.btn-center {
   height:50vh;
   background-color:#7dcc46;
 }
-#signiup-form-container {
+.form-container {
   width:25%;
   position:relative;
   left:40%;
@@ -311,5 +317,12 @@ form > button.btn-center {
   text-align:center;
   color:#ffffff;
   font-size:16px;
-  
+}
+
+#contain-area {
+  padding-bottom:50px;
+}
+#request-form-container {
+  position:relative;
+  top:30px;
 }

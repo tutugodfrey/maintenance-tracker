@@ -392,7 +392,7 @@ form > button.btn-center {
   top:30px;
 }
 
-#view-requests, #view-approved-requests {
+#view-requests, #view-approved-requests, #view-resolved-requests {
   width:80%;
   background-color:#7dcc46;
   position:relative;

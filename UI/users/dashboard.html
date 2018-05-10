@@ -64,11 +64,25 @@
             </form>
           </div>
         </div>
-        <div id="view-requests" class="tab-item">
-          
+        <div id="view-requests" class="tab-item">  
           <div id="request1" class="requests">
-            <form action="" class="form-block">
-              <h1 class="form-title"></h1>
+            <dl>
+              <dt>Issue Date:</dt>
+              <dd>11-05-2018</dd>
+              <dt>Problem Caterogy:</dt>
+              <dd>Electrical</dd>
+              <dt>Description:</dt>
+              <dd>Wall Socket get burn and need replacement</dd>
+              <dt>Urgency:</dt>
+              <dd>urgent</dd>
+              <dt>Status:</dt>
+              <dd>Approved</dd>
+            </dl>
+            <form action="" class="form-inline">
+              <input type="hidden" class="form-control" id = "user-id" value="3"  >
+              <input type="hidden" class="form-control" id = "request-id" value="1"  >
+              <button type="reset" id="reset-request" class="submit-button bg-outline btn-large">edit Request</button>
+              <button type="reset" id="reset-request" class="submit-button bg-outline btn-large">Cancel Request</button>
             </form>
           </div>
         </div>

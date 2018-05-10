@@ -91,7 +91,7 @@ textarea.bg-outline {
   border-radius:2px;
 }
 
-.signup-link, #signin-link, #reset-request, #contact-button {
+.signup-link, #signin-link, #reset-request, #contact-button, #approved-request {
   text-decoration:none;
   color:#7dcc46;
   background-color:#ffffff;
@@ -392,7 +392,7 @@ form > button.btn-center {
   top:30px;
 }
 
-#view-requests {
+#view-requests, #view-approved-requests {
   width:80%;
   background-color:#7dcc46;
   position:relative;

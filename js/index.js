@@ -43,15 +43,37 @@ domNotifier();
   function showNavigation(toggleBtn) {
     const verticalNav = document.getElementById("vertical-nav-bar");
     const classValue = verticalNav.getAttribute("class");
-    alert(classValue)
     if(classValue === "hidden") {
       changeAttribut(verticalNav, "class", "show-item")
     } else if(classValue === "show-item") {
       changeAttribut(verticalNav, "class", "hidden")
     }
-    
   }
+  // get the id of the default tab view
+  let lastElementClicked = "";
+  function tabNavigation(elem) {
+    const anchorPos = elem.href.indexOf("#");
+    const href = elem.href.substring(anchorPos + 1);
+    
+    const tabSection = document.getElementById(href);
+    const classValue = tabSection.getAttribute("class");
+    if(!lastElementClicked) {
+      changeAttribut(tabSection, "class", "tab-item show-item");
+    } else if(href !== lastElementClicked && lastElementClicked) {
+      if(classValue === "tab-item hidden") {
+        changeAttribut(tabSection, "class", "tab-item show-item");
+      } 
+      const oldTabSection = document.getElementById(lastElementClicked);
+      changeAttribut(oldTabSection, "class", "tab-item hidden");
+    } else {
+      if(classValue === "tab-item show-item") {
+        changeAttribut(tabSection, "class", "tab-item show-item");
+      }
 
+    }
+
+    lastElementClicked = href;
+  }
      
 
 
@@ -63,5 +85,11 @@ function domNotifier() {
       newEvent(toggleNavBtn, 'click', showNavigation, toggleNavBtn);
   }
 
+  if(document.getElementsByClassName('nav-link')) {
+    const navItems = document.getElementsByClassName('nav-link');
+    for(let size = 0; size < navItems.length; size++) {
+      newEvent(navItems[size], 'click', tabNavigation, navItems[size]);
+    }  
+  }
 }
 

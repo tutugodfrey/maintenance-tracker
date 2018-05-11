@@ -19,25 +19,45 @@
             <li id="signout-item"><a href="#">Sign Out</a></li>
           </ul>
         </div>
-        <div id="bottom-nav-layer">
-          <div class="logo-div">
-            <a id="img-link-to-home" href="./../index.html">
-              <img class="logo" src="./../images/mt-logo-white.png" alt="logo" />
-            </a>
-          </div>
-          <div class="nav-bar">
-            <ul class="nav-menu">
-              <li class="nav-item">
-                <a href="#view-requests" class="nav-link">Repair Requests</a>
-              </li>
-              <li class="nav-item">
-                <a href="#view-approved-requests" class="nav-link">Approved Requests</a>
-              </li>
-              <li class="nav-item">
-                <a href="#view-resolved-requests" class="nav-link">Resolved Requests</a>
-              </li>
-            </ul>
-          </div>
+        <div id="bottom-nav-layer" class="">
+            <div class="logo-div">
+              <a id="img-link-to-home" href="./../index.html">
+                <img class="logo" src="./../images/mt-logo-white.png" alt="logo" />
+              </a>
+            </div>
+            <div class="nav-bar">
+              <ul class="nav-menu">
+                <li class="nav-item">
+                  <a href="#request-repair" class="nav-link">Request Repair</a>
+                </li>
+                <li class="nav-item">
+                  <a href="#view-requests" class="nav-link">View Requests</a>
+                </li>
+                <li class="nav-item">
+                  <a href="#contact-service-dept" class="nav-link">Contact Service department</a>
+                </li>
+              </ul>
+            </div>
+            <div id="vertical-nav-bar">
+              <ul class="nav-menu">
+                <li class="nav-item nav-toggle">
+                  <a href="#request-repair" class="nav-link nav-toggle">Request Repair</a>
+                </li>
+                <li class="nav-item nav-toggle">
+                  <a href="#view-requests" class="nav-link nav-toggle">View Requests</a>
+                </li>
+                <li class="nav-item nav-toggle">
+                  <a href="#contact-service-dept" class="nav-link nav-toggle">Contact Service department</a>
+                </li>
+              </ul>
+            </div>
+            <button id="toggle-navigation-btn">
+                <span>
+                  <hr>
+                  <hr>
+                  <hr>
+                </span>
+            </button>
           <div id="search-form-container">
             <form id="search-form" action="#" class="inline-form">
               <input type="search" class="form-control bg-outline" id = "search" placeholder="Search..." >
@@ -72,8 +92,8 @@
                 <form action="" class="form-inline">
                   <input type="hidden" class="form-control" id = "user-id" value="3"  >
                   <input type="hidden" class="form-control" id = "request-id" value="1"  >
-                  <button type="reset" id="reset-request" class="submit-button bg-outline btn-large">Approve Request</button>
-                  <button type="reset" id="reset-request" class="submit-button bg-outline btn-large">Reject Request</button>
+                  <button type="reset" id="reset-request" class="submit-button bg-outline btn-large">Approve</button>
+                  <button type="reset" id="reset-request" class="submit-button bg-outline btn-large">Reject</button>
                 </form>
               </div>
             </div>
@@ -101,8 +121,8 @@
                 <form action="" class="form-inline">
                   <input type="hidden" class="form-control" id = "user-id" value="3"  >
                   <input type="hidden" class="form-control" id = "request-id" value="1"  >
-                  <button type="reset" id="reset-request" class="submit-button bg-outline btn-large">Approve Request</button>
-                  <button type="reset" id="reset-request" class="submit-button bg-outline btn-large">Reject Request</button>
+                  <button type="reset" id="reset-request" class="submit-button bg-outline btn-large">Approve</button>
+                  <button type="reset" id="reset-request" class="submit-button bg-outline btn-large">Reject</button>
                 </form>
               </div>
             </div>
@@ -130,8 +150,8 @@
                 <form action="" class="form-inline">
                   <input type="hidden" class="form-control" id = "user-id" value="3"  >
                   <input type="hidden" class="form-control" id = "request-id" value="1"  >
-                  <button type="reset" id="reset-request" class="submit-button bg-outline btn-large">Approve Request</button>
-                  <button type="reset" id="reset-request" class="submit-button bg-outline btn-large">Reject Request</button>
+                  <button type="reset" id="reset-request" class="submit-button bg-outline btn-large">Approve</button>
+                  <button type="reset" id="reset-request" class="submit-button bg-outline btn-large">Reject</button>
                 </form>
               </div>
             </div>
@@ -159,8 +179,8 @@
                 <form action="" class="form-inline">
                   <input type="hidden" class="form-control" id = "user-id" value="3"  >
                   <input type="hidden" class="form-control" id = "request-id" value="1"  >
-                  <button id="reset-request" class="submit-button bg-outline btn-large">Approve Request</button>
-                  <button  id="reset-request" class="submit-button bg-outline btn-large">Reject Request</button>
+                  <button id="reset-request" class="submit-button bg-outline btn-large">Approve</button>
+                  <button  id="reset-request" class="submit-button bg-outline btn-large">Reject</button>
                 </form>
               </div>
             </div>

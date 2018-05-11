@@ -5,6 +5,12 @@ body {
   margin:0px;
 }
 
+.hidden {
+  visibility:hidden;
+}
+.show-item {
+  visibility:visible;
+}
 .container {
   width:100%;
 }

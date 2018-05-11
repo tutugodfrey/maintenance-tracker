@@ -1,0 +1,67 @@
+
+domNotifier();
+
+  function newEvent(elementObject,  eventType, callBack, callBackArgument) {
+
+   if(elementObject.addEventListener){
+     elementObject.addEventListener(eventType, function(event) {
+     event.preventDefault(); 
+       if(callBackArgument === undefined) {
+         callBack();
+       } else {
+         callBack(callBackArgument);
+       }
+     },
+     false );
+   } else if (element_object.attachEvent) {
+     elementObject.attachEvent("on"+ eventType, function(event){
+     event.preventDefault(); 
+       if(callBackArgument === undefined) {
+         callback();
+       } else {
+         callBack(callBackArgument);
+       }
+     });
+   }
+ }   // end newEvent
+
+  function changeAttribut(eleObject, attrToChange, newAttr, removeAttr) {
+    const eleAttr = eleObject.getAttribute(attrToChange);
+    if (eleAttr === null || eleAttr !== newAttr) 	{
+      //set the attribute and the image become large
+      eleObject.setAttribute(attrToChange, newAttr);
+    } else if (eleAttr === newAttr && removeAttr === "yes") {
+      eleObject.removeAttribute(attrToChange);
+    }  else if (eleAttr === newAttr && removeAttr === "no") {
+      //no action taken
+    } else if(eleAttr === newAttr && (removeAttr !== "yes" || removeAttr !== "no" || removeAttr !== "undefined")){
+      eleObject.setAttribute(attrToChange, removeAttr);
+    } 
+  }		//end changeClass
+
+
+  function showNavigation(toggleBtn) {
+    const verticalNav = document.getElementById("vertical-nav-bar");
+    const classValue = verticalNav.getAttribute("class");
+    alert(classValue)
+    if(classValue === "hidden") {
+      changeAttribut(verticalNav, "class", "show-item")
+    } else if(classValue === "show-item") {
+      changeAttribut(verticalNav, "class", "hidden")
+    }
+    
+  }
+
+     
+
+
+
+
+function domNotifier() {
+  if(document.getElementById('toggle-navigation-btn')) {
+    const toggleNavBtn = document.getElementById('toggle-navigation-btn');
+      newEvent(toggleNavBtn, 'click', showNavigation, toggleNavBtn);
+  }
+
+}
+

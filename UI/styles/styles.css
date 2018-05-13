@@ -5,11 +5,11 @@ body {
   margin:0px;
 }
 
-.hidden {
-  visibility:hidden;
+.hide-item {
+  display:none;
 }
 .show-item {
-  visibility:visible;
+  display:block;
 }
 .container {
   width:100%;
@@ -413,7 +413,15 @@ display:none;
   position:relative;
   top:38px;
   left:-20%;
+  display:none;
+}
+
+#bottom-nav-layer > #vertical-nav-bar.show-item {
   display:block;
+}
+
+#bottom-nav-layer > #vertical-nav-bar.hide-item {
+  display:none;
 }
 #bottom-nav-layer > #vertical-nav-bar > ul {
   width:100%;
@@ -472,7 +480,7 @@ display:none;
 }
 
  /* request and details */
- #view-requests, #view-approved-requests, #view-resolved-requests {
+ #view-requests, #view-users-requests, #view-approved-requests, #view-resolved-requests {
   width:90%;
   background-color:#7dcc46;
   position:relative;
@@ -481,12 +489,14 @@ display:none;
   margin-top:90px;
   margin-bottom:90px;
   padding:40px 5px;
-  display:grid;
+  display:grid; /* will be change to display grid on tab nav */
   grid-template-columns:90%;
   grid-gap:1em;
   justify-content:center;
 }
-
+#view-requests.hide-item, #view-users-requests.hide-item, #view-approved-requests.hide-item, #view-resolved-requests.hide-item {
+  display:none; /* will be change to display grid on tab nav */
+}
 .requests {
   background-color:#ffffff;
   box-shadow: 4px 7px 0 0 rgba(0, 0, 0, 0.3);
@@ -557,7 +567,7 @@ display:none;
     top:-150px;
   }
 
-  #view-requests, #view-approved-requests, #view-resolved-requests {
+  #view-requests, #view-users-requests, #view-approved-requests, #view-resolved-requests {
     width:70%;
     grid-template-columns:90%;
   }
@@ -657,7 +667,7 @@ display:none;
     display:block;
   }
 
-  #view-requests, #view-approved-requests, #view-resolved-requests {
+  #view-requests, #view-users-requests, #view-approved-requests, #view-resolved-requests {
     width:80%;
     grid-template-columns:30% 30% 30%;
   }

@@ -14,7 +14,7 @@ domNotifier();
      },
      false );
    } else if (element_object.attachEvent) {
-     elementObject.attachEvent("on"+ eventType, function(event){
+     elementObject.attachEvent('on'+ eventType, function(event){
      event.preventDefault(); 
        if(callBackArgument === undefined) {
          callback();
@@ -30,44 +30,54 @@ domNotifier();
     if (eleAttr === null || eleAttr !== newAttr) 	{
       //set the attribute and the image become large
       eleObject.setAttribute(attrToChange, newAttr);
-    } else if (eleAttr === newAttr && removeAttr === "yes") {
+    } else if (eleAttr === newAttr && removeAttr === 'yes') {
       eleObject.removeAttribute(attrToChange);
-    }  else if (eleAttr === newAttr && removeAttr === "no") {
+    }  else if (eleAttr === newAttr && removeAttr === 'no') {
       //no action taken
-    } else if(eleAttr === newAttr && (removeAttr !== "yes" || removeAttr !== "no" || removeAttr !== "undefined")){
+    } else if(eleAttr === newAttr && (removeAttr !== 'yes' || removeAttr !== 'no' || removeAttr !== "undefined")){
       eleObject.setAttribute(attrToChange, removeAttr);
     } 
   }		//end changeClass
 
 
   function showNavigation(toggleBtn) {
-    const verticalNav = document.getElementById("vertical-nav-bar");
-    const classValue = verticalNav.getAttribute("class");
-    if(classValue === "hidden") {
-      changeAttribut(verticalNav, "class", "show-item")
-    } else if(classValue === "show-item") {
-      changeAttribut(verticalNav, "class", "hidden")
+    const verticalNav = document.getElementById('vertical-nav-bar');
+    const classValue = verticalNav.getAttribute('class');
+    if(classValue === 'hide-item') {
+      changeAttribut(verticalNav, 'class', 'show-item')
+    } else if(classValue === 'show-item') {
+      changeAttribut(verticalNav, 'class', 'hide-item')
     }
   }
   // get the id of the default tab view
-  let lastElementClicked = "";
+  let lastElementClicked = '';
+  let defaultTab;
   function tabNavigation(elem) {
-    const anchorPos = elem.href.indexOf("#");
+    const anchorPos = elem.href.indexOf('#');
     const href = elem.href.substring(anchorPos + 1);
-    
     const tabSection = document.getElementById(href);
-    const classValue = tabSection.getAttribute("class");
-    if(!lastElementClicked) {
-      changeAttribut(tabSection, "class", "tab-item show-item");
+    const classValue = tabSection.getAttribute('class');
+    if(!lastElementClicked && (href !== 'view-requests' || href !== 'request-repair')) {
+      changeAttribut(tabSection, 'class', 'tab-item show-item');
+      if(document.getElementById('view-requests')) {
+        defaultTab = document.getElementById('view-requests');
+        changeAttribut(defaultTab, 'class', 'tab-item hide-item');
+      }
+
+      if(document.getElementById('request-repair')) {
+        defaultTab = document.getElementById('request-repair');
+        changeAttribut(defaultTab, 'class', 'tab-item hide-item');
+      }
+
     } else if(href !== lastElementClicked && lastElementClicked) {
-      if(classValue === "tab-item hidden") {
-        changeAttribut(tabSection, "class", "tab-item show-item");
+      if(classValue === 'tab-item hide-item') {
+        changeAttribut(tabSection, 'class', 'tab-item show-item');
       } 
       const oldTabSection = document.getElementById(lastElementClicked);
-      changeAttribut(oldTabSection, "class", "tab-item hidden");
+      changeAttribut(oldTabSection, 'class', 'tab-item hide-item');
     } else {
-      if(classValue === "tab-item show-item") {
-        changeAttribut(tabSection, "class", "tab-item show-item");
+      if(classValue === 'tab-item show-item') {
+        changeAttribut(tabSection, 'class', 'tab-item show-item');
       }
 
     }

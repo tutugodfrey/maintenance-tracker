@@ -89,9 +89,10 @@ hr {
 }
 
 #small-signup-link {
-  position:relative;
-  top:-360px;
-  left:25%;
+  width:150px;
+  position:absolute;
+  top:20px;
+  right:-1%;
 }
 #small-signup-link > a {
   padding-right:6px;
@@ -556,10 +557,6 @@ display:none;
     top:-150px;
   }
 
-  #small-signup-link {
-    left:35%;
-  }
-
   #view-requests, #view-approved-requests, #view-resolved-requests {
     width:70%;
     grid-template-columns:90%;
@@ -584,10 +581,7 @@ display:none;
   #signin-form-container {
     display:block;
   }
-  #small-signup-link {
-    left:45%;
-    top:-400px;
-  }
+  
   .signup-link, .signin-link {
     padding:7px 35px 5px 35px;
     font-size:18px;
@@ -601,16 +595,16 @@ display:none;
     align-items:center;
   }
   .form-container {
-    width:30%;
+    width:40%;
     position:relative;
-    left:40%;
+    left:30%;
     top:-150px;
   }
   
   .form-gradient {
-    width:30%;
+    width:45%;
     position:relative;
-    left:40%;
+    left:30%;
     top:-150px;
   }
 
@@ -685,6 +679,16 @@ display:none;
     top:-85px;
     left:75%;
     display:block;
+  }
+
+  .form-container {
+    width:30%;
+    left:30%;
+  }
+  
+  .form-gradient {
+    width:30%;
+    left:30%;
   }
 }
 @media only screen and (min-width:920px) {

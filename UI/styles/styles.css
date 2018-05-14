@@ -29,6 +29,7 @@ a {
   text-decoration:none;
 }
 
+
 #toggle-navigation-btn {
   height:35px;
   background-color:white;
@@ -407,17 +408,24 @@ display:none;
 
 #bottom-nav-layer > div > ul > li{
   display:inline-block;
-  padding:5px 10px;
-  border:1px solid #ffffff;
-  border-radius:2px;
+  padding:5px 0px;
   height:26px;
   padding-top:12px;
 }
 
 #bottom-nav-layer > div > ul > li > a{
+  padding:13px 14px;
+  margin:0px;
   text-align:center;
+  border-radius:2px;
+  border:1px solid #ffffff;
   color:#ffffff;
   font-size:16px;
+}
+
+#bottom-nav-layer > div > ul > li > a.active{
+  background-color:#ffffff;
+  color:#7dcc46;
 }
 
 #bottom-nav-layer > #vertical-nav-bar {
@@ -427,6 +435,20 @@ display:none;
   top:38px;
   left:-20%;
   display:none;
+}
+
+#bottom-nav-layer > #vertical-nav-bar > ul > li > a{
+  padding:13px 14px;
+  margin:0px;
+  text-align:center;
+  border-radius:2px;
+  border:0;
+  font-size:16px;
+}
+
+#bottom-nav-layer > #vertical-nav-bar > ul > li > a.active {
+  color:#7dcc46;
+  padding:5px;
 }
 
 #bottom-nav-layer > #vertical-nav-bar.show-item {

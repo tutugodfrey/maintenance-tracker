@@ -1,6 +1,5 @@
-
+let defaultNavItem;
 domNotifier();
-
   function newEvent(elementObject,  eventType, callBack, callBackArgument) {
 
    if(elementObject.addEventListener){
@@ -50,7 +49,7 @@ domNotifier();
     }
   }
   // get the id of the default tab view
-  let lastElementClicked = '';
+  let lastElementClicked;
   let defaultTab;
   function tabNavigation(elem) {
     //change the class for this element
@@ -63,13 +62,7 @@ domNotifier();
         let activeNavClass = activeNavItem['className'].replace('active', 'inactive');
         activeNavItem.setAttribute('class', activeNavClass);
       }
-      /*
-      for(let sizeOfActive = 0; sizeOfActive < activeNav.length + 1; sizeOfActive++) {
-        alert(activeNav[sizeOfActive])
-        let activeNavClass = activeNav[sizeOfActive]['className'].replace('active', 'inactive');
-        activeNav[sizeOfActive].setAttribute('class', activeNavClass);
-      }
-      */
+    
       // activate new active nav
       const newClassValue = elemClass.replace('inactive', 'active');
       elem.setAttribute('class', newClassValue)
@@ -80,7 +73,7 @@ domNotifier();
     const href = elem.href.substring(anchorPos + 1);
     const tabSection = document.getElementById(href);
     const classValue = tabSection.getAttribute('class');
-    if(!lastElementClicked && (href !== 'view-requests' || href !== 'request-repair')) {
+    if((!lastElementClicked && href !== defaultNavItem)) {
       changeAttribut(tabSection, 'class', 'tab-item show-item');
       if(document.getElementById('view-requests')) {
         defaultTab = document.getElementById('view-requests');
@@ -92,7 +85,7 @@ domNotifier();
         changeAttribut(defaultTab, 'class', 'tab-item hide-item');
       }
 
-    } else if(href !== lastElementClicked && lastElementClicked) {
+    } else if(lastElementClicked && href !== lastElementClicked) {
       if(classValue === 'tab-item hide-item') {
         changeAttribut(tabSection, 'class', 'tab-item show-item');
       } 
@@ -123,6 +116,13 @@ function domNotifier() {
     for(let size = 0; size < navItems.length; size++) {
       newEvent(navItems[size], 'click', tabNavigation, navItems[size]);
     }  
+  }
+
+  if(document.getElementById('default-nav')) {
+    // get the default nav item
+    const defaultNav = document.getElementById('default-nav');
+    const anchorPos = defaultNav.href.indexOf('#');
+    defaultNavItem = defaultNav.href.substring(anchorPos + 1);
   }
 }
 

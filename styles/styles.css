@@ -208,7 +208,7 @@ form > button.btn-center {
 }
 
 /* style signup page and form  */
-#singnup-head {
+#signup-head {
   height:50vh;
   background-color:#7dcc46;
 }
@@ -346,7 +346,7 @@ padding-top:12px;
   border-radius:3px;
 }
 #top-nav-layer {
-  width:100%;
+  width:60%;
   height:45px;
   position:relative;
   top:-3px;
@@ -357,7 +357,7 @@ padding-top:12px;
   height:50px;
   list-style:none;
   position:relative;
-  left:35%;
+  right:-40%;
   top:-25px;
 }
 
@@ -377,16 +377,15 @@ padding-top:12px;
 }
 
 #top-nav-layer > ul > li#notification-item {
-  padding-top:4px;
   position:relative;
-  height:20px;
   top:-10px;
+  height:20px;
+  padding-top:4px;
 }
 
 #top-nav-layer img#notification-icon {
   height:25px;
   width:25px;
-
 }
 
 #bottom-nav-layer {
@@ -496,7 +495,7 @@ display:none;
  /* request and details */
  #view-requests, #view-users-requests, #view-approved-requests, #view-resolved-requests {
   width:90%;
-  background-color:#7dcc46;
+ /* background-color:#7dcc46; */
   position:relative;
   top:100px;
   left:10%;
@@ -542,6 +541,60 @@ display:none;
   top:200px;
   margin:50px 10px;
 }
+#footer-div {
+  background-color:#7dcc46;
+  padding:20px;
+  height:200px;
+}
+
+#footer-div img {
+  widows: 45px;
+  height:45px;
+  position:relative;
+  right:35%;
+  bottom:10px;
+}
+div.socials {
+  background-color:#ffffff;
+  width:30px;
+  height:30px;
+  padding:14px;
+  margin:2px;
+  position:relative;
+  right:-80%; /*93*/
+}
+
+#footer-div > #site-info {
+  position:relative;
+  bottom:200px;
+}
+
+#footer-div > #site-info > .more-info {
+  margin:10px;
+  padding:4px 2px;
+  color:#ffffff;
+}
+
+#footer-div > #site-info > .more-info > a {
+  margin:10px;
+  padding:4px 2px;
+  font-weight:bold;
+  color:#ffffff;
+}
+
+div#copyright {
+  position:relative;
+  bottom:42px;
+  padding:2px;
+  margin-bottom:50px;
+}
+
+div#copyright > a {
+  color:#ffffff;
+  font:12px lighter;
+
+}
+
 /* Utility */
 .small-header-gradient {
   background-image:linear-gradient(to right, #7dcc46, #ffffff, #7dcc46);
@@ -574,6 +627,11 @@ display:none;
 }
 
 @media only screen and (min-width:420px) {
+
+  #top-nav-layer > ul {
+    right:-80%;
+  }
+
   .form-gradient {
     width:60%;
     position:relative;
@@ -596,12 +654,29 @@ display:none;
     padding:6px 8px;
   }
 
-  #top-nav-layer > ul {
-    left:60%;
+
+  div.socials {
+    right:-87%;
+  }
+  #footer-div #site-info {
+    left:25%;
+  }
+
+  div#copyright {
+    left:20%;
   }
 }
 
+@media only screen and (min-width:420px) {
+
+  #top-nav-layer > ul {
+    right:-95%;
+  }
+}
 @media only screen and (min-width:720px) {
+  #top-nav-layer > ul {
+    left:115%;
+  }
   #signin-form-container {
     display:block;
   }
@@ -618,6 +693,8 @@ display:none;
     justify-content:center; 
     align-items:center;
   }
+
+
   .form-container {
     width:40%;
     position:relative;
@@ -658,9 +735,7 @@ display:none;
       left:150px;
       top:160px;
     }
-  #top-nav-layer > ul {
-    left:80%;
-  }
+
   #bottom-nav-layer > div.nav-bar {
     display:inline-block;
     position:relative;
@@ -683,7 +758,7 @@ display:none;
 
   #view-requests, #view-users-requests, #view-approved-requests, #view-resolved-requests {
     width:80%;
-    grid-template-columns:30% 30% 30%;
+    grid-template-columns:45% 45%;
   }
 
   [type=search] {
@@ -695,9 +770,24 @@ display:none;
   #toggle-navigation-btn {
     display:none;
   }
+
+  div.socials {
+    right:-93%;
+  }
+
+  #footer-div #site-info {
+    left:35%;
+  }
+
+  div#copyright {
+    left:30%;
+  }
 }
 
 @media only screen and (min-width:820px) {
+  #top-nav-layer > ul {
+    left:120%;
+  }
   #search-form-container {
     position:relative;
     top:-85px;
@@ -714,18 +804,41 @@ display:none;
     width:30%;
     left:30%;
   }
+
+  #footer-div #site-info {
+    left:40%;
+  }
+
+  div.socials {
+    right:-93%;
+  }
 }
 @media only screen and (min-width:920px) {
+  #top-nav-layer > ul {
+    left:125%;
+  }
   [type=search] {
     width:150px;
+  }
+
+  div#copyright {
+    left:35%;
   }
 }
 
 @media only screen and (min-width:1024px) {
+  #top-nav-layer > ul {
+    left:130%;
+  }
   #search-form-container {
     position:relative;
     top:-90px;
     left:72%;
     display:block;
+  }
+
+  #view-requests, #view-users-requests, #view-approved-requests, #view-resolved-requests {
+    width:80%;
+    grid-template-columns:35% 35% 35%;
   }
 }

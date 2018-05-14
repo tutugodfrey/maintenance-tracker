@@ -253,7 +253,9 @@ form > button.btn-center {
   position:relative; 
   color:#ffffff;
 }
-
+#header-title {
+  font-size:40px;
+}
 #index-body {
   min-height:200px;
   margin:0px;
@@ -640,6 +642,9 @@ div#copyright > a {
 
 .shadow {
   box-shadow: 4px 7px 0 0 rgba(0, 0, 0, 0.3);
+}
+.text-shadow {
+  text-shadow: 3px 3px 1px rgba(3, 3, 3, 0.5);
 }
 .shadow-bottom {
   box-shadow: 0 7px 0 0 rgba(0, 0, 0, 0.3);

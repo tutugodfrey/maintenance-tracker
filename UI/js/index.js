@@ -53,6 +53,29 @@ domNotifier();
   let lastElementClicked = '';
   let defaultTab;
   function tabNavigation(elem) {
+    //change the class for this element
+    const elemClass = elem.getAttribute('class');
+    const classArr = elemClass.split(' ');
+    if(classArr.indexOf('inactive') >= 0) {
+      // deactive old active nav
+      const activeNav = document.getElementsByClassName('active');
+      for(let activeNavItem of activeNav) {
+        let activeNavClass = activeNavItem['className'].replace('active', 'inactive');
+        activeNavItem.setAttribute('class', activeNavClass);
+      }
+      /*
+      for(let sizeOfActive = 0; sizeOfActive < activeNav.length + 1; sizeOfActive++) {
+        alert(activeNav[sizeOfActive])
+        let activeNavClass = activeNav[sizeOfActive]['className'].replace('active', 'inactive');
+        activeNav[sizeOfActive].setAttribute('class', activeNavClass);
+      }
+      */
+      // activate new active nav
+      const newClassValue = elemClass.replace('inactive', 'active');
+      elem.setAttribute('class', newClassValue)
+    }
+
+    // display tab nav item
     const anchorPos = elem.href.indexOf('#');
     const href = elem.href.substring(anchorPos + 1);
     const tabSection = document.getElementById(href);

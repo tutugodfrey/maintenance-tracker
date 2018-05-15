@@ -13,6 +13,9 @@
     "istanbul:cover": "istanbul cover ./node_modules/mocha/bin/_mocha -- -R spec ./server/trans/test/ --timeout 10000  --exit",
     "send:coverage": "istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec ./server/trans/test/ --timeout 10000 --exit && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js"
   },
+  "engines": {
+    "node": "6.10.3"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/tutugodfrey/maintenance-tracker.git"

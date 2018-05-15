@@ -1,11 +1,9 @@
 
 import chai from 'chai';
-import chaiHttp from 'chai-http';
 import Server from './../app';
 
 const server = new Server();
 const { expect } = chai;
-chai.use(chaiHttp);
 
 // enforce test to run only in test env
 if (process.env.NODE_ENV !== 'test') {

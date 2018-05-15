@@ -9,7 +9,9 @@
     "start": "node ./server/src/bin/www.js",
     "test": "mocha server/trans/test/",
     "test:local": "npm run build && mocha server/trans/test/",
-    "js:lint": "eslint server/src/"
+    "js:lint": "eslint server/src/",
+    "istanbul:cover": "istanbul cover ./node_modules/mocha/bin/_mocha -- -R spec ./server/trans/test/ --timeout 10000  --exit",
+    "send:coverage": "istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec ./server/trans/test/ --timeout 10000 --exit && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js"
   },
   "repository": {
     "type": "git",

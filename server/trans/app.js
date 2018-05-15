@@ -18,11 +18,17 @@ var _morgan = require('morgan');
 
 var _morgan2 = _interopRequireDefault(_morgan);
 
+var _index = require('./routes/index');
+
+var _index2 = _interopRequireDefault(_index);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+var route = new _index2.default();
 // setup server class
+
 var Server = function () {
   function Server() {
     _classCallCheck(this, Server);
@@ -30,6 +36,7 @@ var Server = function () {
     this.express = _express2.default;
     this.bodyParser = _bodyParser2.default;
     this.logger = _morgan2.default;
+    this.route = route;
   }
 
   _createClass(Server, [{
@@ -39,6 +46,7 @@ var Server = function () {
       this.app.use(this.express.static('public'));
       this.app.use(this.bodyParser.urlencoded({ extended: true }));
       this.app.use(this.bodyParser.json());
+      this.route.routes(this.app);
       return this.app;
     }
   }]);

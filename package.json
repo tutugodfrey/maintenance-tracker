@@ -2,9 +2,14 @@
   "name": "maintenance-tracker",
   "version": "1.0.0",
   "description": "Maintenance tracker is a platform that allows users to reach out to maintenance department for repairs and to track the progress of the process",
-  "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "babel-node": "nodemon --exec babel-node ./server/src/bin/www.js",
+    "build": "babel server/src -s -d server/trans",
+    "start:dev": "nodemon --exec && npm run bable-node",
+    "start": "node ./server/src/bin/www.js",
+    "test": "mocha server/trans/test/",
+    "test:local": "npm run build && mocha server/trans/test/",
+    "js:lint": "eslint server/src/"
   },
   "repository": {
     "type": "git",

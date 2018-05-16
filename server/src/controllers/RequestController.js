@@ -53,7 +53,25 @@ const RequestController = class {
 
   // update a request
   updateRequest(req, res) {
-    return res.send('working');
+    const requestId = parseInt(req.params.requestId, 10);
+    return requests
+      .findById(requestId)
+      .then((request) => {
+        return requests
+          .update(
+            request,
+            {
+              category: req.body.category || request.category,
+              description: req.body.description || request.description,
+              department: req.body.department || request.department,
+              urgency: req.body.urgency || request.urgency,
+              status: req.body.status || request.status,
+            },
+          )
+          .then(newRequest => res.status(200).send(newRequest))
+          .catch(error => res.status(400).send(error));
+      })
+      .catch(error => res.status(404).send(error));
   }
 };
 export default RequestController;

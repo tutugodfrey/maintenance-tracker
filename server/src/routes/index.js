@@ -1,4 +1,5 @@
 import RequestController from './../controllers/RequestController';
+
 const requestController = new RequestController();
 const Routes = class {
   constructor() {

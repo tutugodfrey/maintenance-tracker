@@ -9,19 +9,13 @@ const DummyDataModel = class {
     this.singleModel = modelName.substring(0, modelName.length - 1);
     this.model = [];
     this.createModel = this.createModel.bind(this);
-    this.getObjectByField = this.getObjectByField.bind(this);
     this.getFields = this.getFields.bind(this);
   }
-
-  getObjectByField(arrayOfObjects, objectField, fieldValue) {
-    for (const objCollection of arrayOfObjects) {
-      if (objCollection[objectField] === fieldValue) {
-        return objCollection;
-      }
-    }
-    return `No object with field ${objectField} found`;
-  }
-
+  
+  /* require attention */
+  /* eslint-disable class-methods-use-this */
+  /* eslint-disable prefer-promise-reject-errors */
+  /* eslint-disable no-param-reassign */
   getFields(objCollector, field) {
     if (objCollector[field]) {
       return objCollector[field];
@@ -128,6 +122,7 @@ const DummyDataModel = class {
 
   findById(id) {
     // return an object with the given id
+    /* eslint-disable array-callback-return */
     let modelToFind;
     this.model.filter((model) => {
       if (model.id === id) {
@@ -138,7 +133,7 @@ const DummyDataModel = class {
       if (modelToFind) {
         resolve(modelToFind);
       } else {
-        reject({ error: `${this.singleModel} not found` });
+        reject({ Error: `${this.singleModel} not found` });
       }
     });
     return result;
@@ -151,7 +146,7 @@ const DummyDataModel = class {
     */
     const result = new Promise((resolve, reject) => {
       if (!condition || !condition.where) {
-        reject({ message: 'missing object propertiy \'where\' to find model' });
+        reject({ error: 'missing object propertiy \'where\' to find model' });
       } else {
         const props = Object.keys(condition.where);
         let propMatch;
@@ -169,7 +164,7 @@ const DummyDataModel = class {
           }
         });
         if (!searchResult) {
-          reject({ message: `${this.singleModel} not found` });
+          reject({ Error: `${this.singleModel} not found` });
         }
       }
     });
@@ -182,7 +177,7 @@ const DummyDataModel = class {
     condition is single object with property where whose value is further
       an object with key => value pair of the properties of the object to find
     */
-    const result = new Promise((resolve, reject) => {
+    const result = new Promise((resolve) => {
       if (condition === 'all') {
         // all model in this instance
         resolve(this.model);
@@ -241,7 +236,7 @@ const DummyDataModel = class {
           }
         }
       });
-      reject({ message: `${this.singleModel} not found, not action taken` });
+      reject({ Error: `${this.singleModel} not found, not action taken` });
     });
 
     return result;

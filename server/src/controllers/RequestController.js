@@ -6,24 +6,32 @@ const RequestController = class {
   /* eslint-disable class-methods-use-this */
   // add a new event center
   addRequest(req, res) {
-    console.log('respond with a resource')
+    if (!(req.body.userId) || !(req.body.description)) {
+      return res.status(400).send({ message: 'missing required field' });
+    }
+    return requests
+      .create(req.body)
+      .then((request) => {
+        return res.status(201).send(request);
+      })
+      .catch((error) => {
+        return res.status(400).send(error);
+      });
   }
 
   // get a signle requests for a logged in user
   getRequestBYId(req, res) {
-    console.log('respond with resource');
+    return res.send('working');
   }
 
   // get all request for a logged in user
   getAllRequests(req, res) {
-    console.log('respond with resource');
+    return res.send('working');
   }
 
   // update a request
   updateRequest(req, res) {
-    console.log('respond with resource');
+    return res.send('working');
   }
-
-
 };
 export default RequestController;

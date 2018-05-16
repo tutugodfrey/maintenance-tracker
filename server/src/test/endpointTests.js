@@ -133,5 +133,39 @@ if (process.env.NODE_ENV !== 'test') {
           });
       });
     });
+
+    // test for get ../users/requests/:requestId
+    describe('get one request', () => {
+      it('should return a request with the givn id', () => {
+        const { id } = createdRequest1;
+        return chai.request(app)
+          .get(`/api/v1/users/requests/${id}`)
+          .then((res) => {
+            expect(res).to.have.status(200);
+            expect(res.body).to.be.an('object');
+            expect(res.body).to.have.any.keys('userId');
+          });
+      });
+
+      it('should return not found for the request that does not exist', () => {
+        return chai.request(app)
+          .get('/api/v1/users/requests/5')
+          .then((res) => {
+            expect(res).to.have.status(404);
+            expect(res.body).to.be.an('object');
+            expect(res.body).to.eql({ Error: 'request not found' });
+          });
+      });
+
+      it('should return 400 error for bad request', () => {
+        return chai.request(app)
+          .get('/api/v1/users/requests/0')
+          .then((res) => {
+            expect(res).to.have.status(400);
+            expect(res.body).to.be.an('object');
+            expect(res.body).to.eql({ message: 'missing required field' });
+          });
+      });
+    });
   });
 }

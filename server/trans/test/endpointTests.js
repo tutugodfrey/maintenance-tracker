@@ -90,6 +90,7 @@ if (process.env.NODE_ENV !== 'test') {
       });
     });
 
+    // test for post ../users/requests
     describe('Create requests', function () {
       it('should create a new request', function () {
         return _chai2.default.request(app).post('/api/v1/users/requests').send(request1).then(function (res) {
@@ -121,6 +122,33 @@ if (process.env.NODE_ENV !== 'test') {
 
       it('should not create request if a required field is not present', function () {
         return _chai2.default.request(app).post('/api/v1/users/requests').send(request4).then(function (res) {
+          expect(res).to.have.status(400);
+          expect(res.body).to.be.an('object');
+          expect(res.body).to.eql({ message: 'missing required field' });
+        });
+      });
+    });
+
+    // test for get ../users/requests/:requestId
+    describe('get one request', function () {
+      it('should return a request with the givn id', function () {
+        var id = createdRequest1.id;
+
+        return _chai2.default.request(app).get('/api/v1/users/requests/' + id).then(function (res) {
+          expect(res).to.have.status(200);
+          expect(res.body).to.be.an('object');
+          expect(res.body).to.have.any.keys('userId');
+        });
+      });
+      it('should return not found for the request that does not exist', function () {
+        return _chai2.default.request(app).get('/api/v1/users/requests/5').then(function (res) {
+          expect(res).to.have.status(404);
+          expect(res.body).to.be.an('object');
+          expect(res.body).to.eql({ Error: 'request not found' });
+        });
+      });
+      it('should return not found for the request that does not exist', function () {
+        return _chai2.default.request(app).get('/api/v1/users/requests/0').then(function (res) {
           expect(res).to.have.status(400);
           expect(res.body).to.be.an('object');
           expect(res.body).to.eql({ message: 'missing required field' });

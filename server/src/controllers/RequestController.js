@@ -28,8 +28,19 @@ const RequestController = class {
   }
 
   // get a signle requests for a logged in user
-  getRequestBYId(req, res) {
-    return res.send('working');
+  getOneRequest(req, res) {
+    const requestId = parseInt(req.params.requestId, 10);
+    if (!requestId) {
+      return res.status(400).send({ message: 'missing required field' });
+    }
+    return requests
+      .find({
+        where: {
+          id: requestId,
+        },
+      })
+      .then(request => res.status(200).send(request))
+      .catch(error => res.status(404).send(error));
   }
 
   // get all request for a logged in user

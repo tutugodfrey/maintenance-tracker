@@ -11,7 +11,7 @@ const DummyDataModel = class {
     this.createModel = this.createModel.bind(this);
     this.getFields = this.getFields.bind(this);
   }
-  
+
   /* require attention */
   /* eslint-disable class-methods-use-this */
   /* eslint-disable prefer-promise-reject-errors */
@@ -21,6 +21,37 @@ const DummyDataModel = class {
       return objCollector[field];
     }
     return undefined;
+  }
+
+  bulkCreate(modelsToCreate) {
+    // create a new model
+    const result = new Promise((resolve, reject) => {
+      if (this.requiredFields.length === 0) {
+        modelsToCreate.forEach((modelToCreate) => {
+          this.createModel(modelToCreate, resolve, reject);
+        });
+      } else {
+        let allFieldsPassed = true;
+        let allModelsPassed = true;
+        modelsToCreate.forEach((modelToCreate) => {
+          this.requiredFields.forEach((required) => {
+            if (!modelToCreate[required]) {
+              allFieldsPassed = false;
+              allModelsPassed = false;
+            }
+          });
+        });
+
+        if (!allFieldsPassed && !allModelsPassed) {
+          reject({ message: 'missing required field' });
+        } else {
+          modelsToCreate.forEach((modelToCreate) => {
+            this.createModel(modelToCreate, resolve, reject);
+          });
+        }
+      }
+    });
+    return result;
   }
   // define class methods
   create(modelToCreate) {

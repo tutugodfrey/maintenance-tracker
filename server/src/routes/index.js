@@ -13,6 +13,7 @@ const Routes = class {
 
     app.post('/api/v1/users/requests', this.requestController.addRequest);
     app.get('/api/v1/users/requests/:requestId', this.requestController.getOneRequest);
+    app.get('/api/v1/users/requests', this.requestController.getAllRequests);
   }
 };
 

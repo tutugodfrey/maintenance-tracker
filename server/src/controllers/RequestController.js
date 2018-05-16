@@ -45,7 +45,10 @@ const RequestController = class {
 
   // get all request for a logged in user
   getAllRequests(req, res) {
-    return res.send('working');
+    return requests
+      .findAll()
+      .then(allRequests => res.status(200).send(allRequests))
+      .catch(error => res.status(404).send(error));
   }
 
   // update a request

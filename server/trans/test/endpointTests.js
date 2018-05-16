@@ -140,6 +140,7 @@ if (process.env.NODE_ENV !== 'test') {
           expect(res.body).to.have.any.keys('userId');
         });
       });
+
       it('should return not found for the request that does not exist', function () {
         return _chai2.default.request(app).get('/api/v1/users/requests/5').then(function (res) {
           expect(res).to.have.status(404);
@@ -147,11 +148,26 @@ if (process.env.NODE_ENV !== 'test') {
           expect(res.body).to.eql({ Error: 'request not found' });
         });
       });
-      it('should return not found for the request that does not exist', function () {
+
+      it('should return 400 error for bad request', function () {
         return _chai2.default.request(app).get('/api/v1/users/requests/0').then(function (res) {
           expect(res).to.have.status(400);
           expect(res.body).to.be.an('object');
           expect(res.body).to.eql({ message: 'missing required field' });
+        });
+      });
+    });
+
+    // test for get ../users/requests
+    describe('get one request', function () {
+      it('should return all request', function () {
+        var id = createdRequest1.id;
+
+        return _chai2.default.request(app).get('/api/v1/users/requests').then(function (res) {
+          expect(res).to.have.status(200);
+          expect(res.body).to.be.an('array');
+          expect(res.body).to.have.length.of.at.least(2);
+          expect(res.body).to.deep.include.members([createdRequest1, createdRequest2]);
         });
       });
     });

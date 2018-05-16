@@ -167,5 +167,19 @@ if (process.env.NODE_ENV !== 'test') {
           });
       });
     });
+
+    // test for get ../users/requests
+    describe('get one request', () => {
+      it('should return all request', () => {
+        return chai.request(app)
+          .get('/api/v1/users/requests')
+          .then((res) => {
+            expect(res).to.have.status(200);
+            expect(res.body).to.be.an('array');
+            expect(res.body).to.have.length.of.at.least(2);
+            expect(res.body).to.deep.include.members([createdRequest1, createdRequest2]);
+          });
+      });
+    });
   });
 }

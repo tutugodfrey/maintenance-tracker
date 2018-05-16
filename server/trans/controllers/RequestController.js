@@ -84,6 +84,9 @@ var RequestController = function () {
     key: 'updateRequest',
     value: function updateRequest(req, res) {
       var requestId = parseInt(req.params.requestId, 10);
+      if (!requestId) {
+        return res.status(400).send({ message: 'missing required field' });
+      }
       return requests.findById(requestId).then(function (request) {
         return requests.update(request, {
           category: req.body.category || request.category,

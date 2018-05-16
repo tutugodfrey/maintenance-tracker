@@ -161,13 +161,49 @@ if (process.env.NODE_ENV !== 'test') {
     // test for get ../users/requests
     describe('get one request', function () {
       it('should return all request', function () {
-        var id = createdRequest1.id;
-
         return _chai2.default.request(app).get('/api/v1/users/requests').then(function (res) {
           expect(res).to.have.status(200);
           expect(res.body).to.be.an('array');
           expect(res.body).to.have.length.of.at.least(2);
           expect(res.body).to.deep.include.members([createdRequest1, createdRequest2]);
+        });
+      });
+    });
+
+    // test for put ../users/requests/:requestId
+    describe('get one request', function () {
+      it('should update a request', function () {
+        var id = createdRequest1.id;
+
+        return _chai2.default.request(app).put('/api/v1/users/requests/' + id).send({
+          status: 'approved'
+        }).then(function (res) {
+          expect(res).to.have.status(200);
+          expect(res.body).to.be.an('object');
+          expect(res.body.status).to.equal('approved');
+        });
+      });
+
+      it('should return not found request that does not exist', function () {
+        var id = createdRequest1.id;
+
+        return _chai2.default.request(app).put('/api/v1/users/requests/4').send({
+          status: 'approved'
+        }).then(function (res) {
+          expect(res).to.have.status(404);
+          expect(res.body).to.be.an('object');
+        });
+      });
+
+      it('should return bad request if requestId is not specified params', function () {
+        var id = createdRequest1.id;
+
+        return _chai2.default.request(app).put('/api/v1/users/requests/0').send({
+          status: 'approved'
+        }).then(function (res) {
+          expect(res).to.have.status(400);
+          expect(res.body).to.be.an('object');
+          expect(res.body).to.eql({ message: 'missing required field' });
         });
       });
     });

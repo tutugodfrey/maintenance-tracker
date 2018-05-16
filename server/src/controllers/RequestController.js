@@ -54,6 +54,9 @@ const RequestController = class {
   // update a request
   updateRequest(req, res) {
     const requestId = parseInt(req.params.requestId, 10);
+    if (!requestId) {
+      return res.status(400).send({ message: 'missing required field' });
+    }
     return requests
       .findById(requestId)
       .then((request) => {

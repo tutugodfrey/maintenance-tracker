@@ -181,5 +181,47 @@ if (process.env.NODE_ENV !== 'test') {
           });
       });
     });
+
+    // test for put ../users/requests/:requestId
+    describe('get one request', () => {
+      it('should update a request', () => {
+        const { id } = createdRequest1;
+        return chai.request(app)
+          .put(`/api/v1/users/requests/${id}`)
+          .send({
+            status: 'approved',
+          })
+          .then((res) => {
+            expect(res).to.have.status(200);
+            expect(res.body).to.be.an('object');
+            expect(res.body.status).to.equal('approved');
+          });
+      });
+
+      it('should return not found request that does not exist', () => {
+        return chai.request(app)
+          .put('/api/v1/users/requests/4')
+          .send({
+            status: 'approved',
+          })
+          .then((res) => {
+            expect(res).to.have.status(404);
+            expect(res.body).to.be.an('object');
+          });
+      });
+
+      it('should return bad request if requestId is not specified params', () => {
+        return chai.request(app)
+          .put('/api/v1/users/requests/0')
+          .send({
+            status: 'approved',
+          })
+          .then((res) => {
+            expect(res).to.have.status(400);
+            expect(res.body).to.be.an('object');
+            expect(res.body).to.eql({ message: 'missing required field' });
+          });
+      });
+    });
   });
 }

@@ -78,7 +78,7 @@ if (process.env.NODE_ENV !== 'test') {
           .then((res) => {
             expect(res).to.have.status(404);
             expect(res.body).to.be.an('object');
-            expect(res.body).to.eql({ Error: 'request not found' });
+            expect(res.body).to.eql({ message: 'request not found' });
           });
       });
     });
@@ -153,7 +153,7 @@ if (process.env.NODE_ENV !== 'test') {
           .then((res) => {
             expect(res).to.have.status(404);
             expect(res.body).to.be.an('object');
-            expect(res.body).to.eql({ Error: 'request not found' });
+            expect(res.body).to.eql({ message: 'request not found' });
           });
       });
 

@@ -85,7 +85,7 @@ if (process.env.NODE_ENV !== 'test') {
         return _chai2.default.request(app).get('/api/v1/users/requests/1').then(function (res) {
           expect(res).to.have.status(404);
           expect(res.body).to.be.an('object');
-          expect(res.body).to.eql({ Error: 'request not found' });
+          expect(res.body).to.eql({ message: 'request not found' });
         });
       });
     });
@@ -145,7 +145,7 @@ if (process.env.NODE_ENV !== 'test') {
         return _chai2.default.request(app).get('/api/v1/users/requests/5').then(function (res) {
           expect(res).to.have.status(404);
           expect(res.body).to.be.an('object');
-          expect(res.body).to.eql({ Error: 'request not found' });
+          expect(res.body).to.eql({ message: 'request not found' });
         });
       });
 
@@ -185,8 +185,6 @@ if (process.env.NODE_ENV !== 'test') {
       });
 
       it('should return not found request that does not exist', function () {
-        var id = createdRequest1.id;
-
         return _chai2.default.request(app).put('/api/v1/users/requests/4').send({
           status: 'approved'
         }).then(function (res) {
@@ -196,8 +194,6 @@ if (process.env.NODE_ENV !== 'test') {
       });
 
       it('should return bad request if requestId is not specified params', function () {
-        var id = createdRequest1.id;
-
         return _chai2.default.request(app).put('/api/v1/users/requests/0').send({
           status: 'approved'
         }).then(function (res) {

@@ -164,7 +164,7 @@ const DummyDataModel = class {
       if (modelToFind) {
         resolve(modelToFind);
       } else {
-        reject({ Error: `${this.singleModel} not found` });
+        reject({ error: `${this.singleModel} not found` });
       }
     });
     return result;
@@ -177,7 +177,7 @@ const DummyDataModel = class {
     */
     const result = new Promise((resolve, reject) => {
       if (!condition || !condition.where) {
-        reject({ error: 'missing object propertiy \'where\' to find model' });
+        reject({ message: 'missing object propertiy \'where\' to find model' });
       } else {
         const props = Object.keys(condition.where);
         let propMatch;
@@ -195,7 +195,7 @@ const DummyDataModel = class {
           }
         });
         if (!searchResult) {
-          reject({ Error: `${this.singleModel} not found` });
+          reject({ message: `${this.singleModel} not found` });
         }
       }
     });
@@ -267,7 +267,7 @@ const DummyDataModel = class {
           }
         }
       });
-      reject({ Error: `${this.singleModel} not found, not action taken` });
+      reject({ message: `${this.singleModel} not found, not action taken` });
     });
 
     return result;

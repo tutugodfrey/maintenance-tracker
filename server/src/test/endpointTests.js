@@ -25,5 +25,26 @@ if (process.env.NODE_ENV !== 'test') {
           });
       });
     });
+
+    describe('Empty request model', () => {
+      it('should return an empty array', () => {
+        return chai.request(app)
+          .get('/api/v1/users/requests')
+          .then((res) => {
+            expect(res).to.have.status(200);
+            expect(res.body).to.be.an('array');
+            expect(res.body).to.have.length(0);
+          });
+      });
+      it('should return not found for the request id', () => {
+        return chai.request(app)
+          .get('/api/v1/users/requests/1')
+          .then((res) => {
+            expect(res).to.have.status(404);
+            expect(res.body).to.be.an('object');
+            expect(res.body).to.eql({ Error: 'request not found' });
+          });
+      });
+    });
   });
 }

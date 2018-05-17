@@ -202,7 +202,7 @@ var DummyDataModel = function () {
         if (modelToFind) {
           resolve(modelToFind);
         } else {
-          reject({ Error: _this5.singleModel + ' not found' });
+          reject({ error: _this5.singleModel + ' not found' });
         }
       });
       return result;
@@ -218,7 +218,7 @@ var DummyDataModel = function () {
       */
       var result = new Promise(function (resolve, reject) {
         if (!condition || !condition.where) {
-          reject({ error: 'missing object propertiy \'where\' to find model' });
+          reject({ message: 'missing object propertiy \'where\' to find model' });
         } else {
           var props = Object.keys(condition.where);
           var propMatch = void 0;
@@ -236,7 +236,7 @@ var DummyDataModel = function () {
             }
           });
           if (!searchResult) {
-            reject({ Error: _this6.singleModel + ' not found' });
+            reject({ message: _this6.singleModel + ' not found' });
           }
         }
       });
@@ -316,7 +316,7 @@ var DummyDataModel = function () {
             }
           }
         });
-        reject({ Error: _this8.singleModel + ' not found, not action taken' });
+        reject({ message: _this8.singleModel + ' not found, not action taken' });
       });
 
       return result;

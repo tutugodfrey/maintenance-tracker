@@ -1,20 +1,20 @@
 import RequestController from './../controllers/RequestController';
 
-const requestController = new RequestController();
+// const requestController = new RequestController();
 const Routes = class {
   constructor() {
-    this.requestController = requestController;
+    this.RequestController = RequestController;
   }
-  /* eslint-disable class-methods-use-this */
+  /* eslint-disable class-methods-use-thiss */
   routes(app) {
     app.get('/', (req, res) => {
       res.status(200).send({ message: 'welcome to the maintenance trackers' });
     });
 
-    app.post('/api/v1/users/requests', this.requestController.addRequest);
-    app.get('/api/v1/users/requests/:requestId', this.requestController.getOneRequest);
-    app.get('/api/v1/users/requests', this.requestController.getAllRequests);
-    app.put('/api/v1/users/requests/:requestId', this.requestController.updateRequest);
+    app.post('/api/v1/users/requests', this.RequestController.addRequest);
+    app.get('/api/v1/users/requests/:requestId', this.RequestController.getOneRequest);
+    app.get('/api/v1/users/requests', this.RequestController.getAllRequests);
+    app.put('/api/v1/users/requests/:requestId', this.RequestController.updateRequest);
   }
 };
 

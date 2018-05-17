@@ -3,9 +3,8 @@ import models from './../models/index';
 
 const { requests, users } = models;
 const RequestController = class {
-  /* eslint-disable class-methods-use-this */
-  // add a new event center
-  addRequest(req, res) {
+  // add a new request
+  static addRequest(req, res) {
     const userId = parseInt(req.body.userId, 10);
     if (!(req.body.userId) || !(req.body.description)) {
       return res.status(400).send({ message: 'missing required field' });
@@ -28,7 +27,7 @@ const RequestController = class {
   }
 
   // get a signle requests for a logged in user
-  getOneRequest(req, res) {
+  static getOneRequest(req, res) {
     const requestId = parseInt(req.params.requestId, 10);
     if (!requestId) {
       return res.status(400).send({ message: 'missing required field' });
@@ -44,7 +43,7 @@ const RequestController = class {
   }
 
   // get all request for a logged in user
-  getAllRequests(req, res) {
+  static getAllRequests(req, res) {
     return requests
       .findAll()
       .then(allRequests => res.status(200).send(allRequests))
@@ -52,7 +51,7 @@ const RequestController = class {
   }
 
   // update a request
-  updateRequest(req, res) {
+  static updateRequest(req, res) {
     const requestId = parseInt(req.params.requestId, 10);
     if (!requestId) {
       return res.status(400).send({ message: 'missing required field' });

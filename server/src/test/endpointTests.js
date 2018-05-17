@@ -136,7 +136,7 @@ if (process.env.NODE_ENV !== 'test') {
 
     // test for get ../users/requests/:requestId
     describe('get one request', () => {
-      it('should return a request with the givn id', () => {
+      it('should return a request with the given id', () => {
         const { id } = createdRequest1;
         return chai.request(app)
           .get(`/api/v1/users/requests/${id}`)
@@ -169,7 +169,7 @@ if (process.env.NODE_ENV !== 'test') {
     });
 
     // test for get ../users/requests
-    describe('get one request', () => {
+    describe('get all request', () => {
       it('should return all request', () => {
         return chai.request(app)
           .get('/api/v1/users/requests')
@@ -183,7 +183,7 @@ if (process.env.NODE_ENV !== 'test') {
     });
 
     // test for put ../users/requests/:requestId
-    describe('get one request', () => {
+    describe('update request', () => {
       it('should update a request', () => {
         const { id } = createdRequest1;
         return chai.request(app)

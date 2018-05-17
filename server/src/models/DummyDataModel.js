@@ -11,14 +11,15 @@ const DummyDataModel = class {
     this.createModel = this.createModel.bind(this);
     this.getFields = this.getFields.bind(this);
   }
-
+  // define class methods
   /* require attention */
-  /* eslint-disable class-methods-use-this */
   /* eslint-disable prefer-promise-reject-errors */
   /* eslint-disable no-param-reassign */
   getFields(objCollector, field) {
-    if (objCollector[field]) {
-      return objCollector[field];
+    this.objCollector = objCollector;
+    this.field = field;
+    if (this.objCollector[this.field]) {
+      return objCollector[this.field];
     }
     return undefined;
   }
@@ -53,7 +54,7 @@ const DummyDataModel = class {
     });
     return result;
   }
-  // define class methods
+
   create(modelToCreate) {
     // create a new model
     const result = new Promise((resolve, reject) => {
@@ -242,7 +243,7 @@ const DummyDataModel = class {
 
   destroy(condition) {
     /*
-    delete the object that meet the condition
+      delete the object that meet the condition
       condition is single object with property where whose value is further
       an object with key => value pair of the properties of the object to find.
       if several object match the specified condition, only the first match will

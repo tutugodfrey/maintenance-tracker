@@ -14,14 +14,14 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var requestController = new _RequestController2.default();
+// const requestController = new RequestController();
 var Routes = function () {
   function Routes() {
     _classCallCheck(this, Routes);
 
-    this.requestController = requestController;
+    this.RequestController = _RequestController2.default;
   }
-  /* eslint-disable class-methods-use-this */
+  /* eslint-disable class-methods-use-thiss */
 
 
   _createClass(Routes, [{
@@ -31,10 +31,10 @@ var Routes = function () {
         res.status(200).send({ message: 'welcome to the maintenance trackers' });
       });
 
-      app.post('/api/v1/users/requests', this.requestController.addRequest);
-      app.get('/api/v1/users/requests/:requestId', this.requestController.getOneRequest);
-      app.get('/api/v1/users/requests', this.requestController.getAllRequests);
-      app.put('/api/v1/users/requests/:requestId', this.requestController.updateRequest);
+      app.post('/api/v1/users/requests', this.RequestController.addRequest);
+      app.get('/api/v1/users/requests/:requestId', this.RequestController.getOneRequest);
+      app.get('/api/v1/users/requests', this.RequestController.getAllRequests);
+      app.put('/api/v1/users/requests/:requestId', this.RequestController.updateRequest);
     }
   }]);
 

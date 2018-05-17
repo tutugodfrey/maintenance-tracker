@@ -58,8 +58,16 @@ button#toggle-navigation-btn > span > hr {
   line-height:2px;
   margin:4px 0 4px 0;
 }
-hr {
+button#toggle-navigation-btn hr {
   width:25px;
+}
+button#close-notice-modal {
+  background-color:red;
+  position:absolute;
+  right:0%;
+  top:-18px;
+  padding:2px 15px 2px 15px;
+  border-style:none;
 }
 .logo {
   position:fixed;
@@ -390,7 +398,22 @@ padding-top:12px;
   height:25px;
   width:25px;
 }
-
+div#notice-modal {
+  width:85%;
+  height:350px;
+  position:fixed;
+  top:100px;
+  right:5%;
+  overflow:scroll;
+  border:1px solid #7dcc46;
+  border-radius: 2px;
+  background-color:white;
+  padding:2px 10px 15px 10px;
+  z-index:300;
+}
+#notice-head-title {
+  margin:40px 0 20px 0;
+}
 #bottom-nav-layer {
   width:60%;
   height:45px;
@@ -694,15 +717,25 @@ div#copyright > a {
   }
 }
 
-@media only screen and (min-width:420px) {
+@media only screen and (min-width:520px) {
 
   #top-nav-layer > ul {
     right:-95%;
+  }
+
+  div#notice-modal {
+    width:60%;
+    top:100px;
   }
 }
 @media only screen and (min-width:720px) {
   #top-nav-layer > ul {
     left:115%;
+  }
+
+  div#notice-modal {
+    width:50%;
+    top:100px;
   }
   #signin-form-container {
     display:block;
@@ -814,6 +847,10 @@ div#copyright > a {
 @media only screen and (min-width:820px) {
   #top-nav-layer > ul {
     left:120%;
+  }
+  div#notice-modal {
+    width:40%;
+    top:100px;
   }
   #search-form-container {
     position:relative;

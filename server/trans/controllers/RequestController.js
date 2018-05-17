@@ -22,10 +22,10 @@ var RequestController = function () {
     _classCallCheck(this, RequestController);
   }
 
-  _createClass(RequestController, [{
+  _createClass(RequestController, null, [{
     key: 'addRequest',
 
-    /* eslint-disable class-methods-use-this */
+    /* eslint-disable class-methods-use-thiss */
     // add a new event center
     value: function addRequest(req, res) {
       var userId = parseInt(req.body.userId, 10);

@@ -28,9 +28,9 @@ var DummyDataModel = function () {
     this.createModel = this.createModel.bind(this);
     this.getFields = this.getFields.bind(this);
   }
-
+  // define class methods
   /* require attention */
-  /* eslint-disable class-methods-use-this */
+  /* eslint-disable class-methods-use-thiss */
   /* eslint-disable prefer-promise-reject-errors */
   /* eslint-disable no-param-reassign */
 
@@ -38,7 +38,8 @@ var DummyDataModel = function () {
   _createClass(DummyDataModel, [{
     key: 'getFields',
     value: function getFields(objCollector, field) {
-      if (objCollector[field]) {
+      this.objCollector = objCollector;
+      if (this.objCollector[field]) {
         return objCollector[field];
       }
       return undefined;
@@ -77,8 +78,6 @@ var DummyDataModel = function () {
       });
       return result;
     }
-    // define class methods
-
   }, {
     key: 'create',
     value: function create(modelToCreate) {

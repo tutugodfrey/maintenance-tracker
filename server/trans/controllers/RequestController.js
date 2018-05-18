@@ -32,7 +32,14 @@ var RequestController = function () {
         return res.status(400).send({ message: 'missing required field' });
       }
       return users.findById(userId).then(function (user) {
-        return requests.create(req.body).then(function (request) {
+        return requests.create({
+          userId: userId,
+          category: req.body.category,
+          description: req.body.description,
+          department: req.body.department,
+          urgency: req.body.urgency,
+          status: req.body.status
+        }).then(function (request) {
           return res.status(201).send({
             request: request,
             user: user
@@ -106,11 +113,13 @@ var RequestController = function () {
     key: 'deleteRequest',
     value: function deleteRequest(req, res) {
       var requestId = parseInt(req.params.requestId, 10);
-      if (!requestId) {
+      var userId = parseInt(req.query.userId, 10);
+      if (!requestId || !userId) {
         return res.status(400).send({ message: 'missing required field' });
       }
       return requests.destroy({
         where: {
+          userId: userId,
           id: requestId
         }
       }).then(function (newRequest) {

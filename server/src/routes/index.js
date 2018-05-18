@@ -15,6 +15,7 @@ const Routes = class {
     app.get('/api/v1/users/requests/:requestId', this.RequestController.getOneRequest);
     app.get('/api/v1/users/requests', this.RequestController.getAllRequests);
     app.put('/api/v1/users/requests/:requestId', this.RequestController.updateRequest);
+    app.delete('/api/v1/users/requests/:requestId', this.RequestController.deleteRequest);
   }
 };
 

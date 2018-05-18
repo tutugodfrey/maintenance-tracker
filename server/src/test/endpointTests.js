@@ -182,6 +182,40 @@ if (process.env.NODE_ENV !== 'test') {
       });
     });
 
+    // test for delete ../users/requests/:requestId
+    describe('delete request', () => {
+      it('should delete a request', () => {
+        const { id } = createdRequest2;
+        return chai.request(app)
+          .delete(`/api/v1/users/requests/${id}`)
+          .then((res) => {
+            expect(res).to.have.status(200);
+            expect(res.body).to.be.an('object');
+            expect(res.body).to.eql({ message: 'request has been deleted' });
+          });
+      });
+
+      it('should return not found request that does not exist', () => {
+        return chai.request(app)
+          .delete('/api/v1/users/requests/4')
+          .then((res) => {
+            expect(res).to.have.status(404);
+            expect(res.body).to.be.an('object');
+            expect(res.body).to.eql({ message: 'request not found, not action taken' });
+          });
+      });
+
+      it('should return bad request if requestId is not specified params', () => {
+        return chai.request(app)
+          .delete('/api/v1/users/requests/0')
+          .then((res) => {
+            expect(res).to.have.status(400);
+            expect(res.body).to.be.an('object');
+            expect(res.body).to.eql({ message: 'missing required field' });
+          });
+      });
+    });
+
     // test for put ../users/requests/:requestId
     describe('update request', () => {
       it('should update a request', () => {

@@ -30,7 +30,6 @@ var DummyDataModel = function () {
   }
   // define class methods
   /* require attention */
-  /* eslint-disable class-methods-use-thiss */
   /* eslint-disable prefer-promise-reject-errors */
   /* eslint-disable no-param-reassign */
 
@@ -39,8 +38,9 @@ var DummyDataModel = function () {
     key: 'getFields',
     value: function getFields(objCollector, field) {
       this.objCollector = objCollector;
-      if (this.objCollector[field]) {
-        return objCollector[field];
+      this.field = field;
+      if (this.objCollector[this.field]) {
+        return objCollector[this.field];
       }
       return undefined;
     }
@@ -290,7 +290,7 @@ var DummyDataModel = function () {
       var _this8 = this;
 
       /*
-      delete the object that meet the condition
+        delete the object that meet the condition
         condition is single object with property where whose value is further
         an object with key => value pair of the properties of the object to find.
         if several object match the specified condition, only the first match will

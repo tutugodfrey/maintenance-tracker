@@ -25,8 +25,7 @@ var RequestController = function () {
   _createClass(RequestController, null, [{
     key: 'addRequest',
 
-    /* eslint-disable class-methods-use-thiss */
-    // add a new event center
+    // add a new request
     value: function addRequest(req, res) {
       var userId = parseInt(req.body.userId, 10);
       if (!req.body.userId || !req.body.description) {
@@ -99,6 +98,23 @@ var RequestController = function () {
         }).catch(function (error) {
           return res.status(400).send(error);
         });
+      }).catch(function (error) {
+        return res.status(404).send(error);
+      });
+    }
+  }, {
+    key: 'deleteRequest',
+    value: function deleteRequest(req, res) {
+      var requestId = parseInt(req.params.requestId, 10);
+      if (!requestId) {
+        return res.status(400).send({ message: 'missing required field' });
+      }
+      return requests.destroy({
+        where: {
+          id: requestId
+        }
+      }).then(function (newRequest) {
+        return res.status(200).send(newRequest);
       }).catch(function (error) {
         return res.status(404).send(error);
       });

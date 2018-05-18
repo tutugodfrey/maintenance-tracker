@@ -75,5 +75,20 @@ const RequestController = class {
       })
       .catch(error => res.status(404).send(error));
   }
+
+  static deleteRequest(req, res) {
+    const requestId = parseInt(req.params.requestId, 10);
+    if (!requestId) {
+      return res.status(400).send({ message: 'missing required field' });
+    }
+    return requests
+      .destroy({
+        where: {
+          id: requestId,
+        },
+      })
+      .then(newRequest => res.status(200).send(newRequest))
+      .catch(error => res.status(404).send(error));
+  }
 };
 export default RequestController;

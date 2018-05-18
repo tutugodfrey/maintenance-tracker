@@ -12,7 +12,14 @@ const RequestController = class {
     return users.findById(userId)
       .then((user) => {
         return requests
-          .create(req.body)
+          .create({
+            userId,
+            category: req.body.category,
+            description: req.body.description,
+            department: req.body.department,
+            urgency: req.body.urgency,
+            status: req.body.status,
+          })
           .then((request) => {
             return res.status(201).send({
               request,
@@ -78,12 +85,14 @@ const RequestController = class {
 
   static deleteRequest(req, res) {
     const requestId = parseInt(req.params.requestId, 10);
-    if (!requestId) {
+    const userId = parseInt(req.query.userId, 10);
+    if (!requestId || !userId) {
       return res.status(400).send({ message: 'missing required field' });
     }
     return requests
       .destroy({
         where: {
+          userId,
           id: requestId,
         },
       })

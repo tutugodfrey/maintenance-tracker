@@ -51,6 +51,7 @@ There are two modes to run test locally, `npm run test:local` and `npm test`. `n
 | /api/v1/users/requests                       |  GET                      |  get all requests                                                        |
 | /api/v1/users/requests/:requestId            |  GET                      |  get one request                                                         |
 | /api/v1/users/requests/:requestId            |  PUT                      |  update a request                                                        |
+| /api/v1/users/reques/:requestId              |  DELETE                   |  delete a request                                                        |
 
 ---
 

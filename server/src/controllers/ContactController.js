@@ -6,23 +6,25 @@ const ContactController = class {
   static addMessage(req, res) {
     const userId = parseInt(req.body.userId, 10);
     const adminId = parseInt(req.body.adminId, 10);
-    if (!userId || !adminId) {
+    const senderId = parseInt(req.body.senderId, 10);
+    const message = req.body.message.trim();
+    if (!userId || !adminId || !senderId) {
       return res.status(400).send({ message: 'missing required field' });
     }
     return users
-      .findById(userId)
+      .findById(senderId)
       .then((user) => {
         return contacts
           .create({
             userId,
             adminId,
+            senderId,
+            message,
             title: req.body.title,
-            message: req.body.message,
-            sender: req.body.sender,
           })
-          .then((message) => {
+          .then((newMessage) => {
             res.status(201).send({
-              message,
+              newMessage,
               user,
             });
           })

@@ -41,8 +41,52 @@ const request4 = {
   userId: 2,
   status: 'pending',
 };
+
+const message1 = {
+  title: 'unresolved request',
+  message: 'request to replace wall socket was not attended to',
+  userId: 2,
+  adminId: 1,
+  senderId: 2,
+};
+
+const message2 = {
+  title: 'Apologise',
+  message: 'Please we will attend to it right away',
+  userId: 2,
+  adminId: 1,
+  senderId: 1,
+};
+
+const message3 = {
+  title: 'Apologise',
+  message: 'Please we will attend to it right away',
+  userId: 2,
+  adminId: 1,
+  senderId: 7,
+};
+
+const message4 = {
+  title: 'Apologise',
+  message: 'Please we will attend to it right away',
+  userId: 0,
+  adminId: 0,
+  senderId: 7,
+};
+
+const message5 = {
+  title: 'unresolved request',
+  message: ' ',
+  userId: 2,
+  adminId: 1,
+  senderId: 2,
+};
+
 const createdRequest1 = {};
 const createdRequest2 = {};
+const createdMessage1 = {};
+const createdMessage2 = {};
+
 // enforce test to run in test env
 if (process.env.NODE_ENV !== 'test') {
   /* eslint-disable no-console */
@@ -467,6 +511,63 @@ if (process.env.NODE_ENV !== 'test') {
             expect(res).to.have.status(404);
             expect(res.body).to.be.an('object');
           });
+      });
+    });
+
+    // tests for the contact model
+    describe('contacts', () => {
+      describe('add contacts messages', () => {
+        it('users should be able to send message to the admin', () => {
+          return chai.request(app)
+            .post('/api/v1/contacts')
+            .send(message1)
+            .then((res) => {
+              Object.assign(createdMessage1, res.body);
+              expect(res).to.have.status(201);
+              expect(res.body).to.be.an('object');
+            });
+        });
+
+        it('admin should be able to reply a message', () => {
+          return chai.request(app)
+            .post('/api/v1/contacts')
+            .send(message2)
+            .then((res) => {
+              Object.assign(createdMessage2, res.body);
+              expect(res).to.have.status(201);
+              expect(res.body).to.be.an('object');
+            });
+        });
+
+        it('should return bad request if required fields are not presents', () => {
+          return chai.request(app)
+            .post('/api/v1/contacts')
+            .send(message3)
+            .then((res) => {
+              expect(res).to.have.status(404);
+              expect(res.body).to.be.an('object');
+            });
+        });
+
+        it('should not create a message for a sender that does not exist', () => {
+          return chai.request(app)
+            .post('/api/v1/contacts')
+            .send(message4)
+            .then((res) => {
+              expect(res).to.have.status(400);
+              expect(res.body).to.be.an('object');
+            });
+        });
+
+        it('should not create a message if no message is posted', () => {
+          return chai.request(app)
+            .post('/api/v1/contacts')
+            .send(message5)
+            .then((res) => {
+              expect(res).to.have.status(400);
+              expect(res.body).to.be.an('object');
+            });
+        });
       });
     });
   });

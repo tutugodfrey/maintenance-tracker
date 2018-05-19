@@ -29,18 +29,21 @@ var ContactController = function () {
     value: function addMessage(req, res) {
       var userId = parseInt(req.body.userId, 10);
       var adminId = parseInt(req.body.adminId, 10);
-      if (!userId) {
+      var senderId = parseInt(req.body.senderId, 10);
+      var message = req.body.message.trim();
+      if (!userId || !adminId || !senderId) {
         return res.status(400).send({ message: 'missing required field' });
       }
-      return users.findById(userId).then(function (user) {
+      return users.findById(senderId).then(function (user) {
         return contacts.create({
           userId: userId,
           adminId: adminId,
-          title: req.body.title,
-          message: req.body.message
-        }).then(function (message) {
+          senderId: senderId,
+          message: message,
+          title: req.body.title
+        }).then(function (newMessage) {
           res.status(201).send({
-            message: message,
+            newMessage: newMessage,
             user: user
           });
         }).catch(function (error) {

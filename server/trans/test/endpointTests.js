@@ -54,8 +54,52 @@ var request4 = {
   userId: 2,
   status: 'pending'
 };
+
+var message1 = {
+  title: 'unresolved request',
+  message: 'request to replace wall socket was not attended to',
+  userId: 2,
+  adminId: 1,
+  senderId: 2
+};
+
+var message2 = {
+  title: 'Apologise',
+  message: 'Please we will attend to it right away',
+  userId: 2,
+  adminId: 1,
+  senderId: 1
+};
+
+var message3 = {
+  title: 'Apologise',
+  message: 'Please we will attend to it right away',
+  userId: 2,
+  adminId: 1,
+  senderId: 7
+};
+
+var message4 = {
+  title: 'Apologise',
+  message: 'Please we will attend to it right away',
+  userId: 0,
+  adminId: 0,
+  senderId: 7
+};
+
+var message5 = {
+  title: 'unresolved request',
+  message: ' ',
+  userId: 2,
+  adminId: 1,
+  senderId: 2
+};
+
 var createdRequest1 = {};
 var createdRequest2 = {};
+var createdMessage1 = {};
+var createdMessage2 = {};
+
 // enforce test to run in test env
 if (process.env.NODE_ENV !== 'test') {
   /* eslint-disable no-console */
@@ -421,6 +465,48 @@ if (process.env.NODE_ENV !== 'test') {
         }).then(function (res) {
           expect(res).to.have.status(404);
           expect(res.body).to.be.an('object');
+        });
+      });
+    });
+
+    // tests for the contact model
+    describe('contacts', function () {
+      describe('add contacts messages', function () {
+        it('users should be able to send message to the admin', function () {
+          return _chai2.default.request(app).post('/api/v1/contacts').send(message1).then(function (res) {
+            Object.assign(createdMessage1, res.body);
+            expect(res).to.have.status(201);
+            expect(res.body).to.be.an('object');
+          });
+        });
+
+        it('admin should be able to reply a message', function () {
+          return _chai2.default.request(app).post('/api/v1/contacts').send(message2).then(function (res) {
+            Object.assign(createdMessage2, res.body);
+            expect(res).to.have.status(201);
+            expect(res.body).to.be.an('object');
+          });
+        });
+
+        it('should return bad request if required fields are not presents', function () {
+          return _chai2.default.request(app).post('/api/v1/contacts').send(message3).then(function (res) {
+            expect(res).to.have.status(404);
+            expect(res.body).to.be.an('object');
+          });
+        });
+
+        it('should not create a message for a sender that does not exist', function () {
+          return _chai2.default.request(app).post('/api/v1/contacts').send(message4).then(function (res) {
+            expect(res).to.have.status(400);
+            expect(res.body).to.be.an('object');
+          });
+        });
+
+        it('should not create a message if no message is posted', function () {
+          return _chai2.default.request(app).post('/api/v1/contacts').send(message5).then(function (res) {
+            expect(res).to.have.status(400);
+            expect(res.body).to.be.an('object');
+          });
         });
       });
     });

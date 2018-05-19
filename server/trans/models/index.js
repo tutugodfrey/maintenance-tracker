@@ -11,7 +11,7 @@ var _DummyDataModel2 = _interopRequireDefault(_DummyDataModel);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var requests = new _DummyDataModel2.default('requests', ['id'], ['category', 'description', 'userId']);
-var contacts = new _DummyDataModel2.default('contacts', ['id'], ['message', 'userId', 'adminId']);
+var contacts = new _DummyDataModel2.default('contacts', ['id'], ['message', 'userId', 'adminId', 'senderId']);
 var users = new _DummyDataModel2.default('users', ['id', 'username', 'email']);
 users.bulkCreate([{
   username: 'foo',

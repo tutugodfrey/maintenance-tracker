@@ -12,7 +12,7 @@ const request1 = {
   description: 'Socket burned',
   urgency: 'urgent',
   department: 'baking',
-  userId: 1,
+  userId: 2,
   status: 'pending',
 };
 const request2 = {
@@ -20,7 +20,7 @@ const request2 = {
   description: 'Socket burned',
   urgency: 'urgent',
   department: 'baking',
-  userId: 2,
+  userId: 3,
   status: 'pending',
 };
 
@@ -407,7 +407,7 @@ if (process.env.NODE_ENV !== 'test') {
         it('admin should not be able to modify a request with no matching userId', () => {
           const { id } = createdRequest1;
           return chai.request(app)
-            .put(`/api/v1/users/requests/${id}?userId=2&isAdmin=true`)
+            .put(`/api/v1/users/requests/${id}?userId=3&isAdmin=true`)
             .send({
               status: 'resolved',
             })

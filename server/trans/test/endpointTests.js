@@ -25,7 +25,7 @@ var request1 = {
   description: 'Socket burned',
   urgency: 'urgent',
   department: 'baking',
-  userId: 1,
+  userId: 2,
   status: 'pending'
 };
 var request2 = {
@@ -33,7 +33,7 @@ var request2 = {
   description: 'Socket burned',
   urgency: 'urgent',
   department: 'baking',
-  userId: 2,
+  userId: 3,
   status: 'pending'
 };
 
@@ -375,7 +375,7 @@ if (process.env.NODE_ENV !== 'test') {
         it('admin should not be able to modify a request with no matching userId', function () {
           var id = createdRequest1.id;
 
-          return _chai2.default.request(app).put('/api/v1/users/requests/' + id + '?userId=2&isAdmin=true').send({
+          return _chai2.default.request(app).put('/api/v1/users/requests/' + id + '?userId=3&isAdmin=true').send({
             status: 'resolved'
           }).then(function (res) {
             expect(res).to.have.status(404);

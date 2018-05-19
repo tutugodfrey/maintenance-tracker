@@ -10,6 +10,10 @@ var _RequestController = require('./../controllers/RequestController');
 
 var _RequestController2 = _interopRequireDefault(_RequestController);
 
+var _ContactController = require('./../controllers/ContactController');
+
+var _ContactController2 = _interopRequireDefault(_ContactController);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -20,6 +24,7 @@ var Routes = function () {
     _classCallCheck(this, Routes);
 
     this.RequestController = _RequestController2.default;
+    this.ContactController = _ContactController2.default;
   }
   /* eslint-disable class-methods-use-thiss */
 
@@ -31,11 +36,15 @@ var Routes = function () {
         res.status(200).send({ message: 'welcome to the maintenance trackers' });
       });
 
+      // routes for requests model
       app.post('/api/v1/users/requests', this.RequestController.addRequest);
       app.get('/api/v1/users/requests/:requestId', this.RequestController.getOneRequest);
       app.get('/api/v1/users/requests', this.RequestController.getAllRequests);
       app.put('/api/v1/users/requests/:requestId', this.RequestController.updateRequest);
       app.delete('/api/v1/users/requests/:requestId', this.RequestController.deleteRequest);
+
+      // routes for contacts model
+      app.post('/api/v1/contacts', this.ContactController.addMessage);
     }
   }]);
 

@@ -67,9 +67,7 @@ if (process.env.NODE_ENV !== 'test') {
         return chai.request(app)
           .get('/api/v1/users/requests')
           .then((res) => {
-            expect(res).to.have.status(200);
-            expect(res.body).to.be.an('array');
-            expect(res.body).to.have.length(0);
+            expect(res).to.have.status(400);
           });
       });
       it('should return not found for the request id', () => {
@@ -170,14 +168,35 @@ if (process.env.NODE_ENV !== 'test') {
 
     // test for get ../users/requests
     describe('get all request', () => {
-      it('should return all request', () => {
+      it('should return all request for logged in user', () => {
+        const { userId } = createdRequest1;
         return chai.request(app)
-          .get('/api/v1/users/requests')
+          .get(`/api/v1/users/requests?userId=${userId}`)
           .then((res) => {
             expect(res).to.have.status(200);
             expect(res.body).to.be.an('array');
-            expect(res.body).to.have.length.of.at.least(2);
-            expect(res.body).to.deep.include.members([createdRequest1, createdRequest2]);
+            expect(res.body).to.have.length.of.at.least(1);
+            expect(res.body).to.deep.include.members([createdRequest1]);
+          });
+      });
+
+      it('should return an empty array if no matching userId is found', () => {
+        return chai.request(app)
+          .get('/api/v1/users/requests?userId=5')
+          .then((res) => {
+            expect(res).to.have.status(200);
+            expect(res.body).to.be.an('array');
+            expect(res.body.length).to.equal(0);
+          });
+      });
+
+      it('should return bad request if userId is not supplied in query', () => {
+        return chai.request(app)
+          .get('/api/v1/users/requests')
+          .then((res) => {
+            expect(res).to.have.status(400);
+            expect(res.body).to.be.an('object');
+            expect(res.body).to.eql({ message: 'missing required field' });
           });
       });
     });

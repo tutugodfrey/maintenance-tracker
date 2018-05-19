@@ -76,9 +76,7 @@ if (process.env.NODE_ENV !== 'test') {
     describe('Empty request model', function () {
       it('should return an empty array', function () {
         return _chai2.default.request(app).get('/api/v1/users/requests').then(function (res) {
-          expect(res).to.have.status(200);
-          expect(res.body).to.be.an('array');
-          expect(res.body).to.have.length(0);
+          expect(res).to.have.status(400);
         });
       });
       it('should return not found for the request id', function () {
@@ -160,12 +158,30 @@ if (process.env.NODE_ENV !== 'test') {
 
     // test for get ../users/requests
     describe('get all request', function () {
-      it('should return all request', function () {
-        return _chai2.default.request(app).get('/api/v1/users/requests').then(function (res) {
+      it('should return all request for logged in user', function () {
+        var userId = createdRequest1.userId;
+
+        return _chai2.default.request(app).get('/api/v1/users/requests?userId=' + userId).then(function (res) {
           expect(res).to.have.status(200);
           expect(res.body).to.be.an('array');
-          expect(res.body).to.have.length.of.at.least(2);
-          expect(res.body).to.deep.include.members([createdRequest1, createdRequest2]);
+          expect(res.body).to.have.length.of.at.least(1);
+          expect(res.body).to.deep.include.members([createdRequest1]);
+        });
+      });
+
+      it('should return an empty array if no matching userId is found', function () {
+        return _chai2.default.request(app).get('/api/v1/users/requests?userId=5').then(function (res) {
+          expect(res).to.have.status(200);
+          expect(res.body).to.be.an('array');
+          expect(res.body.length).to.equal(0);
+        });
+      });
+
+      it('should return bad request if userId is not supplied in query', function () {
+        return _chai2.default.request(app).get('/api/v1/users/requests').then(function (res) {
+          expect(res).to.have.status(400);
+          expect(res.body).to.be.an('object');
+          expect(res.body).to.eql({ message: 'missing required field' });
         });
       });
     });
@@ -193,7 +209,7 @@ if (process.env.NODE_ENV !== 'test') {
         });
       });
 
-      it('should not delete a another person\'s request', function () {
+      it('should not delete a request belonging to another person', function () {
         var userId = createdRequest2.userId;
         var id = createdRequest1.id;
 
@@ -214,7 +230,7 @@ if (process.env.NODE_ENV !== 'test') {
         });
       });
 
-      it('should return bad request if requestId is not specified params', function () {
+      it('should return bad request if requestId and userId is invalid', function () {
         return _chai2.default.request(app).delete('/api/v1/users/requests/0?userId=0').then(function (res) {
           expect(res).to.have.status(400);
           expect(res.body).to.be.an('object');
@@ -222,7 +238,7 @@ if (process.env.NODE_ENV !== 'test') {
         });
       });
 
-      it('should return bad request if userId is not specified in query', function () {
+      it('should return bad request if requestId is given but userId is not specified in query', function () {
         var id = createdRequest2.id;
 
         return _chai2.default.request(app).delete('/api/v1/users/requests/' + id).then(function (res) {

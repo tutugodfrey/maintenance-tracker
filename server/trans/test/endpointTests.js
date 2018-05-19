@@ -166,7 +166,7 @@ if (process.env.NODE_ENV !== 'test') {
         return _chai2.default.request(app).get('/api/v1/users/requests/' + id + '?userId=0').then(function (res) {
           expect(res).to.have.status(400);
           expect(res.body).to.be.an('object');
-          expect(res.body).to.eql({ message: 'missing required field' });;
+          expect(res.body).to.eql({ message: 'missing required field' });
         });
       });
 

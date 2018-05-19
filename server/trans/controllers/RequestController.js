@@ -77,10 +77,18 @@ var RequestController = function () {
   }, {
     key: 'getAllRequests',
     value: function getAllRequests(req, res) {
-      return requests.findAll().then(function (allRequests) {
+      var userId = parseInt(req.query.userId, 10);
+      if (!userId) {
+        return res.status(400).send({ message: 'missing required field' });
+      }
+      return requests.findAll({
+        where: {
+          userId: userId
+        }
+      }).then(function (allRequests) {
         return res.status(200).send(allRequests);
       }).catch(function (error) {
-        return res.status(404).send(error);
+        return res.status(500).send(error);
       });
     }
 

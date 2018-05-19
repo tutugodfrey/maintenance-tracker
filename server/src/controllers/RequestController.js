@@ -52,7 +52,7 @@ const RequestController = class {
   // get all request for a logged in user
   static getAllRequests(req, res) {
     const userId = parseInt(req.query.userId, 10);
-    if(!userId) {
+    if (!userId) {
       return res.status(400).send({ message: 'missing required field' });
     }
     return requests
@@ -62,7 +62,7 @@ const RequestController = class {
         },
       })
       .then(allRequests => res.status(200).send(allRequests))
-      .catch(error => res.status(404).send(error));
+      .catch(error => res.status(500).send(error));
   }
 
   // update a request

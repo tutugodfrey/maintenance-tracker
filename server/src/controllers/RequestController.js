@@ -36,12 +36,14 @@ const RequestController = class {
   // get a signle requests for a logged in user
   static getOneRequest(req, res) {
     const requestId = parseInt(req.params.requestId, 10);
-    if (!requestId) {
+    const userId = parseInt(req.query.userId, 10);
+    if (!requestId || !userId) {
       return res.status(400).send({ message: 'missing required field' });
     }
     return requests
       .find({
         where: {
+          userId,
           id: requestId,
         },
       })

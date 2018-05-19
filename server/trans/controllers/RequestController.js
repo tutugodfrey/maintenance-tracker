@@ -58,11 +58,13 @@ var RequestController = function () {
     key: 'getOneRequest',
     value: function getOneRequest(req, res) {
       var requestId = parseInt(req.params.requestId, 10);
-      if (!requestId) {
+      var userId = parseInt(req.query.userId, 10);
+      if (!requestId || !userId) {
         return res.status(400).send({ message: 'missing required field' });
       }
       return requests.find({
         where: {
+          userId: userId,
           id: requestId
         }
       }).then(function (request) {

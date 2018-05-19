@@ -102,6 +102,7 @@ var RequestController = function () {
       var requestId = parseInt(req.params.requestId, 10);
       var userId = parseInt(req.query.userId, 10);
       var isAdmin = req.query.isAdmin;
+
       if (!requestId || !userId) {
         return res.status(400).send({ message: 'missing required field' });
       }
@@ -110,7 +111,9 @@ var RequestController = function () {
           userId: userId,
           id: requestId
         }
-      }).then(function (request) {
+      })
+      /* eslint-disable consistent-return */
+      .then(function (request) {
         // users should not be able to modify the status of a request
         if (!isAdmin) {
           return requests.update(request, {
@@ -121,7 +124,7 @@ var RequestController = function () {
           }).then(function (newRequest) {
             return res.status(200).send(newRequest);
           }).catch(function (error) {
-            return res.status(400).send(error);
+            return res.status(500).send(error);
           });
         }
 
@@ -132,7 +135,7 @@ var RequestController = function () {
           }).then(function (newRequest) {
             return res.status(200).send(newRequest);
           }).catch(function (error) {
-            return res.status(400).send(error);
+            return res.status(500).send(error);
           });
         }
       }).catch(function (error) {

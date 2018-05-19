@@ -74,9 +74,9 @@ if (process.env.NODE_ENV !== 'test') {
         return chai.request(app)
           .get('/api/v1/users/requests/1')
           .then((res) => {
-            expect(res).to.have.status(404);
+            expect(res).to.have.status(400);
             expect(res.body).to.be.an('object');
-            expect(res.body).to.eql({ message: 'request not found' });
+            expect(res.body).to.eql({ message: 'missing required field' });
           });
       });
     });
@@ -134,10 +134,10 @@ if (process.env.NODE_ENV !== 'test') {
 
     // test for get ../users/requests/:requestId
     describe('get one request', () => {
-      it('should return a request with the given id', () => {
-        const { id } = createdRequest1;
+      it('should return a request with the given id for a logged in user', () => {
+        const { id, userId } = createdRequest1;
         return chai.request(app)
-          .get(`/api/v1/users/requests/${id}`)
+          .get(`/api/v1/users/requests/${id}?userId=${userId}`)
           .then((res) => {
             expect(res).to.have.status(200);
             expect(res.body).to.be.an('object');
@@ -145,9 +145,10 @@ if (process.env.NODE_ENV !== 'test') {
           });
       });
 
-      it('should return not found for the request that does not exist', () => {
+      it('should return not found for requestId that does not exist for a logged in user', () => {
+        const { userId } = createdRequest1;
         return chai.request(app)
-          .get('/api/v1/users/requests/5')
+          .get(`/api/v1/users/requests/5?userId=${userId}`)
           .then((res) => {
             expect(res).to.have.status(404);
             expect(res.body).to.be.an('object');
@@ -155,9 +156,42 @@ if (process.env.NODE_ENV !== 'test') {
           });
       });
 
-      it('should return 400 error for bad request', () => {
+      it('should return not found for the requestId with no matching userId', () => {
+        const { id } = createdRequest1;
         return chai.request(app)
-          .get('/api/v1/users/requests/0')
+          .get(`/api/v1/users/requests/${id}?userId=6`)
+          .then((res) => {
+            expect(res).to.have.status(404);
+            expect(res.body).to.be.an('object');
+            expect(res.body).to.eql({ message: 'request not found' });
+          });
+      });
+
+      it('should return bad request if either userId nor requestId is invalid', () => {
+        const { id } = createdRequest1;
+        return chai.request(app)
+          .get(`/api/v1/users/requests/${id}?userId=0`)
+          .then((res) => {
+            expect(res).to.have.status(400);
+            expect(res.body).to.be.an('object');
+            expect(res.body).to.eql({ message: 'missing required field' });
+          });
+      });
+
+      it('should return bad request if either userId nor requestId is invalid', () => {
+        const { userId } = createdRequest1;
+        return chai.request(app)
+          .get(`/api/v1/users/requests/0?userId=${userId}`)
+          .then((res) => {
+            expect(res).to.have.status(400);
+            expect(res.body).to.be.an('object');
+            expect(res.body).to.eql({ message: 'missing required field' });
+          });
+      });
+
+      it('should return bad request if neither userId nor requestId is valid', () => {
+        return chai.request(app)
+          .get('/api/v1/users/requests/0?userId=0')
           .then((res) => {
             expect(res).to.have.status(400);
             expect(res.body).to.be.an('object');

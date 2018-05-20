@@ -70,25 +70,48 @@ const RequestController = class {
   // update a request
   static updateRequest(req, res) {
     const requestId = parseInt(req.params.requestId, 10);
-    if (!requestId) {
+    const userId = parseInt(req.query.userId, 10);
+    const { isAdmin } = req.query;
+    if (!requestId || !userId) {
       return res.status(400).send({ message: 'missing required field' });
     }
     return requests
-      .findById(requestId)
+      .find({
+        where: {
+          userId,
+          id: requestId,
+        },
+      })
+      /* eslint-disable consistent-return */
       .then((request) => {
-        return requests
-          .update(
-            request,
-            {
-              category: req.body.category || request.category,
-              description: req.body.description || request.description,
-              department: req.body.department || request.department,
-              urgency: req.body.urgency || request.urgency,
-              status: req.body.status || request.status,
-            },
-          )
-          .then(newRequest => res.status(200).send(newRequest))
-          .catch(error => res.status(400).send(error));
+        // users should not be able to modify the status of a request
+        if (!isAdmin) {
+          return requests
+            .update(
+              request,
+              {
+                category: req.body.category || request.category,
+                description: req.body.description || request.description,
+                department: req.body.department || request.department,
+                urgency: req.body.urgency || request.urgency,
+              },
+            )
+            .then(newRequest => res.status(200).send(newRequest))
+            .catch(error => res.status(500).send(error));
+        }
+
+        // admin should be able to modify only the status of a request
+        if (isAdmin) {
+          return requests
+            .update(
+              request,
+              {
+                status: req.body.status || request.status,
+              },
+            )
+            .then(newRequest => res.status(200).send(newRequest))
+            .catch(error => res.status(500).send(error));
+        }
       })
       .catch(error => res.status(404).send(error));
   }

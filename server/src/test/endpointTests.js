@@ -9,7 +9,7 @@ chai.use(chaiHttp);
 
 const request1 = {
   category: 'electrical',
-  description: 'Socket  burned',
+  description: 'Socket burned',
   urgency: 'urgent',
   department: 'baking',
   userId: 1,
@@ -17,7 +17,7 @@ const request1 = {
 };
 const request2 = {
   category: 'electrical',
-  description: 'Socket  burned',
+  description: 'Socket burned',
   urgency: 'urgent',
   department: 'baking',
   userId: 2,
@@ -26,7 +26,7 @@ const request2 = {
 
 const request3 = {
   category: 'electrical',
-  description: 'Socket  burned',
+  description: 'Socket burned',
   urgency: 'urgent',
   department: 'baking',
   userId: 4,
@@ -306,35 +306,133 @@ if (process.env.NODE_ENV !== 'test') {
 
     // test for put ../users/requests/:requestId
     describe('update request', () => {
-      it('should update a request', () => {
-        const { id } = createdRequest1;
-        return chai.request(app)
-          .put(`/api/v1/users/requests/${id}`)
-          .send({
-            status: 'approved',
-          })
-          .then((res) => {
-            expect(res).to.have.status(200);
-            expect(res.body).to.be.an('object');
-            expect(res.body.status).to.equal('approved');
-          });
+      describe('Users', () => {
+        it('users should be able to modify the other field except the status of a request', () => {
+          const { id, userId } = createdRequest1;
+          return chai.request(app)
+            .put(`/api/v1/users/requests/${id}?userId=${userId}`)
+            .send({
+              description: 'wall socket got burned and need replacement',
+            })
+            .then((res) => {
+              expect(res).to.have.status(200);
+              expect(res.body).to.be.an('object');
+              expect(res.body.description).to.equal('wall socket got burned and need replacement');
+            });
+        });
+
+        it('users should not be able to modify the status of a request', () => {
+          const { id, userId } = createdRequest1;
+          return chai.request(app)
+            .put(`/api/v1/users/requests/${id}?userId=${userId}&isAdmin=`)
+            .send({
+              status: 'approved',
+            })
+            .then((res) => {
+              expect(res).to.have.status(200);
+              expect(res.body).to.be.an('object');
+              expect(res.body.status).to.equal('pending');
+            });
+        });
+
+        it('should return not found for a request that does not exist', () => {
+          const { userId } = createdRequest1;
+          return chai.request(app)
+            .put(`/api/v1/users/requests/4?userId=${userId}`)
+            .send({
+              description: 'wall socket got burned and need replacement',
+            })
+            .then((res) => {
+              expect(res).to.have.status(404);
+              expect(res.body).to.be.an('object');
+            });
+        });
+
+        it('should return not found for a request with no matching userId', () => {
+          const { id } = createdRequest1;
+          return chai.request(app)
+            .put(`/api/v1/users/requests/${id}?userId=10`)
+            .send({
+              description: 'wall socket got burned and need replacement',
+            })
+            .then((res) => {
+              expect(res).to.have.status(404);
+              expect(res.body).to.be.an('object');
+            });
+        });
       });
 
-      it('should return not found request that does not exist', () => {
+      describe('Admin', () => {
+        it('admin should be able to modify the status of a request', () => {
+          const { id, userId } = createdRequest1;
+          return chai.request(app)
+            .put(`/api/v1/users/requests/${id}?userId=${userId}&isAdmin=true`)
+            .send({
+              status: 'approved',
+            })
+            .then((res) => {
+              expect(res).to.have.status(200);
+              expect(res.body).to.be.an('object');
+              expect(res.body.status).to.equal('approved');
+            });
+        });
+
+        it('admin should not be able to modify the other field except the status of a request', () => {
+          const { id, userId } = createdRequest1;
+          return chai.request(app)
+            .put(`/api/v1/users/requests/${id}?userId=${userId}&isAdmin=true`)
+            .send({
+              description: 'wall socket is bad and need replacement',
+            })
+            .then((res) => {
+              expect(res).to.have.status(200);
+              expect(res.body).to.be.an('object');
+              expect(res.body.description).to.equal('wall socket got burned and need replacement');
+            });
+        });
+
+        it('admin should not be able to modify a request that does not exist', () => {
+          const { userId } = createdRequest1;
+          return chai.request(app)
+            .put(`/api/v1/users/requests/5?userId=${userId}&isAdmin=true`)
+            .send({
+              status: 'rejected',
+            })
+            .then((res) => {
+              expect(res).to.have.status(404);
+              expect(res.body).to.be.an('object');
+            });
+        });
+
+        it('admin should not be able to modify a request with no matching userId', () => {
+          const { id } = createdRequest1;
+          return chai.request(app)
+            .put(`/api/v1/users/requests/${id}?userId=2&isAdmin=true`)
+            .send({
+              status: 'resolved',
+            })
+            .then((res) => {
+              expect(res).to.have.status(404);
+              expect(res.body).to.be.an('object');
+            });
+        });
+      });
+
+      it('should return bad request if userId is not present in query', () => {
         return chai.request(app)
           .put('/api/v1/users/requests/4')
           .send({
             status: 'approved',
           })
           .then((res) => {
-            expect(res).to.have.status(404);
+            expect(res).to.have.status(400);
             expect(res.body).to.be.an('object');
           });
       });
 
       it('should return bad request if requestId is not specified params', () => {
         return chai.request(app)
-          .put('/api/v1/users/requests/0')
+          .put('/api/v1/users/requests/0?userId={userId}')
           .send({
             status: 'approved',
           })
@@ -342,6 +440,32 @@ if (process.env.NODE_ENV !== 'test') {
             expect(res).to.have.status(400);
             expect(res.body).to.be.an('object');
             expect(res.body).to.eql({ message: 'missing required field' });
+          });
+      });
+
+      it('should return bad request if userId is not specified query', () => {
+        const { id } = createdRequest1;
+        return chai.request(app)
+          .put(`/api/v1/users/requests/${id}?userId=`)
+          .send({
+            status: 'approved',
+          })
+          .then((res) => {
+            expect(res).to.have.status(400);
+            expect(res.body).to.be.an('object');
+            expect(res.body).to.eql({ message: 'missing required field' });
+          });
+      });
+
+      it('should not update if neither userId nor requestId exist', () => {
+        return chai.request(app)
+          .put('/api/v1/users/requests/6?userId=7')
+          .send({
+            status: 'approved',
+          })
+          .then((res) => {
+            expect(res).to.have.status(404);
+            expect(res.body).to.be.an('object');
           });
       });
     });

@@ -123,6 +123,16 @@ if (process.env.NODE_ENV !== 'test') {
             expect(res.body).to.eql({ message: 'missing required field' });
           });
       });
+
+      it('should return an empty array if no message exist for the model', () => {
+        return chai.request(app)
+          .get('/api/v1/contacts?isAdmin=true')
+          .then((res) => {
+            expect(res).to.have.status(200);
+            expect(res.body).to.be.an('array');
+            expect(res.body.length).to.equal(0);
+          });
+      });
     });
 
     // test for post ../users/requests
@@ -580,7 +590,37 @@ if (process.env.NODE_ENV !== 'test') {
               expect(res.body.length).to.equal(2);
             });
         });
-      })
+
+        it('should return an empty array if no message exist for the given userId', () => {
+          return chai.request(app)
+            .get('/api/v1/contacts?userId=9')
+            .then((res) => {
+              expect(res).to.have.status(200);
+              expect(res.body).to.be.an('array');
+              expect(res.body.length).to.equal(0);
+            });
+        });
+
+        it('should return all messages if isAdmin === true', () => {
+          return chai.request(app)
+            .get('/api/v1/contacts?isAdmin=true')
+            .then((res) => {
+              expect(res).to.have.status(200);
+              expect(res.body).to.be.an('array');
+              expect(res.body.length).to.equal(2);
+            });
+        });
+
+        it('should return bad request if neither isAdim or userId is not set', () => {
+          return chai.request(app)
+            .get('/api/v1/contacts?userId=&isAdmin=')
+            .then((res) => {
+              expect(res).to.have.status(400);
+              expect(res.body).to.be.an('object');
+              expect(res.body).to.eql({ message: 'missing required field' });
+            });
+        });
+      });
     });
   });
 }

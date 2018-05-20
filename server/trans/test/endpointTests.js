@@ -130,6 +130,14 @@ if (process.env.NODE_ENV !== 'test') {
           expect(res.body).to.eql({ message: 'missing required field' });
         });
       });
+
+      it('should return an empty array if no message exist for the model', function () {
+        return _chai2.default.request(app).get('/api/v1/contacts?isAdmin=true').then(function (res) {
+          expect(res).to.have.status(200);
+          expect(res.body).to.be.an('array');
+          expect(res.body.length).to.equal(0);
+        });
+      });
     });
 
     // test for post ../users/requests
@@ -506,6 +514,40 @@ if (process.env.NODE_ENV !== 'test') {
           return _chai2.default.request(app).post('/api/v1/contacts').send(message5).then(function (res) {
             expect(res).to.have.status(400);
             expect(res.body).to.be.an('object');
+          });
+        });
+      });
+
+      describe('get messages', function () {
+        it('should return all messages for the given userId', function () {
+          return _chai2.default.request(app).get('/api/v1/contacts?userId=2').then(function (res) {
+            expect(res).to.have.status(200);
+            expect(res.body).to.be.an('array');
+            expect(res.body.length).to.equal(2);
+          });
+        });
+
+        it('should return an empty array if no message exist for the given userId', function () {
+          return _chai2.default.request(app).get('/api/v1/contacts?userId=9').then(function (res) {
+            expect(res).to.have.status(200);
+            expect(res.body).to.be.an('array');
+            expect(res.body.length).to.equal(0);
+          });
+        });
+
+        it('should return all messages if isAdmin === true', function () {
+          return _chai2.default.request(app).get('/api/v1/contacts?isAdmin=true').then(function (res) {
+            expect(res).to.have.status(200);
+            expect(res.body).to.be.an('array');
+            expect(res.body.length).to.equal(2);
+          });
+        });
+
+        it('should return bad request if neither isAdim or userId is not set', function () {
+          return _chai2.default.request(app).get('/api/v1/contacts?userId=&isAdmin=').then(function (res) {
+            expect(res).to.have.status(400);
+            expect(res.body).to.be.an('object');
+            expect(res.body).to.eql({ message: 'missing required field' });
           });
         });
       });

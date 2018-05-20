@@ -569,6 +569,18 @@ if (process.env.NODE_ENV !== 'test') {
             });
         });
       });
+
+      describe('get messages', () => {
+        it('should return all messages for the given userId', () => {
+          return chai.request(app)
+            .get('/api/v1/contacts?userId=2')
+            .then((res) => {
+              expect(res).to.have.status(200);
+              expect(res.body).to.be.an('array');
+              expect(res.body.length).to.equal(2);
+            });
+        });
+      })
     });
   });
 }

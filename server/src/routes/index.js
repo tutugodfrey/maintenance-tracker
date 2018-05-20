@@ -1,9 +1,11 @@
 import RequestController from './../controllers/RequestController';
 import ContactController from './../controllers/ContactController';
+import UsersController from './../controllers/UsersController';
 
 // const requestController = new RequestController();
 const Routes = class {
   constructor() {
+    this.UsersController = UsersController;
     this.RequestController = RequestController;
     this.ContactController = ContactController;
   }
@@ -12,6 +14,9 @@ const Routes = class {
     app.get('/', (req, res) => {
       res.status(200).send({ message: 'welcome to the maintenance trackers' });
     });
+
+    // routes for users
+    app.post('/api/v1/users/signup', this.UsersController.signup);
 
     // routes for requests model
     app.post('/api/v1/users/requests', this.RequestController.addRequest);

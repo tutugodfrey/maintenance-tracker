@@ -53,6 +53,32 @@ var ContactController = function () {
         return res.status(404).send(error);
       });
     }
+  }, {
+    key: 'getMessages',
+    value: function getMessages(req, res) {
+      var userId = parseInt(req.query.userId, 10);
+      var isAdmin = req.query.isAdmin;
+
+      if (!(userId || isAdmin)) {
+        return res.status(400).send({ message: 'missing required field' });
+      }
+      if (isAdmin === 'true') {
+        return contacts.findAll().then(function (messages) {
+          return res.status(200).send(messages);
+        }).catch(function (error) {
+          return res.status(500).send(error);
+        });
+      }
+      return contacts.findAll({
+        where: {
+          userId: userId
+        }
+      }).then(function (messages) {
+        return res.status(200).send(messages);
+      }).catch(function (error) {
+        return res.status(500).send(error);
+      });
+    }
   }]);
 
   return ContactController;

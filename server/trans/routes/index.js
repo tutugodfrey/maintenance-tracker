@@ -45,6 +45,7 @@ var Routes = function () {
 
       // routes for contacts model
       app.post('/api/v1/contacts', this.ContactController.addMessage);
+      app.get('/api/v1/contacts', this.ContactController.getMessages);
     }
   }]);
 

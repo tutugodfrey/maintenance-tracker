@@ -1,0 +1,20 @@
+language: node_js
+node_js:
+- "6.10.3"
+addons:
+    code_climate:
+        repo_token:
+        secure: "wMAaFP80wbziEGK/5o0PFcETt005+CTTJKsl0LBx3nfylTKsAlkJRn+7RlRdCp7wfR03GBIBlBy93JKsIfFaGML25OEwZmam85xVwROmoaE3sqTJQxZveHmhMA1doNbcZW4th3Z0fFyBVYWY7rtxxhVAnvMpU56687PZ5bTbTehO5p1K8+gk2ENITxlhNewmH6v3ja+jCfcH1QcIcUrsJf8PUfCFgZLg5tgQsk3f/OYRhissVCqavz/QIGxnKN4sQeNjt0ar1zkojj07EAD5nE+qN0890swUuSxao75Rn3ZHY3+3LBfD7PCgI92hsOl5WI8A4WLITIRHcmuMiUgDtRXY9om2Kb92P3r2Xbd+KLOfr13wTccWXxVj/ACyMulvoFudTPFDoUfwqEGARMy5ozEjLxjMuCkhvZAnDQnIwKcqC8u/OIH69WyxAEUyWipYPTKklhSAonneVI2liVw6j4DPsoLY+rVWdyaVaycOrmwnesyVrSwnsze+yxfcPPaFW38wDPzyXgD1AVAdI2ceXA3Vz0ulnngeC/bfC72sM13tfqSQlJoPEdf3uF70nSf5cmderAROF20mMKY+64lSYl2/5xZzjx1E1JbRGdvp/qXK+T6IODvR7W6EuZsF0equE/vgdzAZ+bwZ42OGNJT9fsA911Fr9DL5o+oZ8H/aDu4="
+
+script: "npm test"
+# send coverage report to codeclimate
+before_script:
+  - npm install codeclimate-test-reporter istanbul -g
+
+# send coverage to coveralls
+after_success:
+  - "npm run send:coverage"
+  - codeclimate-test-reporter < coverage/lcov.info
+
+
+

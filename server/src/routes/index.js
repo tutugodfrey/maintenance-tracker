@@ -1,7 +1,15 @@
+import multer from 'multer';
+import UsersController from './../controllers/UsersController';
 import RequestController from './../controllers/RequestController';
 import ContactController from './../controllers/ContactController';
-import UsersController from './../controllers/UsersController';
 
+const UsersStorage = multer.diskStorage({
+  destination: './public/users-photo/',
+  filename: (req, file, cb) => {
+    cb(null, file.originalname);
+  },
+});
+const usersUpload = multer({ storage: UsersStorage });
 // const requestController = new RequestController();
 const Routes = class {
   constructor() {
@@ -16,7 +24,7 @@ const Routes = class {
     });
 
     // routes for users
-    app.post('/api/v1/users/signup', this.UsersController.signup);
+    app.post('/api/v1/users/signup', usersUpload.single('profile-photo'), this.UsersController.signup);
 
     // routes for requests model
     app.post('/api/v1/users/requests', this.RequestController.addRequest);

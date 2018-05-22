@@ -1,4 +1,6 @@
 .vscode
 node_modules/
 coverage
+.env
 npm-debug.log
+public/users-photo/*

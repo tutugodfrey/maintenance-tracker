@@ -12,7 +12,7 @@ const request1 = {
   description: 'Socket burned',
   urgency: 'urgent',
   department: 'baking',
-  userId: 1,
+  userId: 2,
   status: 'pending',
 };
 const request2 = {
@@ -20,7 +20,7 @@ const request2 = {
   description: 'Socket burned',
   urgency: 'urgent',
   department: 'baking',
-  userId: 2,
+  userId: 3,
   status: 'pending',
 };
 
@@ -41,8 +41,52 @@ const request4 = {
   userId: 2,
   status: 'pending',
 };
+
+const message1 = {
+  title: 'unresolved request',
+  message: 'request to replace wall socket was not attended to',
+  userId: 2,
+  adminId: 1,
+  senderId: 2,
+};
+
+const message2 = {
+  title: 'Apologise',
+  message: 'Please we will attend to it right away',
+  userId: 2,
+  adminId: 1,
+  senderId: 1,
+};
+
+const message3 = {
+  title: 'Apologise',
+  message: 'Please we will attend to it right away',
+  userId: 2,
+  adminId: 1,
+  senderId: 7,
+};
+
+const message4 = {
+  title: 'Apologise',
+  message: 'Please we will attend to it right away',
+  userId: 0,
+  adminId: 0,
+  senderId: 7,
+};
+
+const message5 = {
+  title: 'unresolved request',
+  message: ' ',
+  userId: 2,
+  adminId: 1,
+  senderId: 2,
+};
+
 const createdRequest1 = {};
 const createdRequest2 = {};
+const createdMessage1 = {};
+const createdMessage2 = {};
+
 // enforce test to run in test env
 if (process.env.NODE_ENV !== 'test') {
   /* eslint-disable no-console */
@@ -77,6 +121,16 @@ if (process.env.NODE_ENV !== 'test') {
             expect(res).to.have.status(400);
             expect(res.body).to.be.an('object');
             expect(res.body).to.eql({ message: 'missing required field' });
+          });
+      });
+
+      it('should return an empty array if no message exist for the model', () => {
+        return chai.request(app)
+          .get('/api/v1/contacts?isAdmin=true')
+          .then((res) => {
+            expect(res).to.have.status(200);
+            expect(res.body).to.be.an('array');
+            expect(res.body.length).to.equal(0);
           });
       });
     });
@@ -407,7 +461,7 @@ if (process.env.NODE_ENV !== 'test') {
         it('admin should not be able to modify a request with no matching userId', () => {
           const { id } = createdRequest1;
           return chai.request(app)
-            .put(`/api/v1/users/requests/${id}?userId=2&isAdmin=true`)
+            .put(`/api/v1/users/requests/${id}?userId=3&isAdmin=true`)
             .send({
               status: 'resolved',
             })
@@ -467,6 +521,105 @@ if (process.env.NODE_ENV !== 'test') {
             expect(res).to.have.status(404);
             expect(res.body).to.be.an('object');
           });
+      });
+    });
+
+    // tests for the contact model
+    describe('contacts', () => {
+      describe('add contacts messages', () => {
+        it('users should be able to send message to the admin', () => {
+          return chai.request(app)
+            .post('/api/v1/contacts')
+            .send(message1)
+            .then((res) => {
+              Object.assign(createdMessage1, res.body);
+              expect(res).to.have.status(201);
+              expect(res.body).to.be.an('object');
+            });
+        });
+
+        it('admin should be able to reply a message', () => {
+          return chai.request(app)
+            .post('/api/v1/contacts')
+            .send(message2)
+            .then((res) => {
+              Object.assign(createdMessage2, res.body);
+              expect(res).to.have.status(201);
+              expect(res.body).to.be.an('object');
+            });
+        });
+
+        it('should return bad request if required fields are not presents', () => {
+          return chai.request(app)
+            .post('/api/v1/contacts')
+            .send(message3)
+            .then((res) => {
+              expect(res).to.have.status(404);
+              expect(res.body).to.be.an('object');
+            });
+        });
+
+        it('should not create a message for a sender that does not exist', () => {
+          return chai.request(app)
+            .post('/api/v1/contacts')
+            .send(message4)
+            .then((res) => {
+              expect(res).to.have.status(400);
+              expect(res.body).to.be.an('object');
+            });
+        });
+
+        it('should not create a message if no message is posted', () => {
+          return chai.request(app)
+            .post('/api/v1/contacts')
+            .send(message5)
+            .then((res) => {
+              expect(res).to.have.status(400);
+              expect(res.body).to.be.an('object');
+            });
+        });
+      });
+
+      describe('get messages', () => {
+        it('should return all messages for the given userId', () => {
+          return chai.request(app)
+            .get('/api/v1/contacts?userId=2')
+            .then((res) => {
+              expect(res).to.have.status(200);
+              expect(res.body).to.be.an('array');
+              expect(res.body.length).to.equal(2);
+            });
+        });
+
+        it('should return an empty array if no message exist for the given userId', () => {
+          return chai.request(app)
+            .get('/api/v1/contacts?userId=9')
+            .then((res) => {
+              expect(res).to.have.status(200);
+              expect(res.body).to.be.an('array');
+              expect(res.body.length).to.equal(0);
+            });
+        });
+
+        it('should return all messages if isAdmin === true', () => {
+          return chai.request(app)
+            .get('/api/v1/contacts?isAdmin=true')
+            .then((res) => {
+              expect(res).to.have.status(200);
+              expect(res.body).to.be.an('array');
+              expect(res.body.length).to.equal(2);
+            });
+        });
+
+        it('should return bad request if neither isAdim or userId is not set', () => {
+          return chai.request(app)
+            .get('/api/v1/contacts?userId=&isAdmin=')
+            .then((res) => {
+              expect(res).to.have.status(400);
+              expect(res.body).to.be.an('object');
+              expect(res.body).to.eql({ message: 'missing required field' });
+            });
+        });
       });
     });
   });

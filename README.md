@@ -38,7 +38,7 @@ Routing table
 ### Testing
 
 There are two modes to run test locally, `npm run test:local` and `npm test`. `npm run test:local` will transpile source code to es5 from src/ to trans/ directory and then run the test which is served from the trans/ directory. `npm test` will run the test directly from the trans/ directory skipping the transpiling stage. You will probably want to use the latter command if no changes has been made in src/ since last transpilation, thus conserving the time use for transpiling.
-**NOTE:** ensure you are in test environment before running test. run `export NODE_ENV=test` or `set NODE_ENV=test` depending on whether you are using bash or window cmd.
+NOTE: ensure you are in test environment before running test. run `export NODE_ENV=test` or `set NODE_ENV=test` depending on whether you are using bash or window cmd.
 
 ---
 

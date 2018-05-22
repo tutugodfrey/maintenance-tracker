@@ -1,7 +1,10 @@
+import dotenv from 'dotenv-safe';
+import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import models from './../models/index';
 import HelperFuncts from './../helpers/HelperFuncts';
 
+dotenv.config();
 const { users } = models;
 const UsersController = class {
   // create a new user account
@@ -107,6 +110,41 @@ const UsersController = class {
         }
       })
       .catch(error => res.status(500).send(error));
+  }
+
+  // signin controller
+  static signin(req, res) {
+    return users
+      .find({
+        where: {
+          username: req.body.username,
+        },
+      })
+      .then((user) => {
+        if (user) {
+          let passwordConfirmed = false;
+          const hashedPassword = user.password;
+          const { password } = req.body;
+          passwordConfirmed = bcrypt.compareSync(password, hashedPassword);
+          if (passwordConfirmed) {
+            const authenKey = user.username;
+            const token = jwt.sign({ authenKey }, process.env.SECRET_KEY, { expiresIn: '48h' });
+            res.status(200).send({
+              token,
+              success: true,
+              username: user.username,
+              isAdmin: user.isAdmin,
+              userId: user.id,
+              imgUrl: user.imgUrl,
+            });
+          } else {
+            res.status(400).send({ message: 'authentication fail! check your username or password' });
+          }
+        } else {
+          res.status(400).send({ message: 'authentication fail! check your username or password' });
+        }
+      })
+      .catch(error => res.status(400).send(error));
   }
 };
 

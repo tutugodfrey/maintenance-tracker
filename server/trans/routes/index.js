@@ -54,7 +54,7 @@ var Routes = function () {
 
       // routes for users
       app.post('/api/v1/users/signup', usersUpload.single('profile-photo'), this.UsersController.signup);
-
+      app.post('/api/v1/users/signin', this.UsersController.signin);
       // routes for requests model
       app.post('/api/v1/users/requests', this.RequestController.addRequest);
       app.get('/api/v1/users/requests/:requestId', this.RequestController.getOneRequest);

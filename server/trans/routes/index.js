@@ -10,6 +10,10 @@ var _multer = require('multer');
 
 var _multer2 = _interopRequireDefault(_multer);
 
+var _jsonwebtoken = require('jsonwebtoken');
+
+var _jsonwebtoken2 = _interopRequireDefault(_jsonwebtoken);
+
 var _UsersController = require('./../controllers/UsersController');
 
 var _UsersController2 = _interopRequireDefault(_UsersController);
@@ -52,19 +56,39 @@ var Routes = function () {
         res.status(200).send({ message: 'welcome to the maintenance trackers' });
       });
 
-      // routes for users
-      app.post('/api/v1/users/signup', usersUpload.single('profile-photo'), this.UsersController.signup);
-      app.post('/api/v1/users/signin', this.UsersController.signin);
+      // secure api
+      app.use('/secure/', function (req, res, next) {
+        var token = req.headers.token;
+        /* eslint-disable no-unused-vars */
+
+        var promise = new Promise(function (resolve, reject) {
+          if (token) {
+            _jsonwebtoken2.default.verify(token, process.env.SECRET_KEY, function (err, decode) {
+              if (err) {
+                resolve(res.status(401).send('Invalid Token'));
+              } else {
+                resolve(next());
+              }
+            });
+          } else {
+            resolve(res.status(402).send('Please send a token'));
+          }
+        });
+        return promise;
+      });
+      // routes for us
+      app.post('/api/v1/auth/signup', usersUpload.single('profile-photo'), this.UsersController.signup);
+      app.post('/api/v1/auth/signin', this.UsersController.signin);
       // routes for requests model
-      app.post('/api/v1/users/requests', this.RequestController.addRequest);
-      app.get('/api/v1/users/requests/:requestId', this.RequestController.getOneRequest);
-      app.get('/api/v1/users/requests', this.RequestController.getAllRequests);
-      app.put('/api/v1/users/requests/:requestId', this.RequestController.updateRequest);
-      app.delete('/api/v1/users/requests/:requestId', this.RequestController.deleteRequest);
+      app.post('/secure/api/v1/users/requests', this.RequestController.addRequest);
+      app.get('/secure/api/v1/users/requests/:requestId', this.RequestController.getOneRequest);
+      app.get('/secure/api/v1/users/requests', this.RequestController.getAllRequests);
+      app.put('/secure/api/v1/users/requests/:requestId', this.RequestController.updateRequest);
+      app.delete('/secure/api/v1/users/requests/:requestId', this.RequestController.deleteRequest);
 
       // routes for contacts model
-      app.post('/api/v1/contacts', this.ContactController.addMessage);
-      app.get('/api/v1/contacts', this.ContactController.getMessages);
+      app.post('/secure/api/v1/contacts', this.ContactController.addMessage);
+      app.get('/secure/api/v1/contacts', this.ContactController.getMessages);
     }
   }]);
 

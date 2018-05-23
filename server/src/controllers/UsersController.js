@@ -17,11 +17,7 @@ const UsersController = class {
             email: req.body.email,
           },
         })
-        .then((user) => {
-          if (user.length > 0) {
-            // username already exist
-            res.status(200).send({ message: 'user already exist' });
-          }
+        .then(() => {
           const { passwd1, passwd2 } = req.body;
           let passwd;
           if (passwd1 === passwd2) {
@@ -49,7 +45,7 @@ const UsersController = class {
                       id: signup.id,
                     });
                   })
-                  .catch(error => res.status(400).send(error));
+                  .catch(() => res.status(400).send({ message: 'user already exist' }));
               });
             });
           } else {
@@ -66,11 +62,7 @@ const UsersController = class {
           email: req.body.email,
         },
       })
-      .then((user) => {
-        if (user.length > 0) {
-          // username already exist
-          res.status(200).send({ message: 'user already exist' });
-        }
+      .then(() => {
         // handle uploaded profile pix
         const destination = HelperFuncts.getImgUrl(req.file.path);
         const { passwd1, passwd2 } = req.body;
@@ -99,9 +91,10 @@ const UsersController = class {
                     username: signup.username,
                     imgUrl: signup.imgUrl,
                     id: signup.id,
+                    isAdmin: signup.isAdmin,
                   });
                 })
-                .catch(error => res.status(400).send(error));
+                .catch(() => res.status(400).send({ message: 'user already exist' }));
             });
           });
         } else {

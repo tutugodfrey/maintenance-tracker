@@ -42,7 +42,7 @@ var request3 = {
   description: 'Socket burned',
   urgency: 'urgent',
   department: 'baking',
-  userId: 4,
+  userId: 9,
   status: 'pending'
 };
 
@@ -95,6 +95,9 @@ var message5 = {
   senderId: 2
 };
 
+var adminUser = {};
+var regularUser1 = {};
+var regularUser2 = {};
 var createdRequest1 = {};
 var createdRequest2 = {};
 var createdMessage1 = {};
@@ -113,6 +116,62 @@ if (process.env.NODE_ENV !== 'test') {
           expect(res).to.have.status(200);
           expect(res.body).to.be.an('Object');
           expect(res.body).to.eql({ message: 'welcome to the maintenance trackers' });
+        });
+      });
+    });
+
+    describe('Users signup', function () {
+      describe('Admin User', function () {
+        it('should create new admin user', function () {
+          return _chai2.default.request(app).post('/api/v1/users/signup').set('Content-Type', 'multipart/form-data').field('fullname', 'john doe').field('username', 'johnd').field('email', 'johnd@yahoo.com').field('address', 'market road').field('serviceName', 'mk services').field('passwd1', '1234').field('passwd2', '1234').field('isAdmin', true).attach('profile-photo', './fileuploads/tutug.jpeg').then(function (res) {
+            Object.assign(adminUser, res.body);
+            expect(res).to.have.status(201);
+            expect(res.body).to.be.an('Object');
+            expect(res.body.isAdmin).to.equal('true');
+          });
+        });
+      });
+
+      describe('Create regular User', function () {
+        it('should create new regular user', function () {
+          return _chai2.default.request(app).post('/api/v1/users/signup').set('Content-Type', 'multipart/form-data').field('fullname', 'brain walter').field('username', 'walterb').field('email', 'walterb@yahoo.com').field('address', 'market road').field('serviceName', 'mk services').field('passwd1', '1234').field('passwd2', '1234').field('isAdmin', false).attach('profile-photo', './fileuploads/tutug.jpeg').then(function (res) {
+            Object.assign(regularUser1, res.body);
+            expect(res).to.have.status(201);
+            expect(res.body).to.be.an('Object');
+          });
+        });
+
+        it('file submission should be optional', function () {
+          return _chai2.default.request(app).post('/api/v1/users/signup').set('Content-Type', 'multipart/form-data').field('fullname', 'ryan bob').field('username', 'ryanb').field('email', 'raynb@yahoo.com').field('address', 'market road').field('serviceName', '').field('passwd1', '1234').field('passwd2', '1234').field('isAdmin', false).then(function (res) {
+            Object.assign(regularUser2, res.body);
+            expect(res).to.have.status(201);
+            expect(res.body).to.be.an('Object');
+            expect(res.body.password).to.not.equal('1234');
+          });
+        });
+
+        it('username should be unique ', function () {
+          return _chai2.default.request(app).post('/api/v1/users/signup').set('Content-Type', 'multipart/form-data').field('fullname', 'walter brain').field('username', 'walterb').field('email', 'walterb@yahoo.com').field('address', 'market road').field('serviceName', 'mk services').field('passwd1', '1234').field('passwd2', '1234').field('isAdmin', false).attach('profile-photo', './fileuploads/tutug.jpeg').then(function (res) {
+            expect(res).to.have.status(400);
+            expect(res.body).to.be.an('Object');
+            expect(res.body).to.eql({ message: 'user already exist' });
+          });
+        });
+
+        it('email should be unique ', function () {
+          return _chai2.default.request(app).post('/api/v1/users/signup').set('Content-Type', 'multipart/form-data').field('fullname', 'brain walter').field('username', 'walterbr').field('email', 'walterb@yahoo.com').field('address', 'market road').field('serviceName', 'mk services').field('passwd1', '1234').field('passwd2', '1234').field('isAdmin', false).attach('profile-photo', './fileuploads/tutug.jpeg').then(function (res) {
+            expect(res).to.have.status(400);
+            expect(res.body).to.be.an('Object');
+            expect(res.body).to.eql({ message: 'user already exist' });
+          });
+        });
+
+        it('password, confirm-password should match', function () {
+          return _chai2.default.request(app).post('/api/v1/users/signup').set('Content-Type', 'multipart/form-data').field('fullname', 'brain walter').field('username', 'walterbr').field('email', 'walterbr@yahoo.com').field('address', 'market road').field('serviceName', 'mk services').field('passwd1', '12345').field('passwd2', '12349').field('isAdmin', false).attach('profile-photo', './fileuploads/tutug.jpeg').then(function (res) {
+            expect(res).to.have.status(400);
+            expect(res.body).to.be.an('Object');
+            expect(res.body).to.eql({ message: 'password does not match' });
+          });
         });
       });
     });

@@ -49,11 +49,7 @@ var UsersController = function () {
             username: req.body.username,
             email: req.body.email
           }
-        }).then(function (user) {
-          if (user.length > 0) {
-            // username already exist
-            res.status(200).send({ message: 'user already exist' });
-          }
+        }).then(function () {
           var _req$body = req.body,
               passwd1 = _req$body.passwd1,
               passwd2 = _req$body.passwd2;
@@ -81,8 +77,8 @@ var UsersController = function () {
                     imgUrl: signup.imgUrl,
                     id: signup.id
                   });
-                }).catch(function (error) {
-                  return res.status(400).send(error);
+                }).catch(function () {
+                  return res.status(400).send({ message: 'user already exist' });
                 });
               });
             });
@@ -99,11 +95,7 @@ var UsersController = function () {
           username: req.body.username,
           email: req.body.email
         }
-      }).then(function (user) {
-        if (user.length > 0) {
-          // username already exist
-          res.status(200).send({ message: 'user already exist' });
-        }
+      }).then(function () {
         // handle uploaded profile pix
         var destination = _HelperFuncts2.default.getImgUrl(req.file.path);
         var _req$body2 = req.body,
@@ -132,10 +124,11 @@ var UsersController = function () {
                   email: signup.email,
                   username: signup.username,
                   imgUrl: signup.imgUrl,
-                  id: signup.id
+                  id: signup.id,
+                  isAdmin: signup.isAdmin
                 });
-              }).catch(function (error) {
-                return res.status(400).send(error);
+              }).catch(function () {
+                return res.status(400).send({ message: 'user already exist' });
               });
             });
           });

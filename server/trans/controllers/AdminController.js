@@ -28,8 +28,9 @@ var AdminController = function () {
 
     // get all request for a logged in user
     value: function getAllRequests(req, res) {
-      if (req.query.isAdmin !== 'true') {
-        return res.status(402).send({ message: 'you are not permitted to perform this action' });
+      var isAdmin = req.query.isAdmin;
+      if (isAdmin !== 'true') {
+        return res.status(402).send({ message: 'missing required field' });
       }
       return requests.findAll().then(function (allRequests) {
         return res.status(200).send(allRequests);

@@ -20,6 +20,10 @@ var _userRequestTest = require('./userRequestTest');
 
 var _userRequestTest2 = _interopRequireDefault(_userRequestTest);
 
+var _adminTest = require('./adminTest');
+
+var _adminTest2 = _interopRequireDefault(_adminTest);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 // enforce test to run only in test env
@@ -32,5 +36,6 @@ if (process.env.NODE_ENV !== 'test') {
   _signupTest2.default;
   _signinTest2.default;
   _userRequestTest2.default;
+  _adminTest2.default;
 }
 //# sourceMappingURL=index.js.map

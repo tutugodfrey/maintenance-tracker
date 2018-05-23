@@ -3,6 +3,7 @@ import jwt from 'jsonwebtoken';
 import UsersController from './../controllers/UsersController';
 import RequestController from './../controllers/RequestController';
 import ContactController from './../controllers/ContactController';
+import AdminController from './../controllers/AdminController';
 
 const UsersStorage = multer.diskStorage({
   destination: './public/users-photo/',
@@ -17,6 +18,7 @@ const Routes = class {
     this.UsersController = UsersController;
     this.RequestController = RequestController;
     this.ContactController = ContactController;
+    this.AdminController = AdminController;
   }
   /* eslint-disable class-methods-use-thiss */
   routes(app) {
@@ -46,6 +48,9 @@ const Routes = class {
     // routes for us
     app.post('/api/v1/auth/signup', usersUpload.single('profile-photo'), this.UsersController.signup);
     app.post('/api/v1/auth/signin', this.UsersController.signin);
+
+    // admin routes
+    app.get('/secure/api/v1/requests', this.AdminController.getAllRequests);
     // routes for requests model
     app.post('/secure/api/v1/users/requests', this.RequestController.addRequest);
     app.get('/secure/api/v1/users/requests/:requestId', this.RequestController.getOneRequest);

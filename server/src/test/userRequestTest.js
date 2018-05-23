@@ -1,7 +1,7 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
 import Server from './../app';
-import { regularUser1, regularUser2 } from './signupTest';
+import { regularUser1 } from './signupTest';
 
 const server = new Server();
 const app = server.expressServer();
@@ -67,7 +67,7 @@ export default describe('Users actions', () => {
         });
     });
   });
-  
+
   describe('Create requests', () => {
     it('should create a new request', () => {
       const request1 = {
@@ -370,10 +370,10 @@ export default describe('Users actions', () => {
           expect(res.body).to.eql({ message: 'missing required field' });
         });
     });
-  })
+  });
 });
 
 export {
   createdRequest1,
   createdRequest2,
-}
+};

@@ -141,4 +141,4 @@ export {
   adminUser,
   regularUser1,
   regularUser2,
-}
+};

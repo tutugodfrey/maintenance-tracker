@@ -16,14 +16,10 @@ var _app = require('./../app');
 
 var _app2 = _interopRequireDefault(_app);
 
-var _userRequestTest = require('./userRequestTest');
-
 var _signupTest = require('./signupTest');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-//import { regularUser1, regularUser2 } from './signupTest';
-console.log(_signupTest.adminUser);
 var server = new _app2.default();
 var app = server.expressServer();
 var expect = _chai2.default.expect;

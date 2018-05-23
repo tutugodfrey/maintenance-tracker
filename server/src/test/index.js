@@ -10,6 +10,7 @@ if (process.env.NODE_ENV !== 'test') {
   /* eslint-disable no-console */
   console.log(`can't run test in non test env. you are in ${process.env.NODE_ENV} environment`);
 } else {
+  /* eslint-disable no-unused-expressions */
   serverTest;
   modelTest;
   signupTest;

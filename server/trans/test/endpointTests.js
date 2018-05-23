@@ -97,6 +97,7 @@ var message5 = {
 
 var adminUser = {};
 var regularUser1 = {};
+var signedInUser = {};
 var regularUser2 = {};
 var createdRequest1 = {};
 var createdRequest2 = {};
@@ -172,6 +173,41 @@ if (process.env.NODE_ENV !== 'test') {
             expect(res.body).to.be.an('Object');
             expect(res.body).to.eql({ message: 'password does not match' });
           });
+        });
+      });
+    });
+
+    describe('Signin', function () {
+      it('should signin a User in and give a token', function () {
+        return _chai2.default.request(app).post('/api/v1/users/signin').send({
+          username: regularUser1.username,
+          password: '1234'
+        }).then(function (res) {
+          Object.assign(signedInUser, res.body);
+          expect(res).to.have.status(200);
+          expect(res.body).to.be.an('Object');
+          expect(res.body).to.have.property('token');
+          expect(res.body.token).to.be.a('string');
+        });
+      });
+
+      it('should not signin a user if password is not correct', function () {
+        return _chai2.default.request(app).post('/api/v1/users/signin').send({
+          username: regularUser1.username,
+          password: '1345'
+        }).then(function (res) {
+          expect(res).to.have.status(400);
+          expect(res.body).to.be.an('Object');
+        });
+      });
+
+      it('should not signin a user if password is not correct', function () {
+        return _chai2.default.request(app).post('/api/v1/users/signin').send({
+          username: 'someoneelse',
+          password: '1344'
+        }).then(function (res) {
+          expect(res).to.have.status(400);
+          expect(res.body).to.be.an('Object');
         });
       });
     });

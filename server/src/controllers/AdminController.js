@@ -3,7 +3,7 @@ import models from './../models/index';
 
 const { requests, users } = models;
 const AdminController = class {
-
+  
   // get all request for a logged in user
   static getAllRequests(req, res) {
     const isAdmin = req.query.isAdmin;

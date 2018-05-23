@@ -51,13 +51,13 @@ const Routes = class {
 
     // admin routes
     app.get('/secure/api/v1/requests', this.AdminController.getAllRequests);
-    // routes for requests model
+
+    // user routes
     app.post('/secure/api/v1/users/requests', this.RequestController.addRequest);
     app.get('/secure/api/v1/users/requests/:requestId', this.RequestController.getOneRequest);
     app.get('/secure/api/v1/users/requests', this.RequestController.getAllRequests);
     app.put('/secure/api/v1/users/requests/:requestId', this.RequestController.updateRequest);
     app.delete('/secure/api/v1/users/requests/:requestId', this.RequestController.deleteRequest);
-
     // routes for contacts model
     app.post('/secure/api/v1/contacts', this.ContactController.addMessage);
     app.get('/secure/api/v1/contacts', this.ContactController.getMessages);

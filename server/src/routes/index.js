@@ -52,6 +52,7 @@ const Routes = class {
     // admin routes
     app.get('/secure/api/v1/requests', this.AdminController.getAllRequests);
     app.put('/secure/api/v1/requests/:requestId/reject', this.AdminController.rejectRequest);
+    app.put('/secure/api/v1/requests/:requestId/approve', this.AdminController.approveRequest);
 
     // user routes
     app.post('/secure/api/v1/users/requests', this.RequestController.addRequest);

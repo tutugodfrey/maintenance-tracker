@@ -87,6 +87,7 @@ var Routes = function () {
 
       // admin routes
       app.get('/secure/api/v1/requests', this.AdminController.getAllRequests);
+      app.put('/secure/api/v1/requests/:requestId/reject', this.AdminController.rejectRequest);
 
       // user routes
       app.post('/secure/api/v1/users/requests', this.RequestController.addRequest);

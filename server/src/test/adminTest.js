@@ -1,10 +1,8 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
 import Server from './../app';
-import { createdRequest1, createdRequest2 } from './userRequestTest';
 import { adminUser } from './signupTest';
-//import { regularUser1, regularUser2 } from './signupTest';
-console.log(adminUser)
+
 const server = new Server();
 const app = server.expressServer();
 const { expect } = chai;
@@ -27,11 +25,11 @@ export default describe('Admin Test', () => {
         expect(res.body.token).to.be.a('string');
       });
   });
-  
+
   describe('get all request', () => {
     it('should return all request', () => {
       return chai.request(app)
-        .get(`/secure/api/v1/requests?isAdmin=true`)
+        .get('/secure/api/v1/requests?isAdmin=true')
         .set('token', signedInUser.token)
         .then((res) => {
           expect(res).to.have.status(200);
@@ -42,11 +40,11 @@ export default describe('Admin Test', () => {
 
     it('should return all request', () => {
       return chai.request(app)
-        .get(`/secure/api/v1/requests?isAdmin=false`)
+        .get('/secure/api/v1/requests?isAdmin=false')
         .set('token', signedInUser.token)
         .then((res) => {
           expect(res).to.have.status(402);
         });
     });
-  })
+  });
 });

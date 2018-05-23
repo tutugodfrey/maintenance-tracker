@@ -14,8 +14,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var requests = _index2.default.requests,
-    users = _index2.default.users;
+var requests = _index2.default.requests;
 
 var AdminController = function () {
   function AdminController() {
@@ -25,10 +24,10 @@ var AdminController = function () {
   _createClass(AdminController, null, [{
     key: 'getAllRequests',
 
-
     // get all request for a logged in user
     value: function getAllRequests(req, res) {
       var isAdmin = req.query.isAdmin;
+
       if (isAdmin !== 'true') {
         return res.status(402).send({ message: 'missing required field' });
       }
@@ -36,6 +35,28 @@ var AdminController = function () {
         return res.status(200).send(allRequests);
       }).catch(function (error) {
         return res.status(500).send(error);
+      });
+    }
+  }, {
+    key: 'rejectRequest',
+    value: function rejectRequest(req, res) {
+      var requestId = parseInt(req.params.requestId, 10);
+      var isAdmin = req.query.isAdmin;
+
+      if (isAdmin !== 'true') {
+        return res.status(402).send({ message: 'you are not permitted to perform this action' });
+      }
+      if (isAdmin !== 'true' || !requestId) {
+        return res.status(400).send({ message: 'missiging required field' });
+      }
+      return requests.findById(requestId).then(function (request) {
+        return requests.update(request, {
+          status: 'rejected'
+        }).then(function (updatedRequest) {
+          return res.status(200).send(updatedRequest);
+        });
+      }).catch(function (error) {
+        return res.status(404).send(error);
       });
     }
   }]);

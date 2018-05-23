@@ -26,6 +26,10 @@ var _ContactController = require('./../controllers/ContactController');
 
 var _ContactController2 = _interopRequireDefault(_ContactController);
 
+var _AdminController = require('./../controllers/AdminController');
+
+var _AdminController2 = _interopRequireDefault(_AdminController);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -45,6 +49,7 @@ var Routes = function () {
     this.UsersController = _UsersController2.default;
     this.RequestController = _RequestController2.default;
     this.ContactController = _ContactController2.default;
+    this.AdminController = _AdminController2.default;
   }
   /* eslint-disable class-methods-use-thiss */
 
@@ -79,13 +84,16 @@ var Routes = function () {
       // routes for us
       app.post('/api/v1/auth/signup', usersUpload.single('profile-photo'), this.UsersController.signup);
       app.post('/api/v1/auth/signin', this.UsersController.signin);
-      // routes for requests model
+
+      // admin routes
+      app.get('/secure/api/v1/requests', this.AdminController.getAllRequests);
+
+      // user routes
       app.post('/secure/api/v1/users/requests', this.RequestController.addRequest);
       app.get('/secure/api/v1/users/requests/:requestId', this.RequestController.getOneRequest);
       app.get('/secure/api/v1/users/requests', this.RequestController.getAllRequests);
       app.put('/secure/api/v1/users/requests/:requestId', this.RequestController.updateRequest);
       app.delete('/secure/api/v1/users/requests/:requestId', this.RequestController.deleteRequest);
-
       // routes for contacts model
       app.post('/secure/api/v1/contacts', this.ContactController.addMessage);
       app.get('/secure/api/v1/contacts', this.ContactController.getMessages);

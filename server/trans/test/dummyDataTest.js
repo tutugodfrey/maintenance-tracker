@@ -1,5 +1,9 @@
 'use strict';
 
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
 var _chai = require('chai');
 
 var _chai2 = _interopRequireDefault(_chai);
@@ -43,7 +47,7 @@ var updateUser2 = {
   address: 'now living in planet earth'
 };
 
-describe('Dummy Data Model', function () {
+exports.default = describe('Dummy Data Model', function () {
   describe('DataModel', function () {
     it('should export a function', function () {
       expect(_DummyDataModel2.default).to.be.a('function');

@@ -1,16 +1,10 @@
-
 import chai from 'chai';
 import Server from './../app';
 
 const server = new Server();
 const { expect } = chai;
 
-// enforce test to run only in test env
-if (process.env.NODE_ENV !== 'test') {
-  /* eslint-disable no-console */
-  console.log(`can't run test in non test env. you are in ${process.env.NODE_ENV} environment`);
-} else {
-  describe('Server', () => {
+ export default  describe('Server', () => {
     describe('unit test', () => {
       it('should export a function', () => {
         expect(Server).to.be.a('function');
@@ -25,4 +19,4 @@ if (process.env.NODE_ENV !== 'test') {
       });
     });
   });
-}
+

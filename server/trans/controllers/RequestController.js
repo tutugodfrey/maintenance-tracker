@@ -101,8 +101,6 @@ var RequestController = function () {
     value: function updateRequest(req, res) {
       var requestId = parseInt(req.params.requestId, 10);
       var userId = parseInt(req.query.userId, 10);
-      var isAdmin = req.query.isAdmin;
-
       if (!requestId || !userId) {
         return res.status(400).send({ message: 'missing required field' });
       }
@@ -111,33 +109,18 @@ var RequestController = function () {
           userId: userId,
           id: requestId
         }
-      })
-      /* eslint-disable consistent-return */
-      .then(function (request) {
+      }).then(function (request) {
         // users should not be able to modify the status of a request
-        if (!isAdmin) {
-          return requests.update(request, {
-            category: req.body.category || request.category,
-            description: req.body.description || request.description,
-            department: req.body.department || request.department,
-            urgency: req.body.urgency || request.urgency
-          }).then(function (newRequest) {
-            return res.status(200).send(newRequest);
-          }).catch(function (error) {
-            return res.status(500).send(error);
-          });
-        }
-
-        // admin should be able to modify only the status of a request
-        if (isAdmin) {
-          return requests.update(request, {
-            status: req.body.status || request.status
-          }).then(function (newRequest) {
-            return res.status(200).send(newRequest);
-          }).catch(function (error) {
-            return res.status(500).send(error);
-          });
-        }
+        return requests.update(request, {
+          category: req.body.category || request.category,
+          description: req.body.description || request.description,
+          department: req.body.department || request.department,
+          urgency: req.body.urgency || request.urgency
+        }).then(function (newRequest) {
+          return res.status(200).send(newRequest);
+        }).catch(function (error) {
+          return res.status(500).send(error);
+        });
       }).catch(function (error) {
         return res.status(404).send(error);
       });

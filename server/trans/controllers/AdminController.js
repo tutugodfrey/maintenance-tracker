@@ -81,6 +81,28 @@ var AdminController = function () {
         return res.status(404).send(error);
       });
     }
+  }, {
+    key: 'resolveRequest',
+    value: function resolveRequest(req, res) {
+      var requestId = parseInt(req.params.requestId, 10);
+      var isAdmin = req.query.isAdmin;
+
+      if (isAdmin !== 'true') {
+        return res.status(402).send({ message: 'you are not permitted to perform this action' });
+      }
+      if (isAdmin !== 'true' || !requestId) {
+        return res.status(400).send({ message: 'missiging required field' });
+      }
+      return requests.findById(requestId).then(function (request) {
+        return requests.update(request, {
+          status: 'resolved'
+        }).then(function (updatedRequest) {
+          return res.status(200).send(updatedRequest);
+        });
+      }).catch(function (error) {
+        return res.status(404).send(error);
+      });
+    }
   }]);
 
   return AdminController;

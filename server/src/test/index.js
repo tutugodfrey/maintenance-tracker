@@ -4,6 +4,7 @@ import signupTest from './signupTest';
 import signinTest from './signinTest';
 import userRequestTest from './userRequestTest';
 import adminTest from './adminTest';
+import contactTest from './contactTest';
 
 // enforce test to run only in test env
 if (process.env.NODE_ENV !== 'test') {
@@ -17,4 +18,5 @@ if (process.env.NODE_ENV !== 'test') {
   signinTest;
   userRequestTest;
   adminTest;
+  contactTest;
 }

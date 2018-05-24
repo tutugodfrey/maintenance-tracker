@@ -45,7 +45,7 @@ const AdminController = class {
     if (isAdmin !== 'true') {
       return res.status(402).send({ message: 'you are not permitted to perform this action' });
     }
-    if (isAdmin !== 'true' || !requestId) {
+    if (!requestId) {
       return res.status(400).send({ message: 'missiging required field' });
     }
     return requests

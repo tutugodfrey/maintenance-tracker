@@ -1,3 +1,4 @@
+// client.query('DROP tables')
 const DummyDataModel = class {
   constructor(modelName, uniqueKeys = [], requiredFields = []) {
     if (!Array.isArray(uniqueKeys) || !Array.isArray(requiredFields)) {

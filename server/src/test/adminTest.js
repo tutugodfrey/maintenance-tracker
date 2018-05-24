@@ -2,6 +2,7 @@ import chai from 'chai';
 import chaiHttp from 'chai-http';
 import Server from './../app';
 import { adminUser } from './signupTest';
+import { createdRequest1 } from './userRequestTest';
 
 const server = new Server();
 const app = server.expressServer();
@@ -45,6 +46,137 @@ export default describe('Admin Test', () => {
         .then((res) => {
           expect(res).to.have.status(402);
         });
+    });
+  });
+
+  describe('Update a request', () => {
+    describe('approve request', () => {
+      it('should return all request', () => {
+        return chai.request(app)
+          .put(`/secure/api/v1/requests/${createdRequest1.id}/approve?isAdmin=true`)
+          .set('token', signedInUser.token)
+          .then((res) => {
+            expect(res).to.have.status(200);
+            expect(res.body).to.be.an('object');
+            expect(res.body.status).to.equal('pending');
+          });
+      });
+
+      it('should return all request', () => {
+        return chai.request(app)
+          .put(`/secure/api/v1/requests/${createdRequest1.id}/approve?isAdmin=false`)
+          .set('token', signedInUser.token)
+          .then((res) => {
+            expect(res).to.have.status(402);
+            expect(res.body).to.be.an('object');
+          });
+      });
+
+      it('should not update a request that does not exist', () => {
+        return chai.request(app)
+          .put('/secure/api/v1/requests/10/approve?isAdmin=true')
+          .set('token', signedInUser.token)
+          .then((res) => {
+            expect(res).to.have.status(404);
+            expect(res.body).to.be.an('object');
+          });
+      });
+
+      it('should return bad request if requestId is not set', () => {
+        return chai.request(app)
+          .put('/secure/api/v1/requests/0/approve?isAdmin=true')
+          .set('token', signedInUser.token)
+          .then((res) => {
+            expect(res).to.have.status(400);
+            expect(res.body).to.be.an('object');
+          });
+      });
+    });
+
+    describe('reject request', () => {
+      it('should return all request', () => {
+        return chai.request(app)
+          .put(`/secure/api/v1/requests/${createdRequest1.id}/disapprove?isAdmin=true`)
+          .set('token', signedInUser.token)
+          .then((res) => {
+            expect(res).to.have.status(200);
+            expect(res.body).to.be.an('object');
+            expect(res.body.status).to.equal('rejected');
+          });
+      });
+
+      it('should return all request', () => {
+        return chai.request(app)
+          .put(`/secure/api/v1/requests/${createdRequest1.id}/disapprove?isAdmin=false`)
+          .set('token', signedInUser.token)
+          .then((res) => {
+            expect(res).to.have.status(402);
+            expect(res.body).to.be.an('object');
+          });
+      });
+
+      it('should not update a request that does not exist', () => {
+        return chai.request(app)
+          .put('/secure/api/v1/requests/10/disapprove?isAdmin=true')
+          .set('token', signedInUser.token)
+          .then((res) => {
+            expect(res).to.have.status(404);
+            expect(res.body).to.be.an('object');
+          });
+      });
+
+      it('should return bad request if requestId is not set', () => {
+        return chai.request(app)
+          .put('/secure/api/v1/requests/0/disapprove?isAdmin=true')
+          .set('token', signedInUser.token)
+          .then((res) => {
+            expect(res).to.have.status(400);
+            expect(res.body).to.be.an('object');
+          });
+      });
+    });
+
+    describe('resolve request', () => {
+      it('should return all request', () => {
+        return chai.request(app)
+          .put(`/secure/api/v1/requests/${createdRequest1.id}/resolve?isAdmin=true`)
+          .set('token', signedInUser.token)
+          .then((res) => {
+            expect(res).to.have.status(200);
+            expect(res.body).to.be.an('object');
+            expect(res.body.status).to.equal('resolved');
+          });
+      });
+
+      it('should return all request', () => {
+        return chai.request(app)
+          .put(`/secure/api/v1/requests/${createdRequest1.id}/resolve?isAdmin=false`)
+          .set('token', signedInUser.token)
+          .then((res) => {
+            expect(res).to.have.status(402);
+            expect(res.body).to.be.an('object');
+          });
+      });
+
+      it('should not update a request that does not exist', () => {
+        return chai.request(app)
+          .put('/secure/api/v1/requests/10/resolve?isAdmin=true')
+          .set('token', signedInUser.token)
+          .then((res) => {
+            expect(res).to.have.status(404);
+            expect(res.body).to.be.an('object');
+          });
+      });
+
+      it('should return bad request if requestId is not set', () => {
+        return chai.request(app)
+          .put('/secure/api/v1/requests/0/resolve?isAdmin=true')
+          .set('token', signedInUser.token)
+          .then((res) => {
+            expect(res).to.have.status(400);
+            expect(res.body).to.be.an('object');
+          });
+      });
     });
   });
 });

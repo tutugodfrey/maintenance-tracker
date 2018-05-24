@@ -56,7 +56,7 @@ export default describe('contacts', () => {
           senderId: signedInUser.userId,
         };
         return chai.request(app)
-          .post('/secure/api/v1/contacts')
+          .post('/api/v1/contacts')
           .set('token', signedInUser.token)
           .send(userMessage)
           .then((res) => {
@@ -75,7 +75,7 @@ export default describe('contacts', () => {
           senderId: 7,
         };
         return chai.request(app)
-          .post('/secure/api/v1/contacts')
+          .post('/api/v1/contacts')
           .set('token', signedInUser.token)
           .send(message3)
           .then((res) => {
@@ -86,7 +86,7 @@ export default describe('contacts', () => {
 
       it('should not create a message for a sender that does not exist', () => {
         return chai.request(app)
-          .post('/secure/api/v1/contacts')
+          .post('/api/v1/contacts')
           .set('token', signedInUser.token)
           .send(message4)
           .then((res) => {
@@ -97,7 +97,7 @@ export default describe('contacts', () => {
 
       it('should not create a message if no message is posted', () => {
         return chai.request(app)
-          .post('/secure/api/v1/contacts')
+          .post('/api/v1/contacts')
           .set('token', signedInUser.token)
           .send(message5)
           .then((res) => {
@@ -110,7 +110,7 @@ export default describe('contacts', () => {
     describe('get messages', () => {
       it('should return all messages for the given userId', () => {
         return chai.request(app)
-          .get(`/secure/api/v1/contacts?userId=${regularUser1.id}`)
+          .get(`/api/v1/contacts?userId=${regularUser1.id}`)
           .set('token', signedInUser.token)
           .then((res) => {
             expect(res).to.have.status(200);
@@ -121,7 +121,7 @@ export default describe('contacts', () => {
 
       it('should return an empty array if no message exist for the given userId', () => {
         return chai.request(app)
-          .get('/secure/api/v1/contacts?userId=9')
+          .get('/api/v1/contacts?userId=9')
           .set('token', signedInUser.token)
           .then((res) => {
             expect(res).to.have.status(200);
@@ -159,7 +159,7 @@ export default describe('contacts', () => {
           senderId: adminUser.id,
         };
         return chai.request(app)
-          .post('/secure/api/v1/contacts')
+          .post('/api/v1/contacts')
           .set('token', signedInUser.token)
           .send(adminMessage)
           .then((res) => {
@@ -179,7 +179,7 @@ export default describe('contacts', () => {
         senderId: 7,
       };
       return chai.request(app)
-        .post('/secure/api/v1/contacts')
+        .post('/api/v1/contacts')
         .set('token', signedInUser.token)
         .send(message3)
         .then((res) => {
@@ -190,7 +190,7 @@ export default describe('contacts', () => {
 
     it('should not create a message for a sender that does not exist', () => {
       return chai.request(app)
-        .post('/secure/api/v1/contacts')
+        .post('/api/v1/contacts')
         .set('token', signedInUser.token)
         .send(message4)
         .then((res) => {
@@ -201,7 +201,7 @@ export default describe('contacts', () => {
 
     it('should not create a message if no message is posted', () => {
       return chai.request(app)
-        .post('/secure/api/v1/contacts')
+        .post('/api/v1/contacts')
         .set('token', signedInUser.token)
         .send(message5)
         .then((res) => {
@@ -214,7 +214,7 @@ export default describe('contacts', () => {
   describe('admin get message', () => {
     it('should return all messages if isAdmin === true', () => {
       return chai.request(app)
-        .get('/secure/api/v1/contacts?isAdmin=true')
+        .get('/api/v1/contacts?isAdmin=true')
         .set('token', signedInUser.token)
         .then((res) => {
           expect(res).to.have.status(200);
@@ -225,7 +225,7 @@ export default describe('contacts', () => {
 
     it('should return bad request if neither isAdim or userId is not set', () => {
       return chai.request(app)
-        .get('/secure/api/v1/contacts?userId=&isAdmin=')
+        .get('/api/v1/contacts?userId=&isAdmin=')
         .set('token', signedInUser.token)
         .then((res) => {
           expect(res).to.have.status(400);

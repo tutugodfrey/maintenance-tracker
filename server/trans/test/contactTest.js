@@ -70,7 +70,7 @@ exports.default = describe('contacts', function () {
           adminId: _signupTest.adminUser.id,
           senderId: signedInUser.userId
         };
-        return _chai2.default.request(app).post('/secure/api/v1/contacts').set('token', signedInUser.token).send(userMessage).then(function (res) {
+        return _chai2.default.request(app).post('/api/v1/contacts').set('token', signedInUser.token).send(userMessage).then(function (res) {
           Object.assign(createdMessage1, res.body);
           expect(res).to.have.status(201);
           expect(res.body).to.be.an('object');
@@ -85,21 +85,21 @@ exports.default = describe('contacts', function () {
           adminId: _signupTest.adminUser.id,
           senderId: 7
         };
-        return _chai2.default.request(app).post('/secure/api/v1/contacts').set('token', signedInUser.token).send(message3).then(function (res) {
+        return _chai2.default.request(app).post('/api/v1/contacts').set('token', signedInUser.token).send(message3).then(function (res) {
           expect(res).to.have.status(404);
           expect(res.body).to.be.an('object');
         });
       });
 
       it('should not create a message for a sender that does not exist', function () {
-        return _chai2.default.request(app).post('/secure/api/v1/contacts').set('token', signedInUser.token).send(message4).then(function (res) {
+        return _chai2.default.request(app).post('/api/v1/contacts').set('token', signedInUser.token).send(message4).then(function (res) {
           expect(res).to.have.status(400);
           expect(res.body).to.be.an('object');
         });
       });
 
       it('should not create a message if no message is posted', function () {
-        return _chai2.default.request(app).post('/secure/api/v1/contacts').set('token', signedInUser.token).send(message5).then(function (res) {
+        return _chai2.default.request(app).post('/api/v1/contacts').set('token', signedInUser.token).send(message5).then(function (res) {
           expect(res).to.have.status(400);
           expect(res.body).to.be.an('object');
         });
@@ -108,7 +108,7 @@ exports.default = describe('contacts', function () {
 
     describe('get messages', function () {
       it('should return all messages for the given userId', function () {
-        return _chai2.default.request(app).get('/secure/api/v1/contacts?userId=' + _signupTest.regularUser1.id).set('token', signedInUser.token).then(function (res) {
+        return _chai2.default.request(app).get('/api/v1/contacts?userId=' + _signupTest.regularUser1.id).set('token', signedInUser.token).then(function (res) {
           expect(res).to.have.status(200);
           expect(res.body).to.be.an('array');
           expect(res.body.length).to.be.at.least(1);
@@ -116,7 +116,7 @@ exports.default = describe('contacts', function () {
       });
 
       it('should return an empty array if no message exist for the given userId', function () {
-        return _chai2.default.request(app).get('/secure/api/v1/contacts?userId=9').set('token', signedInUser.token).then(function (res) {
+        return _chai2.default.request(app).get('/api/v1/contacts?userId=9').set('token', signedInUser.token).then(function (res) {
           expect(res).to.have.status(200);
           expect(res.body).to.be.an('array');
           expect(res.body.length).to.equal(0);
@@ -148,7 +148,7 @@ exports.default = describe('contacts', function () {
           adminId: _signupTest.adminUser.id,
           senderId: _signupTest.adminUser.id
         };
-        return _chai2.default.request(app).post('/secure/api/v1/contacts').set('token', signedInUser.token).send(adminMessage).then(function (res) {
+        return _chai2.default.request(app).post('/api/v1/contacts').set('token', signedInUser.token).send(adminMessage).then(function (res) {
           Object.assign(createdMessage2, res.body);
           expect(res).to.have.status(201);
           expect(res.body).to.be.an('object');
@@ -164,21 +164,21 @@ exports.default = describe('contacts', function () {
         adminId: _signupTest.adminUser.id,
         senderId: 7
       };
-      return _chai2.default.request(app).post('/secure/api/v1/contacts').set('token', signedInUser.token).send(message3).then(function (res) {
+      return _chai2.default.request(app).post('/api/v1/contacts').set('token', signedInUser.token).send(message3).then(function (res) {
         expect(res).to.have.status(404);
         expect(res.body).to.be.an('object');
       });
     });
 
     it('should not create a message for a sender that does not exist', function () {
-      return _chai2.default.request(app).post('/secure/api/v1/contacts').set('token', signedInUser.token).send(message4).then(function (res) {
+      return _chai2.default.request(app).post('/api/v1/contacts').set('token', signedInUser.token).send(message4).then(function (res) {
         expect(res).to.have.status(400);
         expect(res.body).to.be.an('object');
       });
     });
 
     it('should not create a message if no message is posted', function () {
-      return _chai2.default.request(app).post('/secure/api/v1/contacts').set('token', signedInUser.token).send(message5).then(function (res) {
+      return _chai2.default.request(app).post('/api/v1/contacts').set('token', signedInUser.token).send(message5).then(function (res) {
         expect(res).to.have.status(400);
         expect(res.body).to.be.an('object');
       });
@@ -187,7 +187,7 @@ exports.default = describe('contacts', function () {
 
   describe('admin get message', function () {
     it('should return all messages if isAdmin === true', function () {
-      return _chai2.default.request(app).get('/secure/api/v1/contacts?isAdmin=true').set('token', signedInUser.token).then(function (res) {
+      return _chai2.default.request(app).get('/api/v1/contacts?isAdmin=true').set('token', signedInUser.token).then(function (res) {
         expect(res).to.have.status(200);
         expect(res.body).to.be.an('array');
         expect(res.body.length).to.equal(2);
@@ -195,7 +195,7 @@ exports.default = describe('contacts', function () {
     });
 
     it('should return bad request if neither isAdim or userId is not set', function () {
-      return _chai2.default.request(app).get('/secure/api/v1/contacts?userId=&isAdmin=').set('token', signedInUser.token).then(function (res) {
+      return _chai2.default.request(app).get('/api/v1/contacts?userId=&isAdmin=').set('token', signedInUser.token).then(function (res) {
         expect(res).to.have.status(400);
         expect(res.body).to.be.an('object');
         expect(res.body).to.eql({ message: 'missing required field' });

@@ -30,7 +30,7 @@ export default describe('Admin Test', () => {
   describe('get all request', () => {
     it('should return all request', () => {
       return chai.request(app)
-        .get('/secure/api/v1/requests?isAdmin=true')
+        .get('/api/v1/requests?isAdmin=true')
         .set('token', signedInUser.token)
         .then((res) => {
           expect(res).to.have.status(200);
@@ -41,7 +41,7 @@ export default describe('Admin Test', () => {
 
     it('should return all request', () => {
       return chai.request(app)
-        .get('/secure/api/v1/requests?isAdmin=false')
+        .get('/api/v1/requests?isAdmin=false')
         .set('token', signedInUser.token)
         .then((res) => {
           expect(res).to.have.status(402);
@@ -53,7 +53,7 @@ export default describe('Admin Test', () => {
     describe('approve request', () => {
       it('should return all request', () => {
         return chai.request(app)
-          .put(`/secure/api/v1/requests/${createdRequest1.id}/approve?isAdmin=true`)
+          .put(`/api/v1/requests/${createdRequest1.id}/approve?isAdmin=true`)
           .set('token', signedInUser.token)
           .then((res) => {
             expect(res).to.have.status(200);
@@ -64,7 +64,7 @@ export default describe('Admin Test', () => {
 
       it('should return all request', () => {
         return chai.request(app)
-          .put(`/secure/api/v1/requests/${createdRequest1.id}/approve?isAdmin=false`)
+          .put(`/api/v1/requests/${createdRequest1.id}/approve?isAdmin=false`)
           .set('token', signedInUser.token)
           .then((res) => {
             expect(res).to.have.status(402);
@@ -74,7 +74,7 @@ export default describe('Admin Test', () => {
 
       it('should not update a request that does not exist', () => {
         return chai.request(app)
-          .put('/secure/api/v1/requests/10/approve?isAdmin=true')
+          .put('/api/v1/requests/10/approve?isAdmin=true')
           .set('token', signedInUser.token)
           .then((res) => {
             expect(res).to.have.status(404);
@@ -84,7 +84,7 @@ export default describe('Admin Test', () => {
 
       it('should return bad request if requestId is not set', () => {
         return chai.request(app)
-          .put('/secure/api/v1/requests/0/approve?isAdmin=true')
+          .put('/api/v1/requests/0/approve?isAdmin=true')
           .set('token', signedInUser.token)
           .then((res) => {
             expect(res).to.have.status(400);
@@ -96,7 +96,7 @@ export default describe('Admin Test', () => {
     describe('reject request', () => {
       it('should return all request', () => {
         return chai.request(app)
-          .put(`/secure/api/v1/requests/${createdRequest1.id}/disapprove?isAdmin=true`)
+          .put(`/api/v1/requests/${createdRequest1.id}/disapprove?isAdmin=true`)
           .set('token', signedInUser.token)
           .then((res) => {
             expect(res).to.have.status(200);
@@ -107,7 +107,7 @@ export default describe('Admin Test', () => {
 
       it('should return all request', () => {
         return chai.request(app)
-          .put(`/secure/api/v1/requests/${createdRequest1.id}/disapprove?isAdmin=false`)
+          .put(`/api/v1/requests/${createdRequest1.id}/disapprove?isAdmin=false`)
           .set('token', signedInUser.token)
           .then((res) => {
             expect(res).to.have.status(402);
@@ -117,7 +117,7 @@ export default describe('Admin Test', () => {
 
       it('should not update a request that does not exist', () => {
         return chai.request(app)
-          .put('/secure/api/v1/requests/10/disapprove?isAdmin=true')
+          .put('/api/v1/requests/10/disapprove?isAdmin=true')
           .set('token', signedInUser.token)
           .then((res) => {
             expect(res).to.have.status(404);
@@ -127,7 +127,7 @@ export default describe('Admin Test', () => {
 
       it('should return bad request if requestId is not set', () => {
         return chai.request(app)
-          .put('/secure/api/v1/requests/0/disapprove?isAdmin=true')
+          .put('/api/v1/requests/0/disapprove?isAdmin=true')
           .set('token', signedInUser.token)
           .then((res) => {
             expect(res).to.have.status(400);
@@ -137,9 +137,9 @@ export default describe('Admin Test', () => {
     });
 
     describe('resolve request', () => {
-      it('should return all request', () => {
+      it('should mark a request as resolve', () => {
         return chai.request(app)
-          .put(`/secure/api/v1/requests/${createdRequest1.id}/resolve?isAdmin=true`)
+          .put(`/api/v1/requests/${createdRequest1.id}/resolve?isAdmin=true`)
           .set('token', signedInUser.token)
           .then((res) => {
             expect(res).to.have.status(200);
@@ -148,9 +148,9 @@ export default describe('Admin Test', () => {
           });
       });
 
-      it('should return all request', () => {
+      it('should not resolve a reequest', () => {
         return chai.request(app)
-          .put(`/secure/api/v1/requests/${createdRequest1.id}/resolve?isAdmin=false`)
+          .put(`/api/v1/requests/${createdRequest1.id}/resolve?isAdmin=false`)
           .set('token', signedInUser.token)
           .then((res) => {
             expect(res).to.have.status(402);
@@ -160,7 +160,7 @@ export default describe('Admin Test', () => {
 
       it('should not update a request that does not exist', () => {
         return chai.request(app)
-          .put('/secure/api/v1/requests/10/resolve?isAdmin=true')
+          .put('/api/v1/requests/10/resolve?isAdmin=true')
           .set('token', signedInUser.token)
           .then((res) => {
             expect(res).to.have.status(404);
@@ -170,7 +170,7 @@ export default describe('Admin Test', () => {
 
       it('should return bad request if requestId is not set', () => {
         return chai.request(app)
-          .put('/secure/api/v1/requests/0/resolve?isAdmin=true')
+          .put('/api/v1/requests/0/resolve?isAdmin=true')
           .set('token', signedInUser.token)
           .then((res) => {
             expect(res).to.have.status(400);

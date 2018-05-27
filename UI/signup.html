@@ -5,6 +5,7 @@
       Maintenance tracker
     </title>
     <link type = "text/css" rel = "stylesheet" href = "styles/styles.css" />
+    <link rel = "shortcut icon" href = "./images/mtracker-icon.ico" type = "image/x-icon" />
   </head>
   <body>
     <div id = "body-div" class = "container bg-secondary">
@@ -21,27 +22,34 @@
               </h3>
             </div>
             <div class="form-content">
-              <form action="#" class="block-form">
-                <label for="fullname" class="form-label">Fullname</label><br />
-                <input type="text" class="form-control required-field bg-outline" id = "fullname" placeholder="Fullname" >
+              <form action="#" class="form-block">
+                <label for="fullname" class="form-label">Fullname</label>
                 <span class = "required">*</span><br />
-                <label for="username" class="form-label">Username</label><br />
-                <input type="text" class="form-control required-field bg-outline" id = "username" placeholder="Username" >
+                <input type="text" class="form-control required-field green-outline" id = "fullname" placeholder="Fullname" ><br />
+                <label for="username" class="form-label">Username</label>
                 <span class = "required">*</span><br />
-                <label for="email" class="form-label">Email</label><br />
-                <input type="text" class="form-control required-field bg-outline" id = "email" placeholder="someone@example.com" >
+                <input type="text" class="form-control required-field green-outline" id = "username" placeholder="Username" ><br />
+                <label for="email" class="form-label">Email</label>
                 <span class = "required">*</span><br />
-                <label for="department" class="form-label">Department</label><br />
-                <input type="text" class="form-control bg-outline" id = "department" placeholder="Dept" ><br />
+                <input type="text" class="form-control required-field green-outline" id = "email" placeholder="someone@example.com" ><br />
+                <label for="department" class="form-label">Address</label><br />
+                <input type="text" class="form-control green-outline" id = "department" placeholder="Address" ><br />
                 <label for="profile-photo" class="form-label">Photo</label><br />
-                <input type="file" class="form-control bg-outline" id = "profile-photo" ><br />
-                <label for="passwd1" class="form-label">Password</label><br />
-                <input type="password" class="form-control required-field bg-outline" id = "passwd1"  >
+                <input type="file" class="form-control green-outline" id = "profile-photo" ><br />
+                <label for="passwd1" class="form-label">Password</label>
                 <span class = "required">*</span><br />
-                <label for="passwd2" class="form-label">Confirm Password</label><br />
-                <input type="password" class="form-control required-field bg-outline" id = "passwd2" >
+                <input type="password" class="form-control required-field green-outline" id = "password"  ><br />
+                <label for="passwd2" class="form-label">Confirm Password</label>
                 <span class = "required">*</span><br />
-                <button id="signup-button" class="submit-button btn-large btn-center">Submit</button>
+                <input type="password" class="form-control required-field green-outline" id = "confirm-password" ><br />
+                <fieldset class="green-outline">
+                  <legend> I am a service provider</legend>
+                  <label for = "confirmisAdmin">check here</label>
+                  <input type = "checkbox" id='confirmisAdmin' class = "form-control green-outline" name = "isAdmin" /><br />
+                  <label for = "service-name" >Service Name</label>
+                  <input type = "text" id="serviceName" class = "form-control green-outline" placeholder="name of service" name = "service-name" /><br />
+                </fieldset>
+                <button id="signup-button" class="submit-button green-button btn-wide btn-center">Submit</button>
               </form>
               <p>I have an account <a class="signin-link" href="./signin.html">Signin</a></p>
             </div>

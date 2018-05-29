@@ -3,7 +3,6 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.usersUpload = undefined;
 
 var _multer = require('multer');
 
@@ -18,5 +17,5 @@ var UsersStorage = _multer2.default.diskStorage({
   }
 });
 var usersUpload = (0, _multer2.default)({ storage: UsersStorage });
-exports.usersUpload = usersUpload;
+exports.default = usersUpload;
 //# sourceMappingURL=uploadfile.js.map

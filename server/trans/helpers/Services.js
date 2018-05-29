@@ -11,12 +11,12 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 /*
 * export a class for working with objects
 */
-var HelperFuncts = function () {
-  function HelperFuncts() {
-    _classCallCheck(this, HelperFuncts);
+var Services = function () {
+  function Services() {
+    _classCallCheck(this, Services);
   }
 
-  _createClass(HelperFuncts, null, [{
+  _createClass(Services, null, [{
     key: 'getImgUrl',
     value: function getImgUrl(path) {
       if (typeof path !== 'string') {
@@ -30,9 +30,22 @@ var HelperFuncts = function () {
       var relPath = newPath.substr(indexOfPublic, newPath.length);
       return relPath;
     }
+  }, {
+    key: 'getDate',
+    value: function getDate() {
+      var dateObject = new Date();
+      var day = dateObject.getDate();
+      var month = dateObject.getMonth();
+      if (month < 10) {
+        month = '0' + month;
+      }
+      var year = dateObject.getFullYear();
+      var date = year + '-' + month + '-' + day;
+      return date;
+    }
   }]);
 
-  return HelperFuncts;
+  return Services;
 }();
-exports.default = HelperFuncts;
-//# sourceMappingURL=HelperFuncts.js.map
+exports.default = Services;
+//# sourceMappingURL=Services.js.map

@@ -10,6 +10,10 @@ var _index = require('./../models/index');
 
 var _index2 = _interopRequireDefault(_index);
 
+var _Services = require('./../helpers/Services');
+
+var _Services2 = _interopRequireDefault(_Services);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -49,8 +53,16 @@ var AdminController = function () {
       if (isAdmin !== 'true' || !requestId) {
         return res.status(400).send({ message: 'missiging required field' });
       }
+      var updatedAt = _Services2.default.getDate();
+      var dateRegExp = /\d{4}-\d{2}-\d{2}/;
+      if (!dateRegExp.test(updatedAt)) {
+        return res.status(500).send({ message: 'an error occur while processing your request' });
+      }
       return requests.findById(requestId).then(function (request) {
-        return requests.update(request, {
+        return requests.update({
+          id: request.id
+        }, {
+          updatedAt: updatedAt,
           status: 'rejected'
         }).then(function (updatedRequest) {
           return res.status(200).send(updatedRequest);
@@ -71,8 +83,16 @@ var AdminController = function () {
       if (!requestId) {
         return res.status(400).send({ message: 'missiging required field' });
       }
+      var updatedAt = _Services2.default.getDate();
+      var dateRegExp = /\d{4}-\d{2}-\d{2}/;
+      if (!dateRegExp.test(updatedAt)) {
+        return res.status(500).send({ message: 'an error occur while processing your request' });
+      }
       return requests.findById(requestId).then(function (request) {
-        return requests.update(request, {
+        return requests.update({
+          id: request.id
+        }, {
+          updatedAt: updatedAt,
           status: 'pending'
         }).then(function (updatedRequest) {
           return res.status(200).send(updatedRequest);
@@ -90,13 +110,20 @@ var AdminController = function () {
       if (isAdmin !== 'true') {
         return res.status(402).send({ message: 'you are not permitted to perform this action' });
       }
-
+      console.log("request id is ", res.params.requestId);
       if (!requestId) {
         return res.status(400).send({ message: 'missiging required field' });
       }
-
+      var updatedAt = _Services2.default.getDate();
+      var dateRegExp = /\d{4}-\d{2}-\d{2}/;
+      if (!dateRegExp.test(updatedAt)) {
+        return res.status(500).send({ message: 'an error occur while processing your request' });
+      }
       return requests.findById(requestId).then(function (request) {
-        return requests.update(request, {
+        return requests.update({
+          id: request.id
+        }, {
+          updatedAt: updatedAt,
           status: 'resolved'
         }).then(function (updatedRequest) {
           return res.status(200).send(updatedRequest);

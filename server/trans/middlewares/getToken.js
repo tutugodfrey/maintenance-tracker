@@ -3,7 +3,6 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.secureRoute = undefined;
 
 var _jsonwebtoken = require('jsonwebtoken');
 
@@ -30,5 +29,5 @@ var secureRoute = function secureRoute(req, res, next) {
   });
   return promise;
 };
-exports.secureRoute = secureRoute;
+exports.default = secureRoute;
 //# sourceMappingURL=getToken.js.map

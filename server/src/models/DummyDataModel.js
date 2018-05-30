@@ -1,118 +1,164 @@
-// client.query('DROP tables')
+import client from './connection';
+
+/* eslint-disable no-underscore-dangle */
 const DummyDataModel = class {
-  constructor(modelName, uniqueKeys = [], requiredFields = []) {
+  constructor(modelName) {
+    /*
     if (!Array.isArray(uniqueKeys) || !Array.isArray(requiredFields)) {
       return { typeError: 'argument2 and argument3 must be of type array' };
-    }
+    } */
     this.modelName = modelName;
-    this.uniqueKeys = uniqueKeys;
-    this.requiredFields = requiredFields;
     this.singleModel = modelName.substring(0, modelName.length - 1);
-    this.model = [];
-    this.createModel = this.createModel.bind(this);
-    this.getFields = this.getFields.bind(this);
-  }
-  // define class methods
-  /* require attention */
-  /* eslint-disable prefer-promise-reject-errors */
-  /* eslint-disable no-param-reassign */
-  getFields(objCollector, field) {
-    this.objCollector = objCollector;
-    this.field = field;
-    if (this.objCollector[this.field]) {
-      return objCollector[this.field];
-    }
-    return undefined;
+    this._generateCreateQuery = this._generateCreateQuery;
+    this._generateUpdateQuery = this._generateUpdateQuery;
+    this._generateGetQuery = this._generateGetQuery;
+    this._generateDeleteQuery = this._generateDeleteQuery;
   }
 
-  bulkCreate(modelsToCreate) {
-    // create a new model
-    const result = new Promise((resolve, reject) => {
-      if (this.requiredFields.length === 0) {
-        modelsToCreate.forEach((modelToCreate) => {
-          this.createModel(modelToCreate, resolve, reject);
-        });
+  _generateCreateQuery(condition) {
+    if (!condition) {
+      return { message: 'type error! expecting an object' };
+    } 
+    const keys = Object.keys(condition);
+    let queryString = `insert into ${this.modelName}`;
+    let keyString = '(';
+    keys.forEach((key) => {
+      if (keyString === '(') {
+        keyString = `${keyString} ${key}`;
       } else {
-        let allFieldsPassed = true;
-        let allModelsPassed = true;
-        modelsToCreate.forEach((modelToCreate) => {
-          this.requiredFields.forEach((required) => {
-            if (!modelToCreate[required]) {
-              allFieldsPassed = false;
-              allModelsPassed = false;
-            }
-          });
-        });
-
-        if (!allFieldsPassed && !allModelsPassed) {
-          reject({ message: 'missing required field' });
-        } else {
-          modelsToCreate.forEach((modelToCreate) => {
-            this.createModel(modelToCreate, resolve, reject);
-          });
-        }
+        keyString = `${keyString}, ${key}`;
       }
     });
-    return result;
+    keyString = `${keyString}) values`;
+
+    let valueString = '(';
+    keys.forEach((key) => {
+      if (valueString === '(') {
+        valueString = `${valueString} '${condition[key]}'`;
+      } else {
+        valueString = `${valueString}, '${condition[key]}'`;
+      }
+    });
+    valueString = `${valueString})`;
+    queryString = `${queryString} ${keyString} ${valueString} returning *`; 
+
+    if (process.env.NODE_ENV !== 'production') {
+      /* eslint-disable no-console */
+      console.log(queryString);
+    }
+    return queryString;
+  }
+
+  _generateUpdateQuery(newProps, condition) {
+    // console.log(newProps)
+    if (typeof newProps !== 'object' || typeof condition !== 'object') {
+      return { message: 'type error! expecting an object' };
+    }
+    let queryString;
+    // console.log('condition', condition)
+    const whereKeys = Object.keys(condition);
+    const newPropsKeys = Object.keys(newProps);
+    queryString = `update ${this.modelName} set`;
+    let propString = '';
+    newPropsKeys.forEach((prop) => {
+      if (propString === '') {
+        propString = `${propString}${prop} = '${newProps[prop]}'`;
+      } else {
+        propString = `${propString}, ${prop} = '${newProps[prop]}'`;
+      }
+    });
+    console.log(condition)
+    let whereString = '';
+    whereKeys.forEach((prop) => {
+      if (whereString === '') {
+        whereString = `${whereString}${prop} = '${condition[prop]}'`;
+      } else {
+        whereString = `${whereString} and ${prop} = '${condition[prop]}'`;
+      }
+    });
+
+    queryString = `${queryString} ${propString} where ${whereString}`;
+    if (process.env.NODE_ENV !== 'production') {
+      /* eslint-disable no-console */
+      console.log(queryString);
+    }
+    return queryString;
+  }
+
+  _generateGetQuery(condition) {
+    const typeOfCondition = (typeof condition);
+    if (typeOfCondition !== 'string' && typeOfCondition !== 'object' && typeOfCondition !== 'number') {
+      return { message: 'type error!' };
+    }
+
+    let queryString;
+    if (condition === 'all') {
+      queryString = `select * from ${this.modelName}`;
+    } else if (typeof condition === 'number') {
+      queryString = `select * from ${this.modelName} where id = ${condition}`;
+    } else {
+      let type;
+      if(!condition.type) {
+        type = 'and';
+      } else {
+        type = condition.type;
+      }
+      const keys = Object.keys(condition.where);
+      queryString = `select * from ${this.modelName}`;
+      keys.forEach((key) => {
+        if (queryString.indexOf('where') < 0) {
+          queryString = `${queryString} where ${key} = '${condition.where[key]}'`;
+        } else {
+          queryString = `${queryString} ${type} ${key} = '${condition.where[key]}'`;
+        }
+      });
+    }
+    if (process.env.NODE_ENV !== 'production') {
+      /* eslint-disable no-console */
+      console.log(queryString);
+    }
+    return queryString;
+
+    // return 'select all from users where username = \'john\'';
+  }
+
+  _generateDeleteQuery(condition) {
+    const typeOfCondition = (typeof condition);
+    if (typeOfCondition !== 'object') {
+      return { message: 'type error! expecting an object' };
+    }
+    let queryString;
+    if (!condition) {
+      queryString = `select all from ${this.modelName}`;
+    } else {
+      const keys = Object.keys(condition.where);
+      queryString = `delete from ${this.modelName}`;
+      keys.forEach((key) => {
+        if (queryString.indexOf('where') < 0) {
+          queryString = `${queryString} where ${key} = '${condition.where[key]}'`;
+        } else {
+          queryString = `${queryString} and ${key} = '${condition.where[key]}'`;
+        }
+      });
+    }
+    if (process.env.NODE_ENV !== 'production') {
+      /* eslint-disable no-console */
+      console.log(queryString);
+    }
+    return queryString;
   }
 
   create(modelToCreate) {
     // create a new model
     const result = new Promise((resolve, reject) => {
-      if (this.requiredFields.length === 0) {
-        this.createModel(modelToCreate, resolve, reject);
-      } else {
-        let allFieldsPassed = true;
-        this.requiredFields.forEach((required) => {
-          if (!modelToCreate[required]) {
-            allFieldsPassed = false;
-          }
-        });
-        if (!allFieldsPassed) {
-          reject({ message: 'missing required field' });
-        } else {
-          this.createModel(modelToCreate, resolve, reject);
-        }
-      }
+      const queryString = this._generateCreateQuery(modelToCreate);
+      client.query(queryString)
+        .then((res) => {
+            resolve(res.rows[0]);
+        })
+        .catch(error => console.log(error));
     });
     return result;
-  }
-
-  createModel(modelToCreate, resolve, reject) {
-    if (this.model.length === 0) {
-      modelToCreate.id = 1;
-      if (this.model.push(modelToCreate)) {
-        resolve(modelToCreate);
-      }
-      reject({ message: `Can not create ${this.singleModel}` });
-    } else {
-      const lastModel = this.model[this.model.length - 1];
-      const lastModelId = this.getFields(lastModel, 'id');
-      // verify uniqueKeys
-      if (this.uniqueKeys.length === 0) {
-        if (this.model.push(modelToCreate)) {
-          resolve(modelToCreate);
-        }
-        reject({ message: `Can not create ${this.singleModel}` });
-      } else {
-        let foundDuplicate = false;
-        this.model.forEach((model) => {
-          this.uniqueKeys.forEach((prop) => {
-            if (model[prop] === modelToCreate[prop]) {
-              foundDuplicate = true;
-              reject({ message: 'duplicate entry for unique key' });
-            }
-          });
-        });
-        if (!foundDuplicate) {
-          modelToCreate.id = lastModelId + 1;
-          if (this.model.push(modelToCreate)) {
-            resolve(modelToCreate);
-          }
-          reject({ message: `Can not create ${this.singleModel}` });
-        }
-      }
-    }
   }
 
   update(modelToUpdate, propsToUpdate) {
@@ -124,28 +170,16 @@ const DummyDataModel = class {
     */
     const result = new Promise((resolve, reject) => {
       if ((typeof propsToUpdate === 'object') && (typeof modelToUpdate === 'object')) {
-        const props = Object.keys(propsToUpdate);
-        this.model.forEach((model) => {
-          if (modelToUpdate.id === model.id) {
-            let wrongModel = false;
-            if (this.uniqueKeys.length !== 0) {
-              this.uniqueKeys.forEach((prop) => {
-                if (modelToUpdate[prop] !== model[prop]) {
-                  wrongModel = true;
-                  reject({ message: `${this.singleModel} not found` });
-                }
-              });
-            }
-            if (!wrongModel) {
-              const indexOfModel = this.model.indexOf(model);
-              props.forEach((property) => {
-                model[property] = propsToUpdate[property];
-              });
-              this.model[indexOfModel] = model;
-              resolve(model);
-            }
-          }
-        });
+        const queryString = this._generateUpdateQuery(propsToUpdate, modelToUpdate);
+        client.query(queryString)
+          .then((res) => {
+            // if (res.rows.length === 0) {
+              console.log("from update models", res.rows[0])
+              resolve(res.rows[0])
+              // resolve(modelToUpdate);
+           // }
+          })
+          .catch(error => console.log(error));
       } else {
         reject({ message: 'invalid argument passed to update! expects argument1 and argument2 to be objects' });
       }
@@ -156,23 +190,19 @@ const DummyDataModel = class {
   findById(id) {
     // return an object with the given id
     /* eslint-disable array-callback-return */
-    let modelToFind;
-    this.model.filter((model) => {
-      if (model.id === id) {
-        modelToFind = model;
-      }
-    });
     const result = new Promise((resolve, reject) => {
-      if (modelToFind) {
-        resolve(modelToFind);
-      } else {
-        reject({ error: `${this.singleModel} not found` });
-      }
+      const queryString = this._generateGetQuery(id);
+      client.query(queryString)
+        .then((res) => {
+        // console.log(res.rows[0])
+          resolve(res.rows[0]);
+        })
+        .catch(error => console.log(error));
     });
     return result;
   }
 
-  find(condition) {
+  find(condition = 'all') {
     /* return a single object that meet the condition
       condition is single object with property where whose value is further
       an object with key => value pair of the properties of the object to find
@@ -181,24 +211,12 @@ const DummyDataModel = class {
       if (!condition || !condition.where) {
         reject({ message: 'missing object propertiy \'where\' to find model' });
       } else {
-        const props = Object.keys(condition.where);
-        let propMatch;
-        let searchResult;
-        this.model.forEach((model) => {
-          propMatch = true;
-          props.forEach((property) => {
-            if (condition.where[property] !== model[property]) {
-              propMatch = false;
-            }
-          });
-          if (propMatch) {
-            searchResult = model;
-            resolve(searchResult);
-          }
-        });
-        if (!searchResult) {
-          reject({ message: `${this.singleModel} not found` });
-        }
+        const queryString = this._generateGetQuery(condition);
+        client.query(queryString)
+          .then((res) => {
+           resolve(res.rows[0]);
+          })
+         // .catch(error => console.log(error));
       }
     });
 
@@ -206,38 +224,13 @@ const DummyDataModel = class {
   }
 
   findAll(condition = 'all') {
-  /* return all objects that meet the condition
-    condition is single object with property where whose value is further
-      an object with key => value pair of the properties of the object to find
-    */
-    const result = new Promise((resolve) => {
-      if (condition === 'all') {
-        // all model in this instance
-        resolve(this.model);
-      } else {
-        // find model that meets the given condition
-        const props = Object.keys(condition.where);
-
-        // array of objects that meet the condition
-        const searchResult = [];
-        let propMatch;
-        this.model.forEach((model) => {
-          propMatch = true;
-          props.forEach((property) => {
-            if (condition.where[property] !== model[property]) {
-              propMatch = false;
-            }
-          });
-          if (propMatch) {
-            searchResult.push(model);
-          }
-        });
-        if (searchResult) {
-          resolve(searchResult);
-        } else {
-          resolve(searchResult);
-        }
-      }
+    const result = new Promise((resolve, reject) => {
+      const queryString = this._generateGetQuery(condition);
+      client.query(queryString)
+        .then((res) => {
+          resolve(res.rows);
+        })
+        .catch(error => reject(error));
     });
     return result;
   }
@@ -251,25 +244,13 @@ const DummyDataModel = class {
       be deleted
     */
     const result = new Promise((resolve, reject) => {
-      const props = Object.keys(condition.where);
-      let propMatch;
-      this.model.forEach((model) => {
-        propMatch = true;
-        props.forEach((property) => {
-          if (condition.where[property] !== model[property]) {
-            propMatch = false;
-          }
-        });
-        if (propMatch) {
-          const indexOfMatchedModel = this.model.indexOf(model);
-          if (this.model.splice(indexOfMatchedModel, 1)) {
-            resolve({ message: `${this.singleModel} has been deleted` });
-          } else {
-            reject({ message: `${this.singleModel} could not be deleted` });
-          }
-        }
-      });
-      reject({ message: `${this.singleModel} not found, not action taken` });
+      const queryString = this._generateGetQuery(condition);
+      const res = client.query(queryString);
+      res.then((result) => {
+        const response = result.rows;
+        resolve(response);
+      })
+        .catch(err => reject(err));
     });
 
     return result;

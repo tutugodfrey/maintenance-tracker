@@ -7,6 +7,4 @@ const UsersStorage = multer.diskStorage({
   },
 });
 const usersUpload = multer({ storage: UsersStorage });
-export {
-  usersUpload,
-};
+export default usersUpload;

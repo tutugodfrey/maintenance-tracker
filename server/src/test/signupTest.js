@@ -21,15 +21,15 @@ export default describe('Users signup', () => {
         .field('email', 'johnd@yahoo.com')
         .field('address', 'market road')
         .field('serviceName', 'mk services')
-        .field('passwd1', '1234')
-        .field('passwd2', '1234')
-        .field('isAdmin', true)
+        .field('password', '123456')
+        .field('confirmPassword', '123456')
+        .field('isAdmin', 'true')
         .attach('profile-photo', './fileuploads/tutug.jpeg')
         .then((res) => {
           Object.assign(adminUser, res.body);
           expect(res).to.have.status(201);
           expect(res.body).to.be.an('Object');
-          expect(res.body.isAdmin).to.equal('true');
+          expect(res.body.isAdmin).to.equal(true);
         });
     });
   });
@@ -43,10 +43,10 @@ export default describe('Users signup', () => {
         .field('username', 'walterb')
         .field('email', 'walterb@yahoo.com')
         .field('address', 'market road')
-        .field('serviceName', 'mk services')
-        .field('passwd1', '1234')
-        .field('passwd2', '1234')
-        .field('isAdmin', false)
+        .field('serviceName', '')
+        .field('password', '123456')
+        .field('confirmPassword', '123456')
+        .field('isAdmin', 'false')
         .attach('profile-photo', './fileuploads/tutug.jpeg')
         .then((res) => {
           Object.assign(regularUser1, res.body);
@@ -64,9 +64,10 @@ export default describe('Users signup', () => {
         .field('email', 'raynb@yahoo.com')
         .field('address', 'market road')
         .field('serviceName', '')
-        .field('passwd1', '1234')
-        .field('passwd2', '1234')
-        .field('isAdmin', false)
+        .field('password', '123456')
+        .field('confirmPassword', '123456')
+        .field('isAdmin', 'false')
+        .attach('profile-photo', '')
         .then((res) => {
           Object.assign(regularUser2, res.body);
           expect(res).to.have.status(201);
@@ -84,12 +85,12 @@ export default describe('Users signup', () => {
         .field('email', 'walterb@yahoo.com')
         .field('address', 'market road')
         .field('serviceName', 'mk services')
-        .field('passwd1', '1234')
-        .field('passwd2', '1234')
-        .field('isAdmin', false)
+        .field('password', '123456')
+        .field('confirmPassword', '123456')
+        .field('isAdmin', 'false')
         .attach('profile-photo', './fileuploads/tutug.jpeg')
         .then((res) => {
-          expect(res).to.have.status(400);
+          expect(res).to.have.status(409);
           expect(res.body).to.be.an('Object');
           expect(res.body).to.eql({ message: 'user already exist' });
         });
@@ -104,12 +105,12 @@ export default describe('Users signup', () => {
         .field('email', 'walterb@yahoo.com')
         .field('address', 'market road')
         .field('serviceName', 'mk services')
-        .field('passwd1', '1234')
-        .field('passwd2', '1234')
-        .field('isAdmin', false)
+        .field('password', '123456')
+        .field('confirmPassword', '123456')
+        .field('isAdmin', 'false')
         .attach('profile-photo', './fileuploads/tutug.jpeg')
         .then((res) => {
-          expect(res).to.have.status(400);
+          expect(res).to.have.status(409);
           expect(res.body).to.be.an('Object');
           expect(res.body).to.eql({ message: 'user already exist' });
         });
@@ -124,14 +125,33 @@ export default describe('Users signup', () => {
         .field('email', 'walterbr@yahoo.com')
         .field('address', 'market road')
         .field('serviceName', 'mk services')
-        .field('passwd1', '12345')
-        .field('passwd2', '12349')
-        .field('isAdmin', false)
+        .field('password', '1234567')
+        .field('confirmPassword', '123456')
+        .field('isAdmin', 'false')
         .attach('profile-photo', './fileuploads/tutug.jpeg')
         .then((res) => {
           expect(res).to.have.status(400);
           expect(res.body).to.be.an('Object');
           expect(res.body).to.eql({ message: 'password does not match' });
+        });
+    });
+    it('password, confirm-password should match', () => {
+      return chai.request(app)
+        .post('/api/v1/auth/signup')
+        .set('Content-Type', 'multipart/form-data')
+        .field('fullname', 'brain walter')
+        .field('username', 'walterbr')
+        .field('email', 'walterbr@yahoo.com')
+        .field('address', 'market road')
+        .field('serviceName', 'mk services')
+        .field('password', '12345')
+        .field('confirmPassword', '123456')
+        .field('isAdmin', 'false')
+        .attach('profile-photo', './fileuploads/tutug.jpeg')
+        .then((res) => {
+          expect(res).to.have.status(400);
+          expect(res.body).to.be.an('Object');
+          expect(res.body).to.eql({ message: 'length of password must not be less than 6' });
         });
     });
   });

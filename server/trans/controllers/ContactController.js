@@ -27,11 +27,17 @@ var ContactController = function () {
 
     // create a new message
     value: function addMessage(req, res) {
-      var userId = parseInt(req.body.userId, 10);
-      var adminId = parseInt(req.body.adminId, 10);
-      var senderId = parseInt(req.body.senderId, 10);
-      var message = req.body.message.trim();
-      if (!userId || !adminId || !senderId) {
+      var _req$body = req.body,
+          userId = _req$body.userId,
+          senderId = _req$body.senderId,
+          adminId = _req$body.adminId,
+          title = _req$body.title,
+          message = _req$body.message;
+
+      if (!parseInt(userId, 10) || !parseInt(adminId, 10) || !parseInt(senderId, 10)) {
+        return res.status(400).send({ message: 'missing required field' });
+      }
+      if (message.trim() === '' || title.trim() === '') {
         return res.status(400).send({ message: 'missing required field' });
       }
       return users.findById(senderId).then(function (user) {
@@ -40,7 +46,7 @@ var ContactController = function () {
           adminId: adminId,
           senderId: senderId,
           message: message,
-          title: req.body.title
+          title: title
         }).then(function (newMessage) {
           res.status(201).send({
             newMessage: newMessage,

@@ -31,18 +31,18 @@ var regularUser2 = {};
 exports.default = describe('Users signup', function () {
   describe('Admin User', function () {
     it('should create new admin user', function () {
-      return _chai2.default.request(app).post('/api/v1/auth/signup').set('Content-Type', 'multipart/form-data').field('fullname', 'john doe').field('username', 'johnd').field('email', 'johnd@yahoo.com').field('address', 'market road').field('serviceName', 'mk services').field('passwd1', '1234').field('passwd2', '1234').field('isAdmin', true).attach('profile-photo', './fileuploads/tutug.jpeg').then(function (res) {
+      return _chai2.default.request(app).post('/api/v1/auth/signup').set('Content-Type', 'multipart/form-data').field('fullname', 'john doe').field('username', 'johnd').field('email', 'johnd@yahoo.com').field('address', 'market road').field('serviceName', 'mk services').field('password', '123456').field('confirmPassword', '123456').field('isAdmin', 'true').attach('profile-photo', './fileuploads/tutug.jpeg').then(function (res) {
         Object.assign(adminUser, res.body);
         expect(res).to.have.status(201);
         expect(res.body).to.be.an('Object');
-        expect(res.body.isAdmin).to.equal('true');
+        expect(res.body.isAdmin).to.equal(true);
       });
     });
   });
 
   describe('Create regular User', function () {
     it('should create new regular user', function () {
-      return _chai2.default.request(app).post('/api/v1/auth/signup').set('Content-Type', 'multipart/form-data').field('fullname', 'brain walter').field('username', 'walterb').field('email', 'walterb@yahoo.com').field('address', 'market road').field('serviceName', 'mk services').field('passwd1', '1234').field('passwd2', '1234').field('isAdmin', false).attach('profile-photo', './fileuploads/tutug.jpeg').then(function (res) {
+      return _chai2.default.request(app).post('/api/v1/auth/signup').set('Content-Type', 'multipart/form-data').field('fullname', 'brain walter').field('username', 'walterb').field('email', 'walterb@yahoo.com').field('address', 'market road').field('serviceName', '').field('password', '123456').field('confirmPassword', '123456').field('isAdmin', 'false').attach('profile-photo', './fileuploads/tutug.jpeg').then(function (res) {
         Object.assign(regularUser1, res.body);
         expect(res).to.have.status(201);
         expect(res.body).to.be.an('Object');
@@ -50,7 +50,7 @@ exports.default = describe('Users signup', function () {
     });
 
     it('file submission should be optional', function () {
-      return _chai2.default.request(app).post('/api/v1/auth/signup').set('Content-Type', 'multipart/form-data').field('fullname', 'ryan bob').field('username', 'ryanb').field('email', 'raynb@yahoo.com').field('address', 'market road').field('serviceName', '').field('passwd1', '1234').field('passwd2', '1234').field('isAdmin', false).then(function (res) {
+      return _chai2.default.request(app).post('/api/v1/auth/signup').set('Content-Type', 'multipart/form-data').field('fullname', 'ryan bob').field('username', 'ryanb').field('email', 'raynb@yahoo.com').field('address', 'market road').field('serviceName', '').field('password', '123456').field('confirmPassword', '123456').field('isAdmin', 'false').attach('profile-photo', '').then(function (res) {
         Object.assign(regularUser2, res.body);
         expect(res).to.have.status(201);
         expect(res.body).to.be.an('Object');
@@ -59,26 +59,33 @@ exports.default = describe('Users signup', function () {
     });
 
     it('username should be unique ', function () {
-      return _chai2.default.request(app).post('/api/v1/auth/signup').set('Content-Type', 'multipart/form-data').field('fullname', 'walter brain').field('username', 'walterb').field('email', 'walterb@yahoo.com').field('address', 'market road').field('serviceName', 'mk services').field('passwd1', '1234').field('passwd2', '1234').field('isAdmin', false).attach('profile-photo', './fileuploads/tutug.jpeg').then(function (res) {
-        expect(res).to.have.status(400);
+      return _chai2.default.request(app).post('/api/v1/auth/signup').set('Content-Type', 'multipart/form-data').field('fullname', 'walter brain').field('username', 'walterb').field('email', 'walterb@yahoo.com').field('address', 'market road').field('serviceName', 'mk services').field('password', '123456').field('confirmPassword', '123456').field('isAdmin', 'false').attach('profile-photo', './fileuploads/tutug.jpeg').then(function (res) {
+        expect(res).to.have.status(409);
         expect(res.body).to.be.an('Object');
         expect(res.body).to.eql({ message: 'user already exist' });
       });
     });
 
     it('email should be unique ', function () {
-      return _chai2.default.request(app).post('/api/v1/auth/signup').set('Content-Type', 'multipart/form-data').field('fullname', 'brain walter').field('username', 'walterbr').field('email', 'walterb@yahoo.com').field('address', 'market road').field('serviceName', 'mk services').field('passwd1', '1234').field('passwd2', '1234').field('isAdmin', false).attach('profile-photo', './fileuploads/tutug.jpeg').then(function (res) {
-        expect(res).to.have.status(400);
+      return _chai2.default.request(app).post('/api/v1/auth/signup').set('Content-Type', 'multipart/form-data').field('fullname', 'brain walter').field('username', 'walterbr').field('email', 'walterb@yahoo.com').field('address', 'market road').field('serviceName', 'mk services').field('password', '123456').field('confirmPassword', '123456').field('isAdmin', 'false').attach('profile-photo', './fileuploads/tutug.jpeg').then(function (res) {
+        expect(res).to.have.status(409);
         expect(res.body).to.be.an('Object');
         expect(res.body).to.eql({ message: 'user already exist' });
       });
     });
 
     it('password, confirm-password should match', function () {
-      return _chai2.default.request(app).post('/api/v1/auth/signup').set('Content-Type', 'multipart/form-data').field('fullname', 'brain walter').field('username', 'walterbr').field('email', 'walterbr@yahoo.com').field('address', 'market road').field('serviceName', 'mk services').field('passwd1', '12345').field('passwd2', '12349').field('isAdmin', false).attach('profile-photo', './fileuploads/tutug.jpeg').then(function (res) {
+      return _chai2.default.request(app).post('/api/v1/auth/signup').set('Content-Type', 'multipart/form-data').field('fullname', 'brain walter').field('username', 'walterbr').field('email', 'walterbr@yahoo.com').field('address', 'market road').field('serviceName', 'mk services').field('password', '1234567').field('confirmPassword', '123456').field('isAdmin', 'false').attach('profile-photo', './fileuploads/tutug.jpeg').then(function (res) {
         expect(res).to.have.status(400);
         expect(res.body).to.be.an('Object');
         expect(res.body).to.eql({ message: 'password does not match' });
+      });
+    });
+    it('password, confirm-password should match', function () {
+      return _chai2.default.request(app).post('/api/v1/auth/signup').set('Content-Type', 'multipart/form-data').field('fullname', 'brain walter').field('username', 'walterbr').field('email', 'walterbr@yahoo.com').field('address', 'market road').field('serviceName', 'mk services').field('password', '12345').field('confirmPassword', '123456').field('isAdmin', 'false').attach('profile-photo', './fileuploads/tutug.jpeg').then(function (res) {
+        expect(res).to.have.status(400);
+        expect(res.body).to.be.an('Object');
+        expect(res.body).to.eql({ message: 'length of password must not be less than 6' });
       });
     });
   });

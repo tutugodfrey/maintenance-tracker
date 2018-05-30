@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 
-const secureRoute = function(req, res, next)  {
+const secureRoute = function (req, res, next) {
   const { token } = req.headers;
   /* eslint-disable no-unused-vars */
   const promise = new Promise((resolve, reject) => {
@@ -18,6 +18,4 @@ const secureRoute = function(req, res, next)  {
   });
   return promise;
 };
-export {
-  secureRoute,
-};
+export default secureRoute;

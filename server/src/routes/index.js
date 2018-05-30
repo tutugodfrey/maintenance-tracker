@@ -1,10 +1,10 @@
-
+import path from 'path';
 import UsersController from './../controllers/UsersController';
 import RequestController from './../controllers/RequestController';
 import ContactController from './../controllers/ContactController';
 import AdminController from './../controllers/AdminController';
-import { secureRoute } from './../middlewares/getToken';
-import { usersUpload } from './../middlewares/uploadfile';
+import secureRoute from './../middlewares/getToken';
+import usersUpload from './../middlewares/uploadfile';
 
 // const requestController = new RequestController();
 const Routes = class {
@@ -17,7 +17,7 @@ const Routes = class {
   /* eslint-disable class-methods-use-thiss */
   routes(app) {
     app.get('/', (req, res) => {
-      res.status(200).send({ message: 'welcome to the maintenance trackers' });
+      res.status(200).sendFile(path.join(__dirname, './../../../client/index.html'));
     });
 
 

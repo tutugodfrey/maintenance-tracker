@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>
+      Maintenance tracker
+    </title>
+    <link type = "text/css" rel = "stylesheet" href = "./../styles/styles.css" />
+    <link rel = "shortcut icon" href = "./../images/mtracker-icon.ico" type = "image/x-icon" />
+  </head>
+  <body>
+    <div id = "body-div" class = "container bg-secondary">
+      <div id="user-dashboard" class="page-header container shadow-bottom">
+        <div id="top-nav-layer" class="">
+          <ul id="menu-items">
+            <li>
+              <a href="" class="user-profile">
+                <img src="./../images/tutug.jpeg" alt="" class="profile-photo">
+              </a>
+            </li>
+            <li id="signout-item"><a href="#">Sign Out</a></li>
+            <li id="notification-item">
+              <a href="#notice-modal" class="nav-link">
+                <img id="notification-icon" src="./../images/white-bell-red-record.png" alt="notice icon">
+              </a>
+            </li>
+          </ul>
+        </div>
+        <div id="bottom-nav-layer" class="">
+          <div class="logo-div">
+            <a id="img-link-to-home" href="./../index.html">
+              <img class="logo" src="./../images/mt-logo-white.png" alt="logo" />
+            </a>
+          </div>
+          <div class="nav-bar">
+            <ul class="nav-menu">
+              <li class="nav-item">
+                <a href="#request-repair" id="default-nav" class="nav-link active">Request Repair</a>
+              </li>
+              <li class="nav-item">
+                <a href="#view-users-requests" class="nav-link inactive">View Requests</a>
+              </li>
+              <li class="nav-item">
+                <a href="#contact-service-dept" class="nav-link inactive">Contact Service department</a>
+              </li>
+            </ul>
+          </div>
+          <div id="vertical-nav-bar" class="hide-item">
+            <ul class="nav-menu">
+              <li class="nav-item nav-toggle">
+                <a href="#request-repair" class="nav-link active">Request Repair</a>
+              </li>
+              <li class="nav-item nav-toggle">
+                <a href="#view-users-requests" class="nav-link inactive">View Requests</a>
+              </li>
+              <li class="nav-item nav-toggle">
+                <a href="#contact-service-dept" class="nav-link inactive">Contact Service department</a>
+              </li>
+            </ul>
+          </div>
+          <button id="toggle-navigation-btn">
+              <span>
+                <hr>
+                <hr>
+                <hr>
+              </span>
+          </button>
+        </div>
+      </div>
+      <div id="content-area" class="container">
+        <div id="request-repair" class="tab-item show-item">
+          <div id="request-form-container" class="form-gradient shadow">
+              <div class="small-header-gradient">
+                <h3 class="head-title">
+                  Request
+                </h3>
+              </div>
+              <div class="form-content">
+                <form action="" class="form-block">
+                  <label for="problem-type" class="form-label">Category</label>
+                  <span class = "required">*</span><br/>
+                  <select name="equipment-type" id="problem-type" class="green-outline" name="category">
+                    <option value="select">Select</soption>
+                    <option value="automobile">Automobile</option>
+                    <option value="electrical-fix">Electrical</option>
+                    <option value="painting">Painting</option>
+                  </select><br />
+                  <label for="description" class="form-label">Description</label>
+                  <span class = "required">*</span><br />
+                  <textarea cols="30" rows="5" class="form-control required-field green-outline" id = "description" placeholder="Problem description" name="description"></textarea><br />
+                  <label for="address" class="form-label">Address</label>
+                  <span class = "required">*</span><br />
+                  <input type="text" class="form-control required-field green-outline" id = "address"  name="address">
+                  <input type="hidden" class="form-control" id = "user-id" value='"get from localstorage' >
+                  <input type="radio" id="urgent-request" class="form-control green-outlinee"><label for="urgent-request" class="form-label" isAdmin="getValue from localstorage">Mark as urgent</label><br />
+                  <button id="request-button" class="submit-button green-button btn-md">Submit</button>
+                  <button class="submit-button delete-request white-button btn-md">Cancel</button>
+                </form>
+              </div>
+          </div>
+        </div>
+        <div id="view-users-requests" class="tab-item hide-item">  
+          <div id="request1" class="requests">
+            <div class="small-header-gradient"></div>
+            <div class="request-content">
+              <dl class="request-details">
+                <dt class = 'issue-date'>Issue Date</dt>
+                <dd class = 'issue-date'>11-05-2018</dd>
+                <dt class = 'category'>Category</dt>
+                <dd class = 'category'>Electrical</dd>
+                <dt class='description'>Description</dt>
+                <dd class ='description'>Wall Socket get burn and need replacement</dd>
+                <dt class='urgent'>Urgency</dt>
+                <dd class='urgent'>urgent</dd>
+                <dt class='status'>Status</dt>
+                <dd class='status'>Approved</dd>
+              </dl>
+              <form action="" class="form-inline">
+                <input type="hidden" class="form-control" id = "user-id" value="3"  >
+                <input type="hidden" class="form-control" id = "request-id" value="1"  >
+                <button id="edit-request" class="submit-button green-button btn-md">Edit Request</button>
+                <button class="submit-button delete-request white-button btn-md">Cancel Request</button>
+              </form>
+            </div>
+          </div>
+        </div>
+        <div id="contact-service-dept" class="tab-item hide-item">
+          <div id="contact-form-container" class="form-gradient shadow">
+            <div class="small-header-gradient">
+              <h3 class="head-title">
+                Contact Service Department
+              </h3>
+            </div>
+            <div class="form-content">
+              <div class="contact-phone">
+                <h3>Phone</h3>
+                <p id= "phone">+234(0)7012134212</p>
+              </div>
+              <form action="msilto:somebody@example.com" class="fblock-form">
+                <h3 class="small-heading">Send Email </h3>
+                <label for="message-title" class="form-label">Title</label><br />
+                <input type="text" class="form-control required-field green-outline" id = "message-title" placeholder="Title" name="title" ><br />
+                <label for="message" class="form-label">Message</label>
+                <span class = "required">*</span><br />
+                <textarea cols="30" rows="5" class="form-control required-field bg-outline" id = "message" placeholder="Type your message here" name="message"></textarea><br />
+                <button id="contact-button" class="submit-button green-button btn-wide btn-center">Send</button>
+              </form>
+            </div>
+          </div>
+        </div>
+        <div id="notice-modal" class="tab-item hide-item shadow">
+          <button id="close-notice-modal">x</button>
+          <div id="notice-content" class="">
+              <h3 id="notice-head-title">
+                  You have resolved requests
+              </h3>
+              <div class="resolve-item">
+                <h3 class="request-category">Car</h3>
+                <p class="request-description">
+                  Kick start not working
+                </p>
+                <p><strong>Status:</strong> Resolved</p>
+                <small>May 18, 2018</small>
+              </div>
+              <hr>
+              <div class="resolve-item">
+                <h3 class="request-category">Electrical</h3>
+                <p class="request-description">
+                  Wall socket got burnt
+                </p>
+                <p><strong>Status:</strong> Resolved</p>
+                <small>May 18, 2018</small>
+              </div>
+              <hr>
+              <div class="resolve-item">
+                <h3 class="request-category">Electrical</h3>
+                <p class="request-description">
+                  Wall socket got burnt
+                </p>
+                <p><strong>Status:</strong> Resolved</p>
+                <small>May 18, 2018</small>
+              </div>
+              <hr>
+              <a href="#">view all</a>
+          </div>
+        </div>
+      </div>
+      <div id="footer-div">
+        <div id="site-info">
+          <div id="about-us" class="more-info">
+              <a href="#">About Us</a>
+          </div>
+          <div id="contact-us" class="more-info">
+            <a href="#">Contact Us</a>
+          </div>
+          <div id="feedback" class="more-info">
+            <a href="#">Feedback</a>
+          </div>
+          <div id="terms-of-use" class="more-info">
+            <a href="#">Terms of Use</a>
+          </div>
+        </div>
+        <div id="social-sharing">
+          <div id="github" class="socials">
+            <a href="https://github.com/tutugodfrey"><img src="./../images/githab.png" alt="github"></a>
+          </div>
+          <div class="socials" id="facebook">
+            <a href="#"><img src="./../images/facebook.png" alt="facebook"></a>
+          </div>
+          <div id="twitter" class="socials">
+            <a href="#"><img src="./../images/twitter.png" alt="twitter"></a>
+          </div>
+          <div id="linked-in" class="socials">
+            <a href="#"><img src="./../images/linked-in.png" alt="linked-in"></a>
+          </div>
+        </div>
+          <p id="copyright">
+            <a href="#">&copy; 2018 maintenance tracker. All Right Reserved.</a>
+          </p>
+      </div>
+    </div>
+    <script src="./../js/index.js" ></script>
+  </body>
+</html>

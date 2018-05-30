@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>
+      Maintenance tracker
+    </title>
+    <link type = "text/css" rel = "stylesheet" href = "./../styles/styles.css" />
+    <link rel = "shortcut icon" href = "./../images/mtracker-icon.ico" type = "image/x-icon" />
+  </head>
+  <body>
+    <div id = "body-div" class = "container bg-secondary">
+      <div id="user-dashboard" class="page-header container shadow-bottom">
+        <div id="top-nav-layer" class="">
+          <ul>
+            <li>
+              <a href="" class="user-profile">
+                <img src="./../images/tutug.jpeg" alt="" class="profile-photo">
+              </a>
+            </li>
+            <li id="signout-item"><a href="#">Sign Out</a></li>
+          </ul>
+        </div>
+        <div id="bottom-nav-layer" class="">
+            <div class="logo-div">
+              <a id="img-link-to-home" href="./../index.html">
+                <img class="logo" src="./../images/mt-logo-white.png" alt="logo" />
+              </a>
+            </div>
+            <div class="nav-bar">
+              <ul class="nav-menu">
+                <li class="nav-item">
+                  <a href="#view-requests" class="nav-link active">View Requests</a>
+                </li>
+                <li class="nav-item">
+                  <a href="#view-approved-requests" class="nav-link inactive">Approved Requests</a>
+                </li>
+                <li class="nav-item">
+                  <a href="#view-resolved-requests" class="nav-link inactive">Resolved Resolved</a>
+                </li>
+              </ul>
+            </div>
+            <div id="vertical-nav-bar" class="hide-item">
+              <ul class="nav-menu">
+                <li class="nav-item nav-toggle">
+                  <a href="#view-requests" id="default-nav" class="nav-link active">View Requests</a>
+                </li>
+                <li class="nav-item nav-toggle">
+                  <a href="#view-approved-requests" class="nav-link inactive">Approved Requests</a>
+                </li>
+                <li class="nav-item nav-toggle">
+                  <a href="#view-resolved-requests" class="nav-link inactive">Resolved Requests</a>
+                </li>
+              </ul>
+            </div>
+            <button id="toggle-navigation-btn">
+                <span>
+                  <hr>
+                  <hr>
+                  <hr>
+                </span>
+            </button>
+          <div id="search-form-container">
+            <form id="search-form" action="#" class="inline-form">
+              <input type="search" class="form-control green-outline" id = "search" placeholder="Search..." >
+              <button id="search-button" class="submit-button green-button">Search</button>
+            </form>
+          </div>
+        </div>
+      </div>
+      <div id="content-area" class="container">
+          <div id="view-requests" class="tab-item show-item"> 
+            <div id="request1" class="requests">
+                <div class="small-header-gradient">
+                    <h3 class="head-title">
+                      Jonn Doe
+                    </h3>
+                  </div>
+              <div class="request-content">
+                <dl class="request-details">
+                <dt class = 'issue-date'>Issue Date</dt>
+                <dd class = 'issue-date'>11-05-2018</dd>
+                <dt class = 'category'>Category</dt>
+                <dd class = 'category'>Electrical</dd>
+                <dt class='description'>Description</dt>
+                <dd class ='description'>Wall Socket get burn and need replacement</dd>
+                <dt class='urgent'>Urgency</dt>
+                <dd class='urgent'>urgent</dd>
+                <dt class='status'>Status</dt>
+                <dd class='status'>Approved</dd>
+                </dl>
+                <form action="" class="form-inline">
+                  <input type="hidden" class="form-control" id = "user-id" value="3"  >
+                  <input type="hidden" class="form-control" id = "request-id" value="1"  >
+                  <button type="reset" id="approve-request" class="submit-button green-button btn-md">Approve</button>
+                  <button  class="submit-button reject-button white-button btn-md">Reject</button>
+                </form>
+              </div>
+            </div>
+          <div id="view-approved-requests" class="tab-item hide-item"> 
+            <div id="request1" class="requests">
+              <div class="small-header-gradient">
+                  <h3 class="head-title">
+                    Jonn Doe
+                  </h3>
+                </div>
+            <div class="request-content">
+              <dl class="request-details">
+                <dt class = 'issue-date'>Issue Date</dt>
+                <dd class = 'issue-date'>11-05-2018</dd>
+                <dt class = 'category'>Category</dt>
+                <dd class = 'category'>Electrical</dd>
+                <dt class='description'>Description</dt>
+                <dd class ='description'>Wall Socket get burn and need replacement</dd>
+                <dt class='urgent'>Urgency</dt>
+                <dd class='urgent'>urgent</dd>
+                <dt class='status'>Status</dt>
+                <dd class='status'>Approved</dd>
+              </dl>
+              <form action="" class="form-inline">
+                <input type="hidden" class="form-control" id = "user-id" value="3"  >
+                <input type="hidden" class="form-control" id = "request-id" value="1"  >
+                <button id="approved-request" class="submit-button green-button btn-wide">Mark As Resolved</button>
+              </form>
+            </div>
+          </div>
+        </div>
+        <div id="view-resolved-requests" class="tab-item hide-item"> 
+          <div id="request1" class="requests">
+            <div class="small-header-gradient">
+                <h3 class="head-title">
+                  Jonn Doe
+                </h3>
+              </div>
+          <div class="request-content">
+            <dl class="request-details">
+                <dt class = 'issue-date'>Issue Date</dt>
+                <dd class = 'issue-date'>11-05-2018</dd>
+                <dt class = 'category'>Category</dt>
+                <dd class = 'category'>Electrical</dd>
+                <dt class='description'>Description</dt>
+                <dd class ='description'>Wall Socket get burn and need replacement</dd>
+                <dt class='urgent'>Urgency</dt>
+                <dd class='urgent'>urgent</dd>
+                <dt class='status'>Status</dt>
+                <dd class='status'>Resolved</dd>
+            </dl>
+          </div>
+        </div>
+      </div>
+      </div>
+      <div id="footer-div">
+        <div id="site-info">
+          <div id="about-us" class="more-info">
+              <a href="#">About Us</a>
+          </div>
+          <div id="contact-us" class="more-info">
+            <a href="#">Contact Us</a>
+          </div>
+          <div id="feedback" class="more-info">
+            <a href="#">Feedback</a>
+          </div>
+          <div id="terms-of-use" class="more-info">
+            <a href="#">Terms of Use</a>
+          </div>
+        </div>
+        <div id="social-sharing">
+          <div id="github" class="socials">
+            <a href="https://github.com/tutugodfrey"><img src="./../images/githab.png" alt="github"></a>
+          </div>
+          <div class="socials" id="facebook">
+            <a href="#"><img src="./../images/facebook.png" alt="facebook"></a>
+          </div>
+          <div id="twitter" class="socials">
+            <a href="#"><img src="./../images/twitter.png" alt="twitter"></a>
+          </div>
+          <div id="linked-in" class="socials">
+            <a href="#"><img src="./../images/linked-in.png" alt="linked-in"></a>
+          </div>
+        </div>
+          <p id="copyright">
+            <a href="#">&copy; 2018 maintenance tracker. All Right Reserved.</a>
+          </p>
+      </div>
+    </div>
+    <script src="./../js/index.js" ></script>
+  </body>
+</html>

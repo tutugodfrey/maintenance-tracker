@@ -31,7 +31,7 @@ exports.default = describe('Signin', function () {
   it('should signin a User in and give a token', function () {
     return _chai2.default.request(app).post('/api/v1/auth/signin').send({
       username: _signupTest.regularUser1.username,
-      password: '1234'
+      password: '123456'
     }).then(function (res) {
       Object.assign(signedInUser, res.body);
       expect(res).to.have.status(200);
@@ -44,7 +44,7 @@ exports.default = describe('Signin', function () {
   it('should not signin a user if password is not correct', function () {
     return _chai2.default.request(app).post('/api/v1/auth/signin').send({
       username: _signupTest.regularUser1.username,
-      password: '1345'
+      password: '134567'
     }).then(function (res) {
       expect(res).to.have.status(400);
       expect(res.body).to.be.an('Object');
@@ -54,7 +54,7 @@ exports.default = describe('Signin', function () {
   it('should not signin a user if password is not correct', function () {
     return _chai2.default.request(app).post('/api/v1/auth/signin').send({
       username: 'someoneelse',
-      password: '1344'
+      password: '123456'
     }).then(function (res) {
       expect(res).to.have.status(400);
       expect(res.body).to.be.an('Object');

@@ -15,7 +15,7 @@ export default describe('Signin', () => {
       .post('/api/v1/auth/signin')
       .send({
         username: regularUser1.username,
-        password: '1234',
+        password: '123456',
       })
       .then((res) => {
         Object.assign(signedInUser, res.body);
@@ -31,7 +31,7 @@ export default describe('Signin', () => {
       .post('/api/v1/auth/signin')
       .send({
         username: regularUser1.username,
-        password: '1345',
+        password: '134567',
       })
       .then((res) => {
         expect(res).to.have.status(400);
@@ -44,7 +44,7 @@ export default describe('Signin', () => {
       .post('/api/v1/auth/signin')
       .send({
         username: 'someoneelse',
-        password: '1344',
+        password: '123456',
       })
       .then((res) => {
         expect(res).to.have.status(400);

@@ -12,6 +12,10 @@ var _app = require('./../app');
 
 var _app2 = _interopRequireDefault(_app);
 
+var _connection = require('./../models/connection');
+
+var _connection2 = _interopRequireDefault(_connection);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var server = new _app2.default();

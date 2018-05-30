@@ -6,6 +6,10 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
+var _path = require('path');
+
+var _path2 = _interopRequireDefault(_path);
+
 var _UsersController = require('./../controllers/UsersController');
 
 var _UsersController2 = _interopRequireDefault(_UsersController);
@@ -24,7 +28,11 @@ var _AdminController2 = _interopRequireDefault(_AdminController);
 
 var _getToken = require('./../middlewares/getToken');
 
+var _getToken2 = _interopRequireDefault(_getToken);
+
 var _uploadfile = require('./../middlewares/uploadfile');
+
+var _uploadfile2 = _interopRequireDefault(_uploadfile);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -47,28 +55,28 @@ var Routes = function () {
     key: 'routes',
     value: function routes(app) {
       app.get('/', function (req, res) {
-        res.status(200).send({ message: 'welcome to the maintenance trackers' });
+        res.status(200).sendFile(_path2.default.join(__dirname, './../../../client/index.html'));
       });
 
       // routes for us
-      app.post('/api/v1/auth/signup', _uploadfile.usersUpload.single('profile-photo'), this.UsersController.signup);
+      app.post('/api/v1/auth/signup', _uploadfile2.default.single('profile-photo'), this.UsersController.signup);
       app.post('/api/v1/auth/signin', this.UsersController.signin);
 
       // admin routes
-      app.get('/api/v1/requests', _getToken.secureRoute, this.AdminController.getAllRequests);
-      app.put('/api/v1/requests/:requestId/disapprove', _getToken.secureRoute, this.AdminController.rejectRequest);
-      app.put('/api/v1/requests/:requestId/approve', _getToken.secureRoute, this.AdminController.approveRequest);
-      app.put('/api/v1/requests/:requestId/resolve', _getToken.secureRoute, this.AdminController.resolveRequest);
+      app.get('/api/v1/requests', _getToken2.default, this.AdminController.getAllRequests);
+      app.put('/api/v1/requests/:requestId/disapprove', _getToken2.default, this.AdminController.rejectRequest);
+      app.put('/api/v1/requests/:requestId/approve', _getToken2.default, this.AdminController.approveRequest);
+      app.put('/api/v1/requests/:requestId/resolve', _getToken2.default, this.AdminController.resolveRequest);
 
       // user routes
-      app.post('/api/v1/users/requests', _getToken.secureRoute, this.RequestController.addRequest);
-      app.get('/api/v1/users/requests/:requestId', _getToken.secureRoute, this.RequestController.getOneRequest);
-      app.get('/api/v1/users/requests', _getToken.secureRoute, this.RequestController.getAllRequests);
-      app.put('/api/v1/users/requests/:requestId', _getToken.secureRoute, this.RequestController.updateRequest);
-      app.delete('/api/v1/users/requests/:requestId', _getToken.secureRoute, this.RequestController.deleteRequest);
+      app.post('/api/v1/users/requests', _getToken2.default, this.RequestController.addRequest);
+      app.get('/api/v1/users/requests/:requestId', _getToken2.default, this.RequestController.getOneRequest);
+      app.get('/api/v1/users/requests', _getToken2.default, this.RequestController.getAllRequests);
+      app.put('/api/v1/users/requests/:requestId', _getToken2.default, this.RequestController.updateRequest);
+      app.delete('/api/v1/users/requests/:requestId', _getToken2.default, this.RequestController.deleteRequest);
       // routes for contacts model
-      app.post('/api/v1/contacts', _getToken.secureRoute, this.ContactController.addMessage);
-      app.get('/api/v1/contacts', _getToken.secureRoute, this.ContactController.getMessages);
+      app.post('/api/v1/contacts', _getToken2.default, this.ContactController.addMessage);
+      app.get('/api/v1/contacts', _getToken2.default, this.ContactController.getMessages);
     }
   }]);
 

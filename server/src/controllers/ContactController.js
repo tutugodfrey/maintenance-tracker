@@ -4,11 +4,17 @@ const { users, contacts } = models;
 const ContactController = class {
   // create a new message
   static addMessage(req, res) {
-    const userId = parseInt(req.body.userId, 10);
-    const adminId = parseInt(req.body.adminId, 10);
-    const senderId = parseInt(req.body.senderId, 10);
-    const message = req.body.message.trim();
-    if (!userId || !adminId || !senderId) {
+    const {
+      userId,
+      senderId,
+      adminId,
+      title,
+      message,
+    } = req.body;
+    if (!parseInt(userId, 10) || !parseInt(adminId, 10) || !parseInt(senderId, 10)) {
+      return res.status(400).send({ message: 'missing required field' });
+    }
+    if (message.trim() === '' || title.trim() === '') {
       return res.status(400).send({ message: 'missing required field' });
     }
     return users
@@ -20,7 +26,7 @@ const ContactController = class {
             adminId,
             senderId,
             message,
-            title: req.body.title,
+            title,
           })
           .then((newMessage) => {
             res.status(201).send({

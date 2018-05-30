@@ -15,6 +15,7 @@ class Server {
   expressServer() {
     this.app = this.express();
     this.app.use(this.express.static('public'));
+    this.app.use(this.express.static('client'));
     this.app.use(this.bodyParser.urlencoded({ extended: true }));
     this.app.use(this.bodyParser.json());
     this.route.routes(this.app);

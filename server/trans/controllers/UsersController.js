@@ -22,9 +22,9 @@ var _index = require('./../models/index');
 
 var _index2 = _interopRequireDefault(_index);
 
-var _HelperFuncts = require('./../helpers/HelperFuncts');
+var _Services = require('./../helpers/Services');
 
-var _HelperFuncts2 = _interopRequireDefault(_HelperFuncts);
+var _Services2 = _interopRequireDefault(_Services);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -43,98 +43,141 @@ var UsersController = function () {
 
     // create a new user account
     value: function signup(req, res) {
-      if (!req.file) {
-        return users.findAll({
-          where: {
-            username: req.body.username,
-            email: req.body.email
-          }
-        }).then(function () {
-          var _req$body = req.body,
-              passwd1 = _req$body.passwd1,
-              passwd2 = _req$body.passwd2;
+      var _req$body = req.body,
+          fullname = _req$body.fullname,
+          username = _req$body.username,
+          email = _req$body.email,
+          phone = _req$body.phone,
+          address = _req$body.address,
+          serviceName = _req$body.serviceName,
+          password = _req$body.password,
+          confirmPassword = _req$body.confirmPassword,
+          isAdmin = _req$body.isAdmin;
+      // validate input
 
-          var passwd = void 0;
-          if (passwd1 === passwd2) {
+      if (username.trim() === '' || fullname.trim() === '' || email.trim() === '' || password.trim() === '' || confirmPassword.trim() === '') {
+        return res.status(400).send({ message: 'missing required field' });
+      }
+      var emailRegExp = /\w+@\w+\.(net|com|org)/;
+      if (!email.match(emailRegExp)) {
+        return res.status(400).send({ message: 'typeError: invalid email format' });
+      }
+
+      if (password.length < 6 || confirmPassword.length < 6) {
+        return res.status(400).send({ message: 'length of password must not be less than 6' });
+      }
+
+      if (password !== confirmPassword) {
+        return res.status(400).send({ message: 'password does not match' });
+      }
+
+      if (address.trim() === '') {
+        return res.status(400).send({ message: 'missing required field' });
+      }
+      if (!isAdmin && isAdmin.trim() !== '') {
+        return res.status(400).send({ message: 'isAdmin must be a true or false' });
+      }
+      // console.log(req.body)
+      if (!req.file) {
+        return users.find({
+          where: {
+            username: username,
+            email: email
+          }
+        }).then(function (user) {
+          if (!user) {
             _bcrypt2.default.genSalt(10, function (err, salt) {
-              _bcrypt2.default.hash(passwd1, salt, function (hashErr, hash) {
-                passwd = hash;
+              _bcrypt2.default.hash(password, salt, function (hashErr, hash) {
                 users.create({
-                  password: passwd,
-                  fullname: req.body.fullname,
-                  email: req.body.email,
-                  username: req.body.username,
-                  imgUrl: 'no/file/uploaded',
-                  address: req.body.address,
-                  isAdmin: req.body.isAdmin,
-                  serviceName: req.body.serviceName
+                  fullname: fullname,
+                  email: email,
+                  username: username,
+                  address: address,
+                  serviceName: serviceName,
+                  password: password,
+                  isAdmin: isAdmin || false,
+                  imgUrl: 'no/file/uploaded'
                 }).then(function (signup) {
-                  res.status(201).send({
-                    message: 'signup successful',
+                  var authenKeys = {
                     fullname: signup.fullname,
                     email: signup.email,
                     username: signup.username,
                     imgUrl: signup.imgUrl,
-                    id: signup.id
+                    id: signup.id,
+                    isAdmin: signup.isAdmin
+                  };
+                  var token = _jsonwebtoken2.default.sign(authenKeys, process.env.SECRET_KEY, { expiresIn: '48h' });
+                  res.status(201).send({
+                    token: token,
+                    message: 'signup successful',
+                    email: signup.email,
+                    username: signup.username,
+                    imgUrl: signup.imgUrl,
+                    id: signup.id,
+                    isAdmin: signup.isAdmin
                   });
-                }).catch(function () {
-                  return res.status(400).send({ message: 'user already exist' });
+                }).catch(function (error) {
+                  return res.status(400).send({ error: error });
                 });
               });
             });
           } else {
-            // password match fail
-            res.status(400).send({ message: 'password does not match' });
+            res.status(409).send({ message: 'user already exist' });
           }
         }).catch(function (error) {
           return res.status(500).send(error);
         });
       }
-      return users.findAll({
+      return users.find({
         where: {
-          username: req.body.username,
-          email: req.body.email
-        }
-      }).then(function () {
-        // handle uploaded profile pix
-        var destination = _HelperFuncts2.default.getImgUrl(req.file.path);
-        var _req$body2 = req.body,
-            passwd1 = _req$body2.passwd1,
-            passwd2 = _req$body2.passwd2;
-        // const passwd2 = req.body.passwd2;
-
-        var passwd = void 0;
-        if (passwd1 === passwd2) {
+          username: username,
+          email: email
+        },
+        type: 'or'
+      }).then(function (user) {
+        if (!user) {
+          // handle uploaded profile pix
+          var destination = _Services2.default.getImgUrl(req.file.path);
+          // const passwd2 = req.body.passwd2;
           _bcrypt2.default.genSalt(10, function (err, salt) {
-            _bcrypt2.default.hash(passwd1, salt, function (hashErr, hash) {
-              passwd = hash;
+            _bcrypt2.default.hash(password, salt, function (hashErr, hash) {
               users.create({
-                password: passwd,
-                fullname: req.body.fullname,
-                email: req.body.email,
-                username: req.body.username,
+                fullname: fullname,
+                email: email,
+                username: username,
+                address: address,
+                isAdmin: isAdmin,
+                serviceName: serviceName,
+                phone: phone,
                 imgUrl: destination,
-                address: req.body.address,
-                isAdmin: req.body.isAdmin,
-                serviceName: req.body.serviceName
+                password: hash
               }).then(function (signup) {
-                res.status(201).send({
-                  message: 'signup successful',
+                var authenKeys = {
                   fullname: signup.fullname,
                   email: signup.email,
                   username: signup.username,
                   imgUrl: signup.imgUrl,
                   id: signup.id,
                   isAdmin: signup.isAdmin
+                };
+                var token = _jsonwebtoken2.default.sign(authenKeys, process.env.SECRET_KEY, { expiresIn: '48h' });
+                res.status(201).send({
+                  token: token,
+                  message: 'signup successful',
+                  fullname: signup.fullname,
+                  email: signup.email,
+                  username: signup.username,
+                  imgUrl: signup.imgurl,
+                  id: signup.id,
+                  isAdmin: signup.isadmin
                 });
-              }).catch(function () {
-                return res.status(400).send({ message: 'user already exist' });
+              }).catch(function (error) {
+                return res.status(400).send({ error: error });
               });
             });
           });
         } else {
-          // password match fail
-          res.status(400).send({ message: 'password does not match' });
+          res.status(409).send({ message: 'user already exist' });
         }
       }).catch(function (error) {
         return res.status(500).send(error);
@@ -158,12 +201,19 @@ var UsersController = function () {
 
           passwordConfirmed = _bcrypt2.default.compareSync(password, hashedPassword);
           if (passwordConfirmed) {
-            var authenKey = user.username;
-            var token = _jsonwebtoken2.default.sign({ authenKey: authenKey }, process.env.SECRET_KEY, { expiresIn: '48h' });
+            var authenKeys = {
+              username: user.username,
+              fullname: user.fullname,
+              isAdmin: user.isAdmin,
+              userId: user.id,
+              imgUrl: user.imgUrl
+            };
+            var token = _jsonwebtoken2.default.sign(authenKeys, process.env.SECRET_KEY, { expiresIn: '48h' });
             res.status(200).send({
               token: token,
               success: true,
               username: user.username,
+              fullname: user.fullname,
               isAdmin: user.isAdmin,
               userId: user.id,
               imgUrl: user.imgUrl

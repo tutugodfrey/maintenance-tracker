@@ -1,30 +1,46 @@
 
 import models from './../models/index';
+import Services from './../helpers/Services';
 
 const { requests, users } = models;
 const RequestController = class {
   // add a new request
   static addRequest(req, res) {
-    const userId = parseInt(req.body.userId, 10);
-    if (!(req.body.userId) || !(req.body.description)) {
+    const {
+      userId,
+      category,
+      description,
+      address,
+      urgent,
+      serviceName,
+    } = req.body;
+
+    if (!parseInt(userId, 10) || description.trim() === '' || address.trim() === '' || category.trim() === '') {
       return res.status(400).send({ message: 'missing required field' });
     }
-    return users.findById(userId)
+    if (!urgent && urgent.trim() !== '') {
+      return res.status(400).send({ message: 'typeError field urgent must be a boolean' });
+    }
+    const issueDate = Services.getDate();
+    const dateRegExp = /\d{4}-\d{2}-\d{2}/;
+    if (!dateRegExp.test(issueDate)) {
+      return res.status(500).send({ message: 'an error occur while processing your request' });
+    }
+    return users.findById(parseInt(userId, 10))
       .then((user) => {
         return requests
           .create({
             userId,
-            category: req.body.category,
-            description: req.body.description,
-            department: req.body.department,
-            urgency: req.body.urgency,
-            status: req.body.status,
+            category,
+            description,
+            address,
+            issueDate: 'now()',
+            updatedAt: 'now()',
+            status: 'awaiting confirmation',
+            urgent: urgent || false,
           })
           .then((request) => {
-            return res.status(201).send({
-              request,
-              user,
-            });
+            return res.status(201).send(request);
           })
           .catch((error) => {
             return res.status(400).send(error);
@@ -69,10 +85,22 @@ const RequestController = class {
 
   // update a request
   static updateRequest(req, res) {
+    const {
+      category,
+      description,
+      address,
+      serviceName,
+      urgent,
+    } = req.body;
     const requestId = parseInt(req.params.requestId, 10);
     const userId = parseInt(req.query.userId, 10);
     if (!requestId || !userId) {
       return res.status(400).send({ message: 'missing required field' });
+    }
+    const updatedAt = Services.getDate();
+    const dateRegExp = /\d{4}-\d{2}-\d{2}/;
+    if (!dateRegExp.test(updatedAt)) {
+      return res.status(500).send({ message: 'an error occur while processing your request' });
     }
     return requests
       .find({
@@ -80,17 +108,23 @@ const RequestController = class {
           userId,
           id: requestId,
         },
+        type: 'or',
       })
       .then((request) => {
         // users should not be able to modify the status of a request
+        if (request.status === 'approved' || request.status === 'resolved') {
+          return res.status(200).send({ message: 'request cannot be modify after it has been approved or resolved' });
+        }
         return requests
           .update(
             request,
             {
-              category: req.body.category || request.category,
-              description: req.body.description || request.description,
-              department: req.body.department || request.department,
-              urgency: req.body.urgency || request.urgency,
+              updatedAt: 'now()',
+              category: category || request.category,
+              description: description || request.description,
+              address: address || request.address,
+              serviceName: serviceName || request.serviceName,
+              urgent: urgent || request.urgent,
             },
           )
           .then(newRequest => res.status(200).send(newRequest))

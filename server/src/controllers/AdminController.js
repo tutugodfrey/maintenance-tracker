@@ -1,5 +1,6 @@
 
 import models from './../models/index';
+import Services from './../helpers/Services';
 
 const { requests } = models;
 const AdminController = class {
@@ -24,13 +25,21 @@ const AdminController = class {
     if (isAdmin !== 'true' || !requestId) {
       return res.status(400).send({ message: 'missiging required field' });
     }
+    const updatedAt = Services.getDate();
+    const dateRegExp = /\d{4}-\d{2}-\d{2}/;
+    if (!dateRegExp.test(updatedAt)) {
+      return res.status(500).send({ message: 'an error occur while processing your request' });
+    }
     return requests
       .findById(requestId)
       .then((request) => {
         return requests
           .update(
-            request,
             {
+              id: request.id,
+            },
+            {
+              updatedAt,
               status: 'rejected',
             },
           )
@@ -48,13 +57,21 @@ const AdminController = class {
     if (!requestId) {
       return res.status(400).send({ message: 'missiging required field' });
     }
+    const updatedAt = Services.getDate();
+    const dateRegExp = /\d{4}-\d{2}-\d{2}/;
+    if (!dateRegExp.test(updatedAt)) {
+      return res.status(500).send({ message: 'an error occur while processing your request' });
+    }
     return requests
       .findById(requestId)
       .then((request) => {
         return requests
           .update(
-            request,
             {
+              id: request.id,
+            },
+            {
+              updatedAt,
               status: 'pending',
             },
           )
@@ -69,18 +86,25 @@ const AdminController = class {
     if (isAdmin !== 'true') {
       return res.status(402).send({ message: 'you are not permitted to perform this action' });
     }
-
+      console.log("request id is ", res.params.requestId)
     if (!requestId) {
       return res.status(400).send({ message: 'missiging required field' });
     }
-
+    const updatedAt = Services.getDate();
+    const dateRegExp = /\d{4}-\d{2}-\d{2}/;
+    if (!dateRegExp.test(updatedAt)) {
+      return res.status(500).send({ message: 'an error occur while processing your request' });
+    }
     return requests
       .findById(requestId)
       .then((request) => {
         return requests
           .update(
-            request,
             {
+              id: request.id,
+            },
+            {
+              updatedAt,
               status: 'resolved',
             },
           )

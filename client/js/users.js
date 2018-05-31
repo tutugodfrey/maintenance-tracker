@@ -16,7 +16,6 @@ const storeUserData = function (userData, keyString) {
   if (!localStorage.getItem(keyString)) {
     const userInfo = JSON.stringify(userData);
     localStorage.setItem(keyString, userInfo);
-    console.log('user data stored');
   } 
 }
 
@@ -24,7 +23,6 @@ const getUserData = function (key) {
   if (localStorage.getItem(key)) {
     let userInfo = localStorage.getItem(key);
     userInfo = JSON.parse(userInfo);
-    console.log(userInfo)
     return userInfo;
   } 
 }
@@ -34,8 +32,6 @@ const userData = getUserData('userdata');
 
 const makeRequest = function (requestData, method, url, callback) {
   const token = userData.token;
-  console.log(token)
-  console.log(requestData)
 	const headers =  new Headers();
  	headers.append('Content-Type', 'application/x-www-form-urlencoded');
   headers.append('Accept', 'application/json');
@@ -76,9 +72,7 @@ const closeConsoleModal = function(message) {
 // process server response
 const handleResponse = function(responseData) {
   storeUserData(responseData, 'requests')
-  console.log(responseData);
   showConsoleModal('Your request has been recorded')
-  console.log('you data stored in local storage')
 }
 const createRequest = function(ele) {
 	if (document.getElementsByClassName('form-control')) {
@@ -92,10 +86,7 @@ const createRequest = function(ele) {
 			const eleClass = inputField.getAttribute('class');
 			if (eleClass.indexOf('required-field') > 0) {
 				if (fieldValue.trim() === '') {
-          console.log('required Field')
-
           showConsoleModal('Please fill out the the required fields');
-          console.log('Please fill out the the required fields');
           return;
         }
         jsonRequest = `${jsonRequest}${fieldName}=${fieldValue}&`;
@@ -105,13 +96,13 @@ const createRequest = function(ele) {
     }
 
     jsonRequest = `${jsonRequest}userId=${userData.id}`;
-    console.log(jsonRequest)
 			makeRequest(jsonRequest, 'POST', '/api/v1/users/requests', handleResponse)
 	}
 }
 
 
 const domNotifier = function() {
+ // localStorage.removeItem('requests')
 	if(document.getElementById('request-button')) {
 		const createRequestBtn = document.getElementById('request-button');
 		newEvent(createRequestBtn, 'click', createRequest, createRequestBtn,);

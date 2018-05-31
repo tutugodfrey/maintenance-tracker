@@ -61,6 +61,12 @@ exports.default = describe('Admin Test', function () {
 
   describe('Update a request', function () {
     describe('approve request', function () {
+      /* Commented block here and below are critecal for the 
+      for application functionality and so need attention as soon as possible.
+      they are commented out to enable working on other feature the the time limit to complete
+      the project
+      */
+
       /*
       it('should return all request', () => {
         return chai.request(app)
@@ -111,6 +117,7 @@ exports.default = describe('Admin Test', function () {
       */
 
       it('should return all request', function () {
+        console.log("created request", _userRequestTest.createdRequest1);
         return _chai2.default.request(app).put('/api/v1/requests/' + _userRequestTest.createdRequest1.id + '/disapprove?isAdmin=false').set('token', signedInUser.token).then(function (res) {
           expect(res).to.have.status(402);
           expect(res.body).to.be.an('object');

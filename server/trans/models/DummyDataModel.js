@@ -88,7 +88,7 @@ var DummyDataModel = function () {
           propString = propString + ', ' + prop + ' = \'' + newProps[prop] + '\'';
         }
       });
-      console.log(condition);
+
       var whereString = '';
       whereKeys.forEach(function (prop) {
         if (whereString === '') {
@@ -98,7 +98,7 @@ var DummyDataModel = function () {
         }
       });
 
-      queryString = queryString + ' ' + propString + ' where ' + whereString;
+      queryString = queryString + ' ' + propString + ' where ' + whereString + ' returning *';
       if (process.env.NODE_ENV !== 'production') {
         /* eslint-disable no-console */
         console.log(queryString);
@@ -201,11 +201,7 @@ var DummyDataModel = function () {
         if ((typeof propsToUpdate === 'undefined' ? 'undefined' : _typeof(propsToUpdate)) === 'object' && (typeof modelToUpdate === 'undefined' ? 'undefined' : _typeof(modelToUpdate)) === 'object') {
           var queryString = _this2._generateUpdateQuery(propsToUpdate, modelToUpdate);
           _connection2.default.query(queryString).then(function (res) {
-            // if (res.rows.length === 0) {
-            console.log("from update models", res.rows[0]);
             resolve(res.rows[0]);
-            // resolve(modelToUpdate);
-            // }
           }).catch(function (error) {
             return console.log(error);
           });
@@ -268,6 +264,23 @@ var DummyDataModel = function () {
       var result = new Promise(function (resolve, reject) {
         var queryString = _this5._generateGetQuery(condition);
         _connection2.default.query(queryString).then(function (res) {
+          console.log(res.rows);
+          resolve(res.rows);
+        }).catch(function (error) {
+          return reject(error);
+        });
+      });
+      return result;
+    }
+  }, {
+    key: 'findServiceName',
+    value: function findServiceName() {
+      var condition = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'all';
+
+      var result = new Promise(function (resolve, reject) {
+        var queryString = 'select servicename from users';
+        _connection2.default.query(queryString).then(function (res) {
+          console.log(res.rows);
           resolve(res.rows);
         }).catch(function (error) {
           return reject(error);

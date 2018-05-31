@@ -61,6 +61,7 @@ var Routes = function () {
       // routes for us
       app.post('/api/v1/auth/signup', _uploadfile2.default.single('profile-photo'), this.UsersController.signup);
       app.post('/api/v1/auth/signin', this.UsersController.signin);
+      app.get('/api/v1/auth/services', this.UsersController.getServiceName);
 
       // admin routes
       app.get('/api/v1/requests', _getToken2.default, this.AdminController.getAllRequests);

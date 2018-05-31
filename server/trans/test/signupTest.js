@@ -28,8 +28,8 @@ var adminUser = {};
 var regularUser1 = {};
 var regularUser2 = {};
 
-exports.default = describe('Users signup', function () {
-  describe('Admin User', function () {
+exports.default = describe('Users controller', function () {
+  describe('signup method', function () {
     it('should create new admin user', function () {
       return _chai2.default.request(app).post('/api/v1/auth/signup').set('Content-Type', 'multipart/form-data').field('fullname', 'john doe').field('username', 'johnd').field('email', 'johnd@yahoo.com').field('address', 'market road').field('serviceName', 'mk services').field('password', '123456').field('confirmPassword', '123456').field('isAdmin', 'true').attach('profile-photo', './fileuploads/tutug.jpeg').then(function (res) {
         Object.assign(adminUser, res.body);
@@ -38,9 +38,7 @@ exports.default = describe('Users signup', function () {
         expect(res.body.isAdmin).to.equal(true);
       });
     });
-  });
 
-  describe('Create regular User', function () {
     it('should create new regular user', function () {
       return _chai2.default.request(app).post('/api/v1/auth/signup').set('Content-Type', 'multipart/form-data').field('fullname', 'brain walter').field('username', 'walterb').field('email', 'walterb@yahoo.com').field('address', 'market road').field('serviceName', '').field('password', '123456').field('confirmPassword', '123456').field('isAdmin', 'false').attach('profile-photo', './fileuploads/tutug.jpeg').then(function (res) {
         Object.assign(regularUser1, res.body);

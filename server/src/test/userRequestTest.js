@@ -75,7 +75,7 @@ export default describe('Users actions', () => {
         description: 'Socket burned',
         urgent: true,
         address: 'somewhere in the world',
-        userId: signedInUser.userId,
+        userId: signedInUser.id,
       };
       return chai.request(app)
         .post('/api/v1/users/requests')
@@ -95,7 +95,7 @@ export default describe('Users actions', () => {
         description: 'Socket burned',
         urgent: true,
         address: 'somewhere in the world',
-        userId: signedInUser.userId,
+        userId: signedInUser.id,
       };
       return chai.request(app)
         .post('/api/v1/users/requests')

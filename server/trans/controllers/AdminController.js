@@ -37,8 +37,8 @@ var AdminController = function () {
       }
       return requests.findAll().then(function (allRequests) {
         return res.status(200).send(allRequests);
-      }).catch(function (error) {
-        return res.status(500).send(error);
+      }).catch(function () {
+        return res.status(500).send({ message: 'some went wrong' });
       });
     }
   }, {
@@ -62,7 +62,7 @@ var AdminController = function () {
         return requests.update({
           id: request.id
         }, {
-          updatedAt: updatedAt,
+          updatedAt: 'now()',
           status: 'rejected'
         }).then(function (updatedRequest) {
           return res.status(200).send(updatedRequest);
@@ -92,7 +92,7 @@ var AdminController = function () {
         return requests.update({
           id: request.id
         }, {
-          updatedAt: updatedAt,
+          updatedAt: 'now()',
           status: 'pending'
         }).then(function (updatedRequest) {
           return res.status(200).send(updatedRequest);
@@ -110,7 +110,6 @@ var AdminController = function () {
       if (isAdmin !== 'true') {
         return res.status(402).send({ message: 'you are not permitted to perform this action' });
       }
-      console.log("request id is ", res.params.requestId);
       if (!requestId) {
         return res.status(400).send({ message: 'missiging required field' });
       }
@@ -123,7 +122,7 @@ var AdminController = function () {
         return requests.update({
           id: request.id
         }, {
-          updatedAt: updatedAt,
+          updatedAt: 'now()',
           status: 'resolved'
         }).then(function (updatedRequest) {
           return res.status(200).send(updatedRequest);

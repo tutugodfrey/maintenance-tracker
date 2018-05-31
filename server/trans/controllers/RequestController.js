@@ -31,6 +31,7 @@ var RequestController = function () {
 
     // add a new request
     value: function addRequest(req, res) {
+      console.log(req.body);
       var _req$body = req.body,
           userId = _req$body.userId,
           category = _req$body.category,
@@ -57,6 +58,7 @@ var RequestController = function () {
           category: category,
           description: description,
           address: address,
+          serviceName: serviceName,
           issueDate: 'now()',
           updatedAt: 'now()',
           status: 'awaiting confirmation',
@@ -146,7 +148,9 @@ var RequestController = function () {
         if (request.status === 'approved' || request.status === 'resolved') {
           return res.status(200).send({ message: 'request cannot be modify after it has been approved or resolved' });
         }
-        return requests.update(request, {
+        return requests.update({
+          id: request.id
+        }, {
           updatedAt: 'now()',
           category: category || request.category,
           description: description || request.description,

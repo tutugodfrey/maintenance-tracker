@@ -86,7 +86,7 @@ exports.default = describe('Users actions', function () {
         description: 'Socket burned',
         urgent: true,
         address: 'somewhere in the world',
-        userId: signedInUser.userId
+        userId: signedInUser.id
       };
       return _chai2.default.request(app).post('/api/v1/users/requests').set('token', signedInUser.token).send(request1).then(function (res) {
         expect(res).to.have.status(201);
@@ -102,7 +102,7 @@ exports.default = describe('Users actions', function () {
         description: 'Socket burned',
         urgent: true,
         address: 'somewhere in the world',
-        userId: signedInUser.userId
+        userId: signedInUser.id
       };
       return _chai2.default.request(app).post('/api/v1/users/requests').set('token', signedInUser.token).send(request2).then(function (res) {
         Object.assign(createdRequest2, res.body);

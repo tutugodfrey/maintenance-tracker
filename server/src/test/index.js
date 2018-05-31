@@ -1,5 +1,5 @@
 import serverTest from './serverTest';
-// import modelTest from './dummyDataTest';
+import modelTest from './dummyDataTest';
 import signupTest from './signupTest';
 import signinTest from './signupTest';
 import client from './../models/connection';
@@ -13,7 +13,7 @@ if (process.env.NODE_ENV !== 'test') {
   console.log(`can't run test in non test env. you are in ${process.env.NODE_ENV} environment`);
 } else {
   serverTest;
-/*  modelTest; */
+  modelTest;
   signupTest;
   signinTest;
   userRequestTest;

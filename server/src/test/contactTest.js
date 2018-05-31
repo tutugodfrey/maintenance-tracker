@@ -51,9 +51,9 @@ export default describe('contacts', () => {
         const userMessage = {
           title: 'unresolved request',
           message: 'request to replace wall socket was not attended to',
-          userId: signedInUser.userId,
+          userId: signedInUser.id,
           adminId: adminUser.id,
-          senderId: signedInUser.userId,
+          senderId: signedInUser.id,
         };
         return chai.request(app)
           .post('/api/v1/contacts')

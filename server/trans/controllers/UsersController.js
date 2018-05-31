@@ -31,6 +31,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 _dotenvSafe2.default.config();
+
 var users = _index2.default.users;
 
 var UsersController = function () {
@@ -47,8 +48,8 @@ var UsersController = function () {
           fullname = _req$body.fullname,
           username = _req$body.username,
           email = _req$body.email,
-          phone = _req$body.phone,
           address = _req$body.address,
+          phone = _req$body.phone,
           serviceName = _req$body.serviceName,
           password = _req$body.password,
           confirmPassword = _req$body.confirmPassword,
@@ -93,8 +94,9 @@ var UsersController = function () {
                   email: email,
                   username: username,
                   address: address,
+                  phone: phone,
                   serviceName: serviceName,
-                  password: password,
+                  password: hash,
                   isAdmin: isAdmin || false,
                   imgUrl: 'no/file/uploaded'
                 }).then(function (signup) {
@@ -102,9 +104,9 @@ var UsersController = function () {
                     fullname: signup.fullname,
                     email: signup.email,
                     username: signup.username,
-                    imgUrl: signup.imgUrl,
+                    imgUrl: signup.imgurl,
                     id: signup.id,
-                    isAdmin: signup.isAdmin
+                    isAdmin: signup.isadmin
                   };
                   var token = _jsonwebtoken2.default.sign(authenKeys, process.env.SECRET_KEY, { expiresIn: '48h' });
                   res.status(201).send({
@@ -112,9 +114,9 @@ var UsersController = function () {
                     message: 'signup successful',
                     email: signup.email,
                     username: signup.username,
-                    imgUrl: signup.imgUrl,
+                    imgUrl: signup.imgurl,
                     id: signup.id,
-                    isAdmin: signup.isAdmin
+                    isAdmin: signup.isadmin
                   });
                 }).catch(function (error) {
                   return res.status(400).send({ error: error });
@@ -156,9 +158,10 @@ var UsersController = function () {
                   fullname: signup.fullname,
                   email: signup.email,
                   username: signup.username,
-                  imgUrl: signup.imgUrl,
+                  phone: signup.phone,
+                  imgUrl: signup.imgurl,
                   id: signup.id,
-                  isAdmin: signup.isAdmin
+                  isAdmin: signup.isadmin
                 };
                 var token = _jsonwebtoken2.default.sign(authenKeys, process.env.SECRET_KEY, { expiresIn: '48h' });
                 res.status(201).send({
@@ -204,19 +207,20 @@ var UsersController = function () {
             var authenKeys = {
               username: user.username,
               fullname: user.fullname,
-              isAdmin: user.isAdmin,
+              isAdmin: user.isadmin,
               userId: user.id,
-              imgUrl: user.imgUrl
+              imgUrl: user.imgurl
             };
             var token = _jsonwebtoken2.default.sign(authenKeys, process.env.SECRET_KEY, { expiresIn: '48h' });
             res.status(200).send({
               token: token,
               success: true,
-              username: user.username,
               fullname: user.fullname,
-              isAdmin: user.isAdmin,
-              userId: user.id,
-              imgUrl: user.imgUrl
+              email: user.email,
+              username: user.username,
+              imgUrl: user.imgurl,
+              id: user.id,
+              isAdmin: user.isadmin
             });
           } else {
             res.status(400).send({ message: 'authentication fail! check your username or password' });
@@ -226,6 +230,18 @@ var UsersController = function () {
         }
       }).catch(function (error) {
         return res.status(400).send(error);
+      });
+    }
+  }, {
+    key: 'getServiceName',
+    value: function getServiceName(req, res) {
+      return users.findServiceName().then(function (serviceNames) {
+        if (serviceNames) {
+          res.status(200).send(serviceNames);
+        }
+        res.status(404).send({ message: 'service not avialable yet' });
+      }).catch(function (error) {
+        return res.status(500).send(error);
       });
     }
   }]);

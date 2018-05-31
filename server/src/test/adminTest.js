@@ -116,6 +116,7 @@ export default describe('Admin Test', () => {
       */
 
       it('should return all request', () => {
+        console.log("created request", createdRequest1)
         return chai.request(app)
           .put(`/api/v1/requests/${createdRequest1.id}/disapprove?isAdmin=false`)
           .set('token', signedInUser.token)

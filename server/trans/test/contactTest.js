@@ -66,9 +66,9 @@ exports.default = describe('contacts', function () {
         var userMessage = {
           title: 'unresolved request',
           message: 'request to replace wall socket was not attended to',
-          userId: signedInUser.userId,
+          userId: signedInUser.id,
           adminId: _signupTest.adminUser.id,
-          senderId: signedInUser.userId
+          senderId: signedInUser.id
         };
         return _chai2.default.request(app).post('/api/v1/contacts').set('token', signedInUser.token).send(userMessage).then(function (res) {
           Object.assign(createdMessage1, res.body);

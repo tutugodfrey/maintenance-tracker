@@ -70,13 +70,14 @@ const UsersController = class {
                     imgUrl: 'no/file/uploaded',
                   })
                   .then((signup) => {
+                    console.log(signup)
                     const authenKeys = {
                       fullname: signup.fullname,
                       email: signup.email,
                       username: signup.username,
                       imgUrl: signup.imgUrl,
                       id: signup.id,
-                      isAdmin: signup.isAdmin,
+                      isAdmin: signup.isadmin,
                     };
                     const token = jwt.sign(authenKeys, process.env.SECRET_KEY, { expiresIn: '48h' });
                     res.status(201).send({
@@ -84,9 +85,9 @@ const UsersController = class {
                       message: 'signup successful',
                       email: signup.email,
                       username: signup.username,
-                      imgUrl: signup.imgUrl,
+                      imgUrl: signup.imgurl,
                       id: signup.id,
-                      isAdmin: signup.isAdmin,
+                      isAdmin: signup.isadmin,
                     });
                   })
                   .catch(error => res.status(400).send({ error }));
@@ -126,13 +127,14 @@ const UsersController = class {
                     password: hash,
                   })
                   .then((signup) => {
+                    console.log(signup)
                     const authenKeys = {
                       fullname: signup.fullname,
                       email: signup.email,
                       username: signup.username,
-                      imgUrl: signup.imgUrl,
+                      imgUrl: signup.imgurl,
                       id: signup.id,
-                      isAdmin: signup.isAdmin,
+                      isAdmin: signup.isadmin,
                     };
                     const token = jwt.sign(authenKeys, process.env.SECRET_KEY, { expiresIn: '48h' });
                     res.status(201).send({
@@ -141,9 +143,9 @@ const UsersController = class {
                       fullname: signup.fullname,
                       email: signup.email,
                       username: signup.username,
-                      imgUrl: signup.imgurl,
+                      imgUrl: signup.imgUrl,
                       id: signup.id,
-                      isAdmin: signup.isadmin,
+                      isAdmin: signup.isAdmin,
                     });
                   })
                   .catch(error => res.status(400).send({ error }));

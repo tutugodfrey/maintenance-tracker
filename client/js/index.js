@@ -16,9 +16,10 @@ let defaultNavItem;
     if (localStorage.getItem(key)) {
       let userInfo = localStorage.getItem(key);
       userInfo = JSON.parse(userInfo);
-      console.log(userInfo)
       return userInfo;
-    } 
+    } else {
+      return 'no user data stored in local storage';
+    }
   }
 
   const changeAttribute  =function (eleObject, attrToChange, newAttr, removeAttr) {
@@ -121,6 +122,7 @@ let defaultNavItem;
 
 
 function domNotifier() {
+ // localStorage.removeItem('userdata')
   if(document.getElementById('toggle-navigation-btn')) {
     const toggleNavBtn = document.getElementById('toggle-navigation-btn');
       newEvent(toggleNavBtn, 'click', showNavigation, toggleNavBtn);
@@ -146,12 +148,17 @@ function domNotifier() {
     newEvent(consoleModalBtn, 'click', closeConsoleBox, consoleModalBtn);
   }
 
-  const userData = getUserData('userdata');
-  if(userData.isAdmin === true  || userData.isAdmin === 'on') {
-		window.location.href= './admin/dashboard.html';
-	} else {
-		window.location.href = './users/dashboard.html';
+  if(document.getElementById('signup-button')) {
+		const signupButton = document.getElementById('signup-button');
+		newEvent(signupButton, 'click', processSignUp, signupButton);
 	}
+  const userData = getUserData('userdata');
+ if(userData.isAdmin === true  || userData.isAdmin === 'on') {
+		window.location.href= '/admin/dashboard.html';
+	} else if (userData.isAdmin === false){
+		window.location.href = '/users/dashboard.html';
+  } 
+  
 }
 
 domNotifier();

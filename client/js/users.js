@@ -87,7 +87,6 @@ const createRequest = function(ele) {
 			if (eleClass.indexOf('required-field') > 0) {
 				if (fieldValue.trim() === '') {
           showConsoleModal('Please fill out the the required fields');
-          showConsoleModal('Please fill out the the required fields');
           return;
         }
         jsonRequest = `${jsonRequest}${fieldName}=${fieldValue}&`;
@@ -97,13 +96,13 @@ const createRequest = function(ele) {
     }
 
     jsonRequest = `${jsonRequest}userId=${userData.id}`;
-		makeRequest(jsonRequest, 'POST', '/api/v1/users/requests', handleResponse)
-			makeRequest(jsonRequest, 'POST', '/api/v1/users/requests', handleResponse);
+			makeRequest(jsonRequest, 'POST', '/api/v1/users/requests', handleResponse)
 	}
 }
 
 
 const domNotifier = function() {
+ // localStorage.removeItem('requests')
 	if(document.getElementById('request-button')) {
 		const createRequestBtn = document.getElementById('request-button');
 		newEvent(createRequestBtn, 'click', createRequest, createRequestBtn,);

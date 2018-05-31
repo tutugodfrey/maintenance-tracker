@@ -20,10 +20,11 @@ const storeUserData = function (userData) {
 
 const makeRequest = function (requestData, method, url, callback) {
 	const headers =  new Headers();
- 	headers.append('Content-Type', 'application/json');
+  headers.append('Content-Type', 'application/x-www-form-urlencoded');
  	headers.append('Accept', 'application/json');
   	const options = {
     method,
+    headers,
     body:requestData,
   }
 	fetch(url, options)
@@ -37,48 +38,42 @@ const makeRequest = function (requestData, method, url, callback) {
 
 // process server response
 const handleResponse = function(responseData) {
-	storeUserData(responseData);
-	if (responseData.isAdmin === true  || responseData.isAdmin === 'on') {
-		window.location.href= '/admin/dashboard.html';
-	} else if (responseData.isAdmin === false ) {
-		window.location.href = '/users/dashboard.html';
-	}
+  storeUserData(responseData);
+  if (responseData.isAdmin === true  || responseData.isAdmin === 'on') {
+    window.location.href= '/admin/dashboard.html';
+  } else if(responseData.isAdmin === false) {
+    window.location.href = '/users/dashboard.html';
+  } 
 }
 
-const processSignUp = function(ele) {
+const processSignIn = function(ele) {
 	if (document.getElementsByClassName('form-control')) {
 		const formControls = document.getElementsByClassName('form-control');
-		const formData = new FormData();
-		const jsonRequest = {}
-		let fileAvailable = false;
+    let requestString = '';
 		for(let numOfInput = 0; numOfInput < formControls.length; numOfInput++) {
 			let inputField = formControls[numOfInput];
-			if (inputField.type === 'file') {
-				fileAvailable = true;
-			}
 			const fieldName = inputField.name;
 			const fieldValue = inputField.value.trim();
 			const eleClass = inputField.getAttribute('class');
 			if (eleClass.indexOf('required-field') > 0) {
-				if (fieldValue === '') {
-					return 'Please fill out the the required fields';
-				}
-			}
-			jsonRequest[fieldName] = fieldValue;
-			formData.append(fieldName, fieldValue);
-		}
-		if(fileAvailable) {
-			makeRequest(formData, 'POST', '/api/v1/auth/signup', handleResponse)
-		} 
-	}
+				if (fieldValue.trim() === '') {
+          showConsoleModal('Please fill out the the required fields');
+          return;
+        }
+        requestString  = `${requestString }${fieldName}=${fieldValue}&`;
+      } else {
+        requestString  = `${requestString }${fieldName}=${fieldValue}&`;
+      }
+    }
+    makeRequest(requestString , 'POST', '/api/v1/auth/signin', handleResponse)
+  }
 }
 
 const domNotifier = function() {
-	// localStorage.removeItem('userdata')
-	if(document.getElementById('signup-button')) {
-		const signupButton = document.getElementById('signup-button');
-		newEvent(signupButton, 'click', processSignUp, signupButton);
+	if(document.getElementById('signin-button')) {
+		const signinButton = document.getElementById('signin-button');
+		newEvent(signinButton, 'click', processSignIn, signinButton);
 	}
 }
 
- domNotifier()
+domNotifier();

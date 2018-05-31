@@ -67,7 +67,7 @@ const DummyDataModel = class {
         propString = `${propString}, ${prop} = '${newProps[prop]}'`;
       }
     });
-    console.log(condition)
+
     let whereString = '';
     whereKeys.forEach((prop) => {
       if (whereString === '') {
@@ -77,7 +77,7 @@ const DummyDataModel = class {
       }
     });
 
-    queryString = `${queryString} ${propString} where ${whereString}`;
+    queryString = `${queryString} ${propString} where ${whereString} returning *`;
     if (process.env.NODE_ENV !== 'production') {
       /* eslint-disable no-console */
       console.log(queryString);
@@ -173,11 +173,7 @@ const DummyDataModel = class {
         const queryString = this._generateUpdateQuery(propsToUpdate, modelToUpdate);
         client.query(queryString)
           .then((res) => {
-            // if (res.rows.length === 0) {
-              console.log("from update models", res.rows[0])
               resolve(res.rows[0])
-              // resolve(modelToUpdate);
-           // }
           })
           .catch(error => console.log(error));
       } else {
@@ -225,9 +221,10 @@ const DummyDataModel = class {
 
   findAll(condition = 'all') {
     const result = new Promise((resolve, reject) => {
-      const queryString = 'select servicename from users';
+      const queryString = this._generateGetQuery(condition);
       client.query(queryString)
         .then((res) => {
+          console.log(res.rows)
           resolve(res.rows);
         })
         .catch(error => reject(error));
@@ -237,12 +234,13 @@ const DummyDataModel = class {
 
   findServiceName(condition = 'all') {
     const result = new Promise((resolve, reject) => {
-      const queryString = this._generateGetQuery(condition);
-      client.query(queryString)
-        .then((res) => {
-          resolve(res.rows);
-        })
-        .catch(error => reject(error));
+    const queryString = 'select servicename from users';
+    client.query(queryString)
+      .then((res) => {
+        console.log(res.rows)
+        resolve(res.rows);
+      })
+      .catch(error => reject(error));
     });
     return result;
   }

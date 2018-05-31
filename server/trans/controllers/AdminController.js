@@ -53,11 +53,7 @@ var AdminController = function () {
       if (isAdmin !== 'true' || !requestId) {
         return res.status(400).send({ message: 'missiging required field' });
       }
-      var updatedAt = _Services2.default.getDate();
-      var dateRegExp = /\d{4}-\d{2}-\d{2}/;
-      if (!dateRegExp.test(updatedAt)) {
-        return res.status(500).send({ message: 'an error occur while processing your request' });
-      }
+
       return requests.findById(requestId).then(function (request) {
         return requests.update({
           id: request.id
@@ -83,11 +79,7 @@ var AdminController = function () {
       if (!requestId) {
         return res.status(400).send({ message: 'missiging required field' });
       }
-      var updatedAt = _Services2.default.getDate();
-      var dateRegExp = /\d{4}-\d{2}-\d{2}/;
-      if (!dateRegExp.test(updatedAt)) {
-        return res.status(500).send({ message: 'an error occur while processing your request' });
-      }
+
       return requests.findById(requestId).then(function (request) {
         return requests.update({
           id: request.id
@@ -112,11 +104,6 @@ var AdminController = function () {
       }
       if (!requestId) {
         return res.status(400).send({ message: 'missiging required field' });
-      }
-      var updatedAt = _Services2.default.getDate();
-      var dateRegExp = /\d{4}-\d{2}-\d{2}/;
-      if (!dateRegExp.test(updatedAt)) {
-        return res.status(500).send({ message: 'an error occur while processing your request' });
       }
       return requests.findById(requestId).then(function (request) {
         return requests.update({

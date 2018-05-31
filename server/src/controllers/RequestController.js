@@ -6,7 +6,6 @@ const { requests, users } = models;
 const RequestController = class {
   // add a new request
   static addRequest(req, res) {
-    console.log(req.body)
     const {
       userId,
       category,
@@ -22,11 +21,7 @@ const RequestController = class {
     if (!urgent && urgent.trim() !== '') {
       return res.status(400).send({ message: 'typeError field urgent must be a boolean' });
     }
-    const issueDate = Services.getDate();
-    const dateRegExp = /\d{4}-\d{2}-\d{2}/;
-    if (!dateRegExp.test(issueDate)) {
-      return res.status(500).send({ message: 'an error occur while processing your request' });
-    }
+  
     return users.findById(parseInt(userId, 10))
       .then((user) => {
         return requests
@@ -65,8 +60,13 @@ const RequestController = class {
           id: requestId,
         },
       })
-      .then(request => res.status(200).send(request))
-      .catch(error => res.status(404).send(error));
+      .then(request => {
+        if(!request) {
+          return res.status(404).send({ message: 'request not found' })
+        }
+        return res.status(200).send(request)
+      })
+     .catch(error => res.status(500).send( error));
   }
 
   // get all request for a logged in user
@@ -99,18 +99,12 @@ const RequestController = class {
     if (!requestId || !userId) {
       return res.status(400).send({ message: 'missing required field' });
     }
-    const updatedAt = Services.getDate();
-    const dateRegExp = /\d{4}-\d{2}-\d{2}/;
-    if (!dateRegExp.test(updatedAt)) {
-      return res.status(500).send({ message: 'an error occur while processing your request' });
-    }
     return requests
       .find({
         where: {
           userId,
           id: requestId,
         },
-        type: 'or',
       })
       .then((request) => {
         // users should not be able to modify the status of a request
@@ -150,7 +144,12 @@ const RequestController = class {
           id: requestId,
         },
       })
-      .then(newRequest => res.status(200).send(newRequest))
+      .then((rows) => {
+        if (rows.length === 0) {
+          return res.status(404).send({ message: 'request not found, not action taken' })
+        }
+        res.status(200).send({ message: 'request has been deleted' })
+    })
       .catch(error => res.status(404).send(error));
   }
 };

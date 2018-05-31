@@ -264,7 +264,6 @@ var DummyDataModel = function () {
       var result = new Promise(function (resolve, reject) {
         var queryString = _this5._generateGetQuery(condition);
         _connection2.default.query(queryString).then(function (res) {
-          console.log(res.rows);
           resolve(res.rows);
         }).catch(function (error) {
           return reject(error);
@@ -280,7 +279,6 @@ var DummyDataModel = function () {
       var result = new Promise(function (resolve, reject) {
         var queryString = 'select servicename from users';
         _connection2.default.query(queryString).then(function (res) {
-          console.log(res.rows);
           resolve(res.rows);
         }).catch(function (error) {
           return reject(error);

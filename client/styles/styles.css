@@ -88,7 +88,7 @@ input#urgent-request, input#confirmisAdmin {
 /* button style */
 button {
   height:30px;
-  border-style: none
+  border-style: none;
   margin:3px;
   border-radius:4px;
   margin-top:20px;
@@ -803,6 +803,34 @@ p#copyright {
   padding-top:20px;
   margin:0px;
 }
+
+#console-modal {
+  min-height:150px;
+  width:90%;
+  padding:10px;
+  border-radius:5px;
+  background-color:#7dcc46;
+  position:absolute;
+  z-index:300;
+  left:3%;
+  top:100px;
+}
+
+#console-modal > button {
+  position:absolute;
+  left:80%;
+  top:100px;
+} 
+
+#console-modal > p {
+  position:relative;
+  left:0%;
+  top:44px;
+  text-align:center;
+  font-size:18px;
+  color:#ffffff;
+} 
+
 
 .shadow {
   box-shadow: 4px 7px 0px 1px rgba(0, 0, 0, 0.3);

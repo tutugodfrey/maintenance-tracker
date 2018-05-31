@@ -5,6 +5,7 @@ import models from './../models/index';
 import Services from './../helpers/Services';
 
 dotenv.config();
+
 const { users } = models;
 const UsersController = class {
   // create a new user account
@@ -196,6 +197,14 @@ const UsersController = class {
       })
       .catch(error => res.status(400).send(error));
   }
+
+  static getServiceName(req, res) {
+    return requests
+      .findServiceName()
+      .then(allRequests => res.status(200).send(allRequests))
+      .catch(error => res.status(500).send(error));
+  }
+
 };
 
 export default UsersController;

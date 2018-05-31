@@ -225,6 +225,18 @@ const DummyDataModel = class {
 
   findAll(condition = 'all') {
     const result = new Promise((resolve, reject) => {
+      const queryString = 'select servicename from users';
+      client.query(queryString)
+        .then((res) => {
+          resolve(res.rows);
+        })
+        .catch(error => reject(error));
+    });
+    return result;
+  }
+
+  findServiceName(condition = 'all') {
+    const result = new Promise((resolve, reject) => {
       const queryString = this._generateGetQuery(condition);
       client.query(queryString)
         .then((res) => {

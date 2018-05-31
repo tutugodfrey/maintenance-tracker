@@ -1,6 +1,6 @@
 let defaultNavItem;
 domNotifier();
-  function newEvent(elementObject,  eventType, callBack, callBackArgument) {
+  const newEvent = function (elementObject,  eventType, callBack, callBackArgument) {
 
    if(elementObject.addEventListener){
      elementObject.addEventListener(eventType, function(event) {
@@ -24,7 +24,7 @@ domNotifier();
    }
  }   // end newEvent
 
-  function changeAttribut(eleObject, attrToChange, newAttr, removeAttr) {
+  const changeAttribute = function (eleObject, attrToChange, newAttr, removeAttr) {
     const eleAttr = eleObject.getAttribute(attrToChange);
     if (eleAttr === null || eleAttr !== newAttr) 	{
       //set the attribute and the image become large
@@ -39,13 +39,13 @@ domNotifier();
   }		//end changeClass
 
 
-  function showNavigation(toggleBtn) {
+  const showNavigation =  function(toggleBtn) {
     const verticalNav = document.getElementById('vertical-nav-bar');
     const classValue = verticalNav.getAttribute('class');
     if(classValue === 'hide-item') {
-      changeAttribut(verticalNav, 'class', 'show-item')
+      changeAttribute(verticalNav, 'class', 'show-item')
     } else if(classValue === 'show-item') {
-      changeAttribut(verticalNav, 'class', 'hide-item')
+      changeAttribute(verticalNav, 'class', 'hide-item')
     }
   }
   // get the id of the default tab view
@@ -74,26 +74,26 @@ domNotifier();
     const tabSection = document.getElementById(href);
     const classValue = tabSection.getAttribute('class');
     if((!lastElementClicked && href !== defaultNavItem)) {
-      changeAttribut(tabSection, 'class', 'tab-item show-item');
+      changeAttribute(tabSection, 'class', 'tab-item show-item');
       if(document.getElementById('view-requests')) {
         defaultTab = document.getElementById('view-requests');
-        changeAttribut(defaultTab, 'class', 'tab-item hide-item');
+        changeAttribute(defaultTab, 'class', 'tab-item hide-item');
       }
 
       if(document.getElementById('request-repair')) {
         defaultTab = document.getElementById('request-repair');
-        changeAttribut(defaultTab, 'class', 'tab-item hide-item');
+        changeAttribute(defaultTab, 'class', 'tab-item hide-item');
       }
 
     } else if(lastElementClicked && href !== lastElementClicked) {
       if(classValue === 'tab-item hide-item') {
-        changeAttribut(tabSection, 'class', 'tab-item show-item');
+        changeAttribute(tabSection, 'class', 'tab-item show-item');
       } 
       const oldTabSection = document.getElementById(lastElementClicked);
-      changeAttribut(oldTabSection, 'class', 'tab-item hide-item');
+      changeAttribute(oldTabSection, 'class', 'tab-item hide-item');
     } else {
       if(classValue === 'tab-item show-item') {
-        changeAttribut(tabSection, 'class', 'tab-item show-item');
+        changeAttribute(tabSection, 'class', 'tab-item show-item');
       }
 
     }
@@ -124,5 +124,11 @@ function domNotifier() {
     const anchorPos = defaultNav.href.indexOf('#');
     defaultNavItem = defaultNav.href.substring(anchorPos + 1);
   }
+
+  // user signup
+  if(document.getElementById('signup-button')) {
+		const signupButton = document.getElementById('signup-button');
+		eventListener(signupButton, processSignUp, signupButton);
+	}
 }
 

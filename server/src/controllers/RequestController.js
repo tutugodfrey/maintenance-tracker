@@ -6,6 +6,7 @@ const { requests, users } = models;
 const RequestController = class {
   // add a new request
   static addRequest(req, res) {
+    console.log(req.body)
     const {
       userId,
       category,

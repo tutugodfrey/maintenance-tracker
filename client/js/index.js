@@ -12,6 +12,15 @@ let defaultNavItem;
      false );
   }   // end newEvent
 
+  const getUserData = function (key) {
+    if (localStorage.getItem(key)) {
+      let userInfo = localStorage.getItem(key);
+      userInfo = JSON.parse(userInfo);
+      console.log(userInfo)
+      return userInfo;
+    } 
+  }
+
   const changeAttribute  =function (eleObject, attrToChange, newAttr, removeAttr) {
     const eleAttr = eleObject.getAttribute(attrToChange);
     if (eleAttr === null || eleAttr !== newAttr) 	{
@@ -88,8 +97,26 @@ let defaultNavItem;
 
     lastElementClicked = href;
   }
-     
 
+  const showConsoleModal = function(message) {
+    if(document.getElementById('console-modal')) {
+      const consoleModal = document.getElementById('console-modal');
+      const messageBox = document.getElementById('message-box');
+      messageBox.innerHTML = message;
+      let consoleModalClass = consoleModal.getAttribute('class');
+      consoleModalClass = consoleModalClass.replace('hide-item', 'show-item');
+      consoleModal.setAttribute('class', consoleModalClass);
+    }
+  }
+  
+  const closeConsoleModal = function(message) {
+    if(document.getElementById('console-modal')) {
+      const consoleModal = document.getElementById('console-modal');
+      let consoleModalClass = consoleModal.getAttribute('class');
+      consoleModalClass = consoleModalClass.replace('show-item', 'hide-item');
+      consoleModal.setAttribute('class', consoleModalClass);
+    }
+  }
 
 
 
@@ -113,11 +140,18 @@ function domNotifier() {
     defaultNavItem = defaultNav.href.substring(anchorPos + 1);
   }
 
-  // user signup
-  if(document.getElementById('signup-button')) {
-    const signupButton = document.getElementById('signup-button');
-    newEvent(signupButton, processSignUp, signupButton);
+  // console modal
+  if(document.getElementById('console-modal-button')) {
+    const consoleModalBtn = document.getElementById('console-modal-button');
+    newEvent(consoleModalBtn, 'click', closeConsoleBox, consoleModalBtn);
   }
+
+  const userData = getUserData('userdata');
+  if(userData.isAdmin === true  || userData.isAdmin === 'on') {
+		window.location.href= './admin/dashboard.html';
+	} else {
+		window.location.href = './users/dashboard.html';
+	}
 }
 
 domNotifier();

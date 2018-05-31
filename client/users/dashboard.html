@@ -78,20 +78,19 @@
                 <form action="" class="form-block">
                   <label for="problem-type" class="form-label">Category</label>
                   <span class = "required">*</span><br/>
-                  <select name="equipment-type" id="problem-type" class="green-outline" name="category">
+                  <select id="problem-type" class="request-data green-outline" name="category">
                     <option value="select">Select</soption>
                     <option value="automobile">Automobile</option>
-                    <option value="electrical-fix">Electrical</option>
+                    <option value="Electrical">Electrical</option>
                     <option value="painting">Painting</option>
                   </select><br />
                   <label for="description" class="form-label">Description</label>
                   <span class = "required">*</span><br />
-                  <textarea cols="30" rows="5" class="form-control required-field green-outline" id = "description" placeholder="Problem description" name="description"></textarea><br />
+                  <textarea cols="30" rows="5" class="form-control request-data required-field green-outline" id = "description" placeholder="Problem description" name="description"></textarea><br />
                   <label for="address" class="form-label">Address</label>
                   <span class = "required">*</span><br />
-                  <input type="text" class="form-control required-field green-outline" id = "address"  name="address">
-                  <input type="hidden" class="form-control" id = "user-id" value='"get from localstorage' >
-                  <input type="radio" id="urgent-request" class="form-control green-outlinee"><label for="urgent-request" class="form-label" isAdmin="getValue from localstorage">Mark as urgent</label><br />
+                  <input type="text" class="form-control request-data required-field green-outline" id = "address"  name="address">
+                  <input type="radio" id="urgent-request" class="form-control request-data green-outlinee" name='urgent'><label for="urgent-request" class="form-label" isAdmin="getValue from localstorage">Mark as urgent</label><br />
                   <button id="request-button" class="submit-button green-button btn-md">Submit</button>
                   <button class="submit-button delete-request white-button btn-md">Cancel</button>
                 </form>
@@ -183,6 +182,11 @@
               <a href="#">view all</a>
           </div>
         </div>
+        <div id="console-modal" class="tab-item hide-item green-outline">
+              <p id="message-box">
+              </p>
+              <button id="console-modal-button" class="white-button btn-md">close</button>
+        </div>
       </div>
       <div id="footer-div">
         <div id="site-info">
@@ -217,7 +221,7 @@
             <a href="#">&copy; 2018 maintenance tracker. All Right Reserved.</a>
           </p>
       </div>
-    </div>
-    <script src="./../js/index.js" ></script>
+
+    <script src="./../js/users.js" ></script>
   </body>
 </html>

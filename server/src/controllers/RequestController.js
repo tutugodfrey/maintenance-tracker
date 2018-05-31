@@ -35,6 +35,7 @@ const RequestController = class {
             category,
             description,
             address,
+            serviceName,
             issueDate: 'now()',
             updatedAt: 'now()',
             status: 'awaiting confirmation',
@@ -118,7 +119,9 @@ const RequestController = class {
         }
         return requests
           .update(
-            request,
+            {
+              id: request.id,
+            },
             {
               updatedAt: 'now()',
               category: category || request.category,

@@ -9,6 +9,7 @@ const secureRoute = function (req, res, next) {
         if (err) {
           resolve(res.status(401).send('Invalid Token'));
         } else {
+          // req.body.decode = decode;
           resolve(next());
         }
       });

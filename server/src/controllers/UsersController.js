@@ -14,8 +14,8 @@ const UsersController = class {
       fullname,
       username,
       email,
-      phone,
       address,
+      phone,
       serviceName,
       password,
       confirmPassword,
@@ -64,18 +64,18 @@ const UsersController = class {
                     email,
                     username,
                     address,
+                    phone,
                     serviceName,
-                    password,
+                    password: hash,
                     isAdmin: isAdmin || false,
                     imgUrl: 'no/file/uploaded',
                   })
                   .then((signup) => {
-                    console.log(signup)
                     const authenKeys = {
                       fullname: signup.fullname,
                       email: signup.email,
                       username: signup.username,
-                      imgUrl: signup.imgUrl,
+                      imgUrl: signup.imgurl,
                       id: signup.id,
                       isAdmin: signup.isadmin,
                     };
@@ -127,11 +127,11 @@ const UsersController = class {
                     password: hash,
                   })
                   .then((signup) => {
-                    console.log(signup)
                     const authenKeys = {
                       fullname: signup.fullname,
                       email: signup.email,
                       username: signup.username,
+                      phone: signup.phone,
                       imgUrl: signup.imgurl,
                       id: signup.id,
                       isAdmin: signup.isadmin,
@@ -143,9 +143,9 @@ const UsersController = class {
                       fullname: signup.fullname,
                       email: signup.email,
                       username: signup.username,
-                      imgUrl: signup.imgUrl,
+                      imgUrl: signup.imgurl,
                       id: signup.id,
-                      isAdmin: signup.isAdmin,
+                      isAdmin: signup.isadmin,
                     });
                   })
                   .catch(error => res.status(400).send({ error }));
@@ -176,19 +176,20 @@ const UsersController = class {
             const authenKeys = {
               username: user.username,
               fullname: user.fullname,
-              isAdmin: user.isAdmin,
+              isAdmin: user.isadmin,
               userId: user.id,
-              imgUrl: user.imgUrl,
+              imgUrl: user.imgurl,
             };
             const token = jwt.sign(authenKeys, process.env.SECRET_KEY, { expiresIn: '48h' });
             res.status(200).send({
               token,
               success: true,
-              username: user.username,
               fullname: user.fullname,
-              isAdmin: user.isAdmin,
-              userId: user.id,
-              imgUrl: user.imgUrl,
+              email: user.email,
+              username: user.username,
+              imgUrl: user.imgurl,
+              id: user.id,
+              isAdmin: user.isadmin,
             });
           } else {
             res.status(400).send({ message: 'authentication fail! check your username or password' });
@@ -201,9 +202,14 @@ const UsersController = class {
   }
 
   static getServiceName(req, res) {
-    return requests
+    return users
       .findServiceName()
-      .then(allRequests => res.status(200).send(allRequests))
+      .then(serviceNames =>{ 
+        if (serviceNames) {
+          res.status(200).send(serviceNames)
+        }
+        res.status(404).send({ message: 'service not avialable yet' })
+      })
       .catch(error => res.status(500).send(error));
   }
 

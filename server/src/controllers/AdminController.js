@@ -13,7 +13,7 @@ const AdminController = class {
     return requests
       .findAll()
       .then(allRequests => res.status(200).send(allRequests))
-      .catch(error => res.status(500).send(error));
+      .catch(() => res.status(500).send({ message: 'some went wrong'}));
   }
 
   static rejectRequest(req, res) {
@@ -39,7 +39,7 @@ const AdminController = class {
               id: request.id,
             },
             {
-              updatedAt,
+              updatedAt: 'now()',
               status: 'rejected',
             },
           )
@@ -71,7 +71,7 @@ const AdminController = class {
               id: request.id,
             },
             {
-              updatedAt,
+              updatedAt: 'now()',
               status: 'pending',
             },
           )
@@ -86,7 +86,6 @@ const AdminController = class {
     if (isAdmin !== 'true') {
       return res.status(402).send({ message: 'you are not permitted to perform this action' });
     }
-      console.log("request id is ", res.params.requestId)
     if (!requestId) {
       return res.status(400).send({ message: 'missiging required field' });
     }
@@ -104,7 +103,7 @@ const AdminController = class {
               id: request.id,
             },
             {
-              updatedAt,
+              updatedAt: 'now()',
               status: 'resolved',
             },
           )

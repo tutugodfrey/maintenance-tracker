@@ -10,8 +10,8 @@ const adminUser = {};
 const regularUser1 = {};
 const regularUser2 = {};
 
-export default describe('Users signup', () => {
-  describe('Admin User', () => {
+export default describe('Users controller', () => {
+  describe('signup method', () => {
     it('should create new admin user', () => {
       return chai.request(app)
         .post('/api/v1/auth/signup')
@@ -32,9 +32,7 @@ export default describe('Users signup', () => {
           expect(res.body.isAdmin).to.equal(true);
         });
     });
-  });
 
-  describe('Create regular User', () => {
     it('should create new regular user', () => {
       return chai.request(app)
         .post('/api/v1/auth/signup')

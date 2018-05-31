@@ -51,6 +51,12 @@ export default describe('Admin Test', () => {
 
   describe('Update a request', () => {
     describe('approve request', () => {
+      /* Commented block here and below are critecal for the 
+      for application functionality and so need attention as soon as possible.
+      they are commented out to enable working on other feature the the time limit to complete
+      the project
+      */
+
       /*
       it('should return all request', () => {
         return chai.request(app)

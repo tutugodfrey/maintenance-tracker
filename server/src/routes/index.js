@@ -24,7 +24,7 @@ const Routes = class {
     // routes for us
     app.post('/api/v1/auth/signup', usersUpload.single('profile-photo'), this.UsersController.signup);
     app.post('/api/v1/auth/signin', this.UsersController.signin);
-    app.post('/api/v1/auth/services', this.UsersController.getServiceName);
+    app.get('/api/v1/auth/services', this.UsersController.getServiceName);
 
     // admin routes
     app.get('/api/v1/requests', secureRoute, this.AdminController.getAllRequests);

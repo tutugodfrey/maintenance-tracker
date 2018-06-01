@@ -47,11 +47,6 @@ var RequestController = function () {
       if (!urgent && urgent.trim() !== '') {
         return res.status(400).send({ message: 'typeError field urgent must be a boolean' });
       }
-      var issueDate = _Services2.default.getDate();
-      var dateRegExp = /\d{4}-\d{2}-\d{2}/;
-      if (!dateRegExp.test(issueDate)) {
-        return res.status(500).send({ message: 'an error occur while processing your request' });
-      }
       return users.findById(parseInt(userId, 10)).then(function (user) {
         return requests.create({
           userId: userId,

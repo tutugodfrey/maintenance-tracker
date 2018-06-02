@@ -76,24 +76,20 @@ exports.default = describe('contacts', function () {
           expect(res.body).to.be.an('object');
         });
       });
-      /*
-      it('should return bad request if required fields are not presents', () => {
-        const message3 = {
+      // failing here
+      it('should return bad request if required fields are not presents', function () {
+        var message3 = {
           title: 'Apologise',
           message: 'Please we will attend to it right away',
-          userId: regularUser1.id,
-          adminId: adminUser.id,
-          senderId: 7,
+          userId: _signupTest.regularUser1.id,
+          adminId: _signupTest.adminUser.id,
+          senderId: ''
         };
-        return chai.request(app)
-          .post('/api/v1/contacts')
-          .set('token', signedInUser.token)
-          .send(message3)
-          .then((res) => {
-            expect(res).to.have.status(404);
-            expect(res.body).to.be.an('object');
-          });
-      }); */
+        return _chai2.default.request(app).post('/api/v1/contacts').set('token', signedInUser.token).send(message3).then(function (res) {
+          expect(res).to.have.status(400);
+          expect(res.body).to.be.an('object');
+        });
+      });
 
       it('should not create a message for a sender that does not exist', function () {
         return _chai2.default.request(app).post('/api/v1/contacts').set('token', signedInUser.token).send(message4).then(function (res) {
@@ -159,24 +155,20 @@ exports.default = describe('contacts', function () {
         });
       });
     });
-    /*
-    it('should return bad request if required fields are not presents', () => {
-      const message3 = {
+    // failing here
+    it('should return bad request if required fields are not presents', function () {
+      var message3 = {
         title: 'Apologise',
         message: 'Please we will attend to it right away',
-        userId: regularUser1.id,
-        adminId: adminUser.id,
-        senderId: 7,
+        userId: _signupTest.regularUser1.id,
+        adminId: _signupTest.adminUser.id,
+        senderId: ''
       };
-      return chai.request(app)
-        .post('/api/v1/contacts')
-        .set('token', signedInUser.token)
-        .send(message3)
-        .then((res) => {
-          expect(res).to.have.status(404);
-          expect(res.body).to.be.an('object');
-        });
-    }); */
+      return _chai2.default.request(app).post('/api/v1/contacts').set('token', signedInUser.token).send(message3).then(function (res) {
+        expect(res).to.have.status(400);
+        expect(res.body).to.be.an('object');
+      });
+    });
 
     it('should not create a message for a sender that does not exist', function () {
       return _chai2.default.request(app).post('/api/v1/contacts').set('token', signedInUser.token).send(message4).then(function (res) {
@@ -194,17 +186,13 @@ exports.default = describe('contacts', function () {
   });
 
   describe('admin get message', function () {
-
-    /* it('should return all messages if isAdmin === true', () => {
-       return chai.request(app)
-         .get('/api/v1/contacts?isAdmin=true')
-         .set('token', signedInUser.token)
-         .then((res) => {
-           expect(res).to.have.status(200);
-           expect(res.body).to.be.an('array');
-           expect(res.body.length).to.equal(2);
-         });
-     }); */
+    it('should return all messages if isAdmin === true', function () {
+      return _chai2.default.request(app).get('/api/v1/contacts?isAdmin=true').set('token', signedInUser.token).then(function (res) {
+        expect(res).to.have.status(200);
+        expect(res.body).to.be.an('array');
+        expect(res.body.length).to.equal(2);
+      });
+    });
 
     it('should return bad request if neither isAdim or userId is not set', function () {
       return _chai2.default.request(app).get('/api/v1/contacts?userId=&isAdmin=').set('token', signedInUser.token).then(function (res) {

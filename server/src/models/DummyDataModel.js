@@ -224,7 +224,6 @@ const DummyDataModel = class {
       const queryString = this._generateGetQuery(condition);
       client.query(queryString)
         .then((res) => {
-          console.log(res.rows)
           resolve(res.rows);
         })
         .catch(error => reject(error));
@@ -237,7 +236,6 @@ const DummyDataModel = class {
     const queryString = 'select servicename from users';
     client.query(queryString)
       .then((res) => {
-        console.log(res.rows)
         resolve(res.rows);
       })
       .catch(error => reject(error));

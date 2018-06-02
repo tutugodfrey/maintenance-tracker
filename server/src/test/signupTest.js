@@ -122,10 +122,10 @@ export default describe('Users controller', () => {
         .field('username', 'walterbr')
         .field('email', 'walterbr@yahoo.com')
         .field('address', 'market road')
-        .field('serviceName', 'mk services')
+        .field('serviceName', '')
         .field('password', '1234567')
         .field('confirmPassword', '123456')
-        .field('isAdmin', 'false')
+        .field('isAdmin', '')
         .attach('profile-photo', './fileuploads/tutug.jpeg')
         .then((res) => {
           expect(res).to.have.status(400);

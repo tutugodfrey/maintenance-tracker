@@ -31,7 +31,6 @@ var RequestController = function () {
 
     // add a new request
     value: function addRequest(req, res) {
-      console.log(req.body);
       var _req$body = req.body,
           userId = _req$body.userId,
           category = _req$body.category,
@@ -84,9 +83,12 @@ var RequestController = function () {
           id: requestId
         }
       }).then(function (request) {
+        if (!request) {
+          return res.status(404).send({ message: 'request not found' });
+        }
         return res.status(200).send(request);
       }).catch(function (error) {
-        return res.status(404).send(error);
+        return res.status(500).send(error);
       });
     }
 
@@ -127,17 +129,11 @@ var RequestController = function () {
       if (!requestId || !userId) {
         return res.status(400).send({ message: 'missing required field' });
       }
-      var updatedAt = _Services2.default.getDate();
-      var dateRegExp = /\d{4}-\d{2}-\d{2}/;
-      if (!dateRegExp.test(updatedAt)) {
-        return res.status(500).send({ message: 'an error occur while processing your request' });
-      }
       return requests.find({
         where: {
           userId: userId,
           id: requestId
-        },
-        type: 'or'
+        }
       }).then(function (request) {
         // users should not be able to modify the status of a request
         if (request.status === 'approved' || request.status === 'resolved') {
@@ -174,8 +170,11 @@ var RequestController = function () {
           userId: userId,
           id: requestId
         }
-      }).then(function (newRequest) {
-        return res.status(200).send(newRequest);
+      }).then(function (rows) {
+        if (rows.length === 0) {
+          return res.status(404).send({ message: 'request not found, not action taken' });
+        }
+        res.status(200).send({ message: 'request has been deleted' });
       }).catch(function (error) {
         return res.status(404).send(error);
       });

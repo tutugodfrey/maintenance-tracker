@@ -73,7 +73,7 @@ exports.default = describe('Users controller', function () {
     });
 
     it('password, confirm-password should match', function () {
-      return _chai2.default.request(app).post('/api/v1/auth/signup').set('Content-Type', 'multipart/form-data').field('fullname', 'brain walter').field('username', 'walterbr').field('email', 'walterbr@yahoo.com').field('address', 'market road').field('serviceName', 'mk services').field('password', '1234567').field('confirmPassword', '123456').field('isAdmin', 'false').attach('profile-photo', './fileuploads/tutug.jpeg').then(function (res) {
+      return _chai2.default.request(app).post('/api/v1/auth/signup').set('Content-Type', 'multipart/form-data').field('fullname', 'brain walter').field('username', 'walterbr').field('email', 'walterbr@yahoo.com').field('address', 'market road').field('serviceName', '').field('password', '1234567').field('confirmPassword', '123456').field('isAdmin', '').attach('profile-photo', './fileuploads/tutug.jpeg').then(function (res) {
         expect(res).to.have.status(400);
         expect(res.body).to.be.an('Object');
         expect(res.body).to.eql({ message: 'password does not match' });

@@ -53,7 +53,6 @@ var AdminController = function () {
       if (isAdmin !== 'true' || !requestId) {
         return res.status(400).send({ message: 'missiging required field' });
       }
-
       return requests.findById(requestId).then(function (request) {
         return requests.update({
           id: request.id
@@ -79,7 +78,6 @@ var AdminController = function () {
       if (!requestId) {
         return res.status(400).send({ message: 'missiging required field' });
       }
-
       return requests.findById(requestId).then(function (request) {
         return requests.update({
           id: request.id

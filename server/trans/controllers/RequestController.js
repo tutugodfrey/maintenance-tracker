@@ -46,7 +46,6 @@ var RequestController = function () {
       if (!urgent && urgent.trim() !== '') {
         return res.status(400).send({ message: 'typeError field urgent must be a boolean' });
       }
-
       return users.findById(parseInt(userId, 10)).then(function (user) {
         return requests.create({
           userId: userId,

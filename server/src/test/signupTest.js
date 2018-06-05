@@ -44,7 +44,7 @@ export default describe('Users controller', () => {
         .field('serviceName', '')
         .field('password', '123456')
         .field('confirmPassword', '123456')
-        .field('isAdmin', 'false')
+        .field('isAdmin', '')
         .attach('profile-photo', './fileuploads/tutug.jpeg')
         .then((res) => {
           Object.assign(regularUser1, res.body);
@@ -64,7 +64,7 @@ export default describe('Users controller', () => {
         .field('serviceName', '')
         .field('password', '123456')
         .field('confirmPassword', '123456')
-        .field('isAdmin', 'false')
+        .field('isAdmin', '')
         .attach('profile-photo', '')
         .then((res) => {
           Object.assign(regularUser2, res.body);
@@ -133,7 +133,7 @@ export default describe('Users controller', () => {
           expect(res.body).to.eql({ message: 'password does not match' });
         });
     });
-    it('password, confirm-password should match', () => {
+    it('length of password or comfirmPassword should be >= 6', () => {
       return chai.request(app)
         .post('/api/v1/auth/signup')
         .set('Content-Type', 'multipart/form-data')
@@ -141,10 +141,10 @@ export default describe('Users controller', () => {
         .field('username', 'walterbr')
         .field('email', 'walterbr@yahoo.com')
         .field('address', 'market road')
-        .field('serviceName', 'mk services')
+        .field('serviceName', '')
         .field('password', '12345')
         .field('confirmPassword', '123456')
-        .field('isAdmin', 'false')
+        .field('isAdmin', '')
         .attach('profile-photo', './fileuploads/tutug.jpeg')
         .then((res) => {
           expect(res).to.have.status(400);

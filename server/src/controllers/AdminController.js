@@ -1,33 +1,47 @@
 
 import models from './../models/index';
-import Services from './../helpers/Services';
 
 const { requests } = models;
 const AdminController = class {
   // get all request for a logged in user
   static getAllRequests(req, res) {
-    const { isAdmin } = req.query;
-    if (isAdmin !== 'true') {
-      return res.status(402).send({ message: 'missing required field' });
+    const {
+      isAdmin,
+      id,
+    } = req.body.decode;
+    if (!isAdmin) {
+      return res.status(402).send({ message: 'you are not authorized to perform this action' });
     }
     return requests
-      .findAll()
+      .findAll({
+        where: {
+          adminId: parseInt(id, 10),
+        },
+      })
       .then(allRequests => res.status(200).send(allRequests))
-      .catch(() => res.status(500).send({ message: 'some went wrong'}));
+      .catch(() => res.status(500).send({ message: 'some went wrong' }));
   }
 
   static rejectRequest(req, res) {
     const requestId = parseInt(req.params.requestId, 10);
-    const { isAdmin } = req.query;
-    if (isAdmin !== 'true') {
+    const {
+      isAdmin,
+      id,
+    } = req.body.decode;
+    if (!isAdmin) {
       return res.status(402).send({ message: 'you are not permitted to perform this action' });
     }
-    if (isAdmin !== 'true' || !requestId) {
+    if (!requestId) {
       return res.status(400).send({ message: 'missiging required field' });
     }
 
     return requests
-      .findById(requestId)
+      .find({
+        where: {
+          id: requestId,
+          adminId: parseInt(id, 10),
+        },
+      })
       .then((request) => {
         return requests
           .update(
@@ -46,8 +60,11 @@ const AdminController = class {
 
   static approveRequest(req, res) {
     const requestId = parseInt(req.params.requestId, 10);
-    const { isAdmin } = req.query;
-    if (isAdmin !== 'true') {
+    const {
+      isAdmin,
+      id,
+    } = req.body.decode;
+    if (!isAdmin) {
       return res.status(402).send({ message: 'you are not permitted to perform this action' });
     }
     if (!requestId) {
@@ -55,7 +72,12 @@ const AdminController = class {
     }
 
     return requests
-      .findById(requestId)
+      .find({
+        where: {
+          id: requestId,
+          adminId: parseInt(id, 10),
+        },
+      })
       .then((request) => {
         return requests
           .update(
@@ -74,15 +96,23 @@ const AdminController = class {
 
   static resolveRequest(req, res) {
     const requestId = parseInt(req.params.requestId, 10);
-    const { isAdmin } = req.query;
-    if (isAdmin !== 'true') {
+    const {
+      isAdmin,
+      id,
+    } = req.body.decode;
+    if (!isAdmin) {
       return res.status(402).send({ message: 'you are not permitted to perform this action' });
     }
     if (!requestId) {
       return res.status(400).send({ message: 'missiging required field' });
     }
     return requests
-      .findById(requestId)
+      .find({
+        where: {
+          id: requestId,
+          adminId: parseInt(id, 10),
+        },
+      })
       .then((request) => {
         return requests
           .update(

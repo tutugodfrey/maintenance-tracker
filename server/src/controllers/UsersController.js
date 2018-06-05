@@ -16,11 +16,11 @@ const UsersController = class {
       email,
       address,
       phone,
-      serviceName,
       password,
       confirmPassword,
       isAdmin,
     } = req.body;
+    let { serviceName } = req.body;
     // validate input
     if (username.trim() === '' || fullname.trim() === '' || email.trim() === ''
     || password.trim() === '' || confirmPassword.trim() === '') {
@@ -43,7 +43,15 @@ const UsersController = class {
       return res.status(400).send({ message: 'missing required field' });
     }
     if (!isAdmin && isAdmin.trim() !== '') {
-      return res.status(400).send({ message: 'isAdmin must be a true or false' });
+      return res.status(400).send({ message: 'isAdmin must be a true if set' });
+    }
+
+    if (!isAdmin) {
+      serviceName = '';
+    }
+
+    if (Boolean(isAdmin) && serviceName.trim() === '') {
+      return res.status(400).send({ message: 'please provide a service name for users to recognize your services' });
     }
     // console.log(req.body)
     if (!req.file) {
@@ -67,7 +75,7 @@ const UsersController = class {
                     phone,
                     serviceName,
                     password: hash,
-                    isAdmin: isAdmin || false,
+                    isAdmin: Boolean(isAdmin) || false,
                     imgUrl: 'no/file/uploaded',
                   })
                   .then((signup) => {
@@ -111,46 +119,45 @@ const UsersController = class {
         if (!user) {
           // handle uploaded profile pix
           const destination = Services.getImgUrl(req.file.path);
-          // const passwd2 = req.body.passwd2;
-            bcrypt.genSalt(10, (err, salt) => {
-              bcrypt.hash(password, salt, (hashErr, hash) => {
-                users
-                  .create({
-                    fullname,
-                    email,
-                    username,
-                    address,
-                    isAdmin,
-                    serviceName,
-                    phone,
-                    imgUrl: destination,
-                    password: hash,
-                  })
-                  .then((signup) => {
-                    const authenKeys = {
-                      fullname: signup.fullname,
-                      email: signup.email,
-                      username: signup.username,
-                      phone: signup.phone,
-                      imgUrl: signup.imgurl,
-                      id: signup.id,
-                      isAdmin: signup.isadmin,
-                    };
-                    const token = jwt.sign(authenKeys, process.env.SECRET_KEY, { expiresIn: '48h' });
-                    res.status(201).send({
-                      token,
-                      message: 'signup successful',
-                      fullname: signup.fullname,
-                      email: signup.email,
-                      username: signup.username,
-                      imgUrl: signup.imgurl,
-                      id: signup.id,
-                      isAdmin: signup.isadmin,
-                    });
-                  })
-                  .catch(error => res.status(400).send({ error }));
-              });
+          bcrypt.genSalt(10, (err, salt) => {
+            bcrypt.hash(password, salt, (hashErr, hash) => {
+              users
+                .create({
+                  fullname,
+                  email,
+                  username,
+                  address,
+                  serviceName,
+                  phone,
+                  imgUrl: destination,
+                  password: hash,
+                  isAdmin: Boolean(isAdmin) || false,
+                })
+                .then((signup) => {
+                  const authenKeys = {
+                    fullname: signup.fullname,
+                    email: signup.email,
+                    username: signup.username,
+                    phone: signup.phone,
+                    imgUrl: signup.imgurl,
+                    id: signup.id,
+                    isAdmin: signup.isadmin,
+                  };
+                  const token = jwt.sign(authenKeys, process.env.SECRET_KEY, { expiresIn: '48h' });
+                  res.status(201).send({
+                    token,
+                    message: 'signup successful',
+                    fullname: signup.fullname,
+                    email: signup.email,
+                    username: signup.username,
+                    imgUrl: signup.imgurl,
+                    id: signup.id,
+                    isAdmin: signup.isadmin,
+                  });
+                })
+                .catch(error => res.status(400).send({ error }));
             });
+          });
         } else {
           res.status(409).send({ message: 'user already exist' });
         }
@@ -177,7 +184,7 @@ const UsersController = class {
               username: user.username,
               fullname: user.fullname,
               isAdmin: user.isadmin,
-              userId: user.id,
+              id: user.id,
               imgUrl: user.imgurl,
             };
             const token = jwt.sign(authenKeys, process.env.SECRET_KEY, { expiresIn: '48h' });
@@ -204,15 +211,14 @@ const UsersController = class {
   static getServiceName(req, res) {
     return users
       .findServiceName()
-      .then(serviceNames =>{ 
+      .then((serviceNames) => {
         if (serviceNames) {
-          res.status(200).send(serviceNames)
+          res.status(200).send(serviceNames);
         }
-        res.status(404).send({ message: 'service not avialable yet' })
+        res.status(404).send({ message: 'service not avialable yet' });
       })
       .catch(error => res.status(500).send(error));
   }
-
 };
 
 export default UsersController;

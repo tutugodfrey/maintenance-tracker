@@ -1,6 +1,6 @@
 import chai from 'chai';
 import Server from './../app';
-import client from './../models/connection';
+
 const server = new Server();
 const { expect } = chai;
 

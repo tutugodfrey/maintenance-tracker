@@ -19,8 +19,6 @@ const Routes = class {
     app.get('/', (req, res) => {
       res.status(200).sendFile(path.join(__dirname, './../../../client/index.html'));
     });
-
-
     // routes for us
     app.post('/api/v1/auth/signup', usersUpload.single('profile-photo'), this.UsersController.signup);
     app.post('/api/v1/auth/signin', this.UsersController.signin);

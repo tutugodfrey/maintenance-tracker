@@ -5,11 +5,11 @@ const queryString = 'drop table if exists users; drop table if exists requests; 
 // let queryCompleted = false;
 console.log('droping table');
 client.query(queryString)
-.then(() => {
-  console.log('table droped')
-  client.end()
-})
-.catch(error =>{
-   console.log(error)
-   client.end();
-});
+  .then(() => {
+    console.log('table droped');
+    client.end();
+  })
+  .catch((error) => {
+    console.log(error);
+    client.end();
+  });

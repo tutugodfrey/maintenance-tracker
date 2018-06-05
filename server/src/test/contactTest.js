@@ -1,7 +1,7 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
 import Server from './../app';
-import { adminUser, regularUser1 } from './signupTest';
+import { adminUser, regularUser1, regularUser2 } from './signupTest';
 
 const server = new Server();
 const app = server.expressServer();
@@ -12,15 +12,13 @@ const message4 = {
   title: 'Apologise',
   message: 'Please we will attend to it right away',
   userId: 0,
-  adminId: 0,
   senderId: 7,
 };
 
 const message5 = {
   title: 'unresolved request',
   message: ' ',
-  userId: regularUser1.id,
-  adminId: adminUser.id,
+  receiverId: adminUser.id,
   senderId: regularUser1.id,
 };
 
@@ -46,13 +44,12 @@ export default describe('contacts', () => {
         });
     });
 
-    describe('user send messages', () => {
+    describe('user sending messages', () => {
       it('users should be able to send message to the admin', () => {
         const userMessage = {
           title: 'unresolved request',
           message: 'request to replace wall socket was not attended to',
-          userId: signedInUser.id,
-          adminId: adminUser.id,
+          receiverId: adminUser.id,
           senderId: signedInUser.id,
         };
         return chai.request(app)
@@ -69,10 +66,9 @@ export default describe('contacts', () => {
       it('should return bad request if required fields are not presents', () => {
         const message3 = {
           title: 'Apologise',
-          message: 'Please we will attend to it right away',
-          userId: regularUser1.id,
-          adminId: adminUser.id,
-          senderId: '',
+          message: '',
+          senderId: regularUser1.id,
+          receiverId: adminUser.id,
         };
         return chai.request(app)
           .post('/api/v1/contacts')
@@ -121,8 +117,9 @@ export default describe('contacts', () => {
 
       it('should return an empty array if no message exist for the given userId', () => {
         return chai.request(app)
-          .get('/api/v1/contacts?userId=9')
-          .set('token', signedInUser.token)
+          .get('/api/v1/contacts')
+          // regularuser2 does not have any messages
+          .set('token', regularUser2.token)
           .then((res) => {
             expect(res).to.have.status(200);
             expect(res.body).to.be.an('array');
@@ -154,8 +151,7 @@ export default describe('contacts', () => {
         const adminMessage = {
           title: 'Apologise',
           message: 'Please we will attend to it right away',
-          userId: regularUser1.id,
-          adminId: adminUser.id,
+          receiverId: regularUser1.id,
           senderId: adminUser.id,
         };
         return chai.request(app)
@@ -173,10 +169,9 @@ export default describe('contacts', () => {
     it('should return bad request if required fields are not presents', () => {
       const message3 = {
         title: 'Apologise',
-        message: 'Please we will attend to it right away',
-        userId: regularUser1.id,
-        adminId: adminUser.id,
-        senderId: '',
+        message: '',
+        receiverId: regularUser1.id,
+        senderId: adminUser.id,
       };
       return chai.request(app)
         .post('/api/v1/contacts')
@@ -186,7 +181,7 @@ export default describe('contacts', () => {
           expect(res).to.have.status(400);
           expect(res.body).to.be.an('object');
         });
-    }); 
+    });
 
     it('should not create a message for a sender that does not exist', () => {
       return chai.request(app)
@@ -220,17 +215,6 @@ export default describe('contacts', () => {
           expect(res).to.have.status(200);
           expect(res.body).to.be.an('array');
           expect(res.body.length).to.equal(2);
-        });
-    }); 
-
-    it('should return bad request if neither isAdim or userId is not set', () => {
-      return chai.request(app)
-        .get('/api/v1/contacts?userId=&isAdmin=')
-        .set('token', signedInUser.token)
-        .then((res) => {
-          expect(res).to.have.status(400);
-          expect(res.body).to.be.an('object');
-          expect(res.body).to.eql({ message: 'missing required field' });
         });
     });
   });

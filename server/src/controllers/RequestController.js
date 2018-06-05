@@ -1,18 +1,18 @@
 
 import models from './../models/index';
-import Services from './../helpers/Services';
 
 const { requests, users } = models;
 const RequestController = class {
   // add a new request
   static addRequest(req, res) {
+    const { id } = req.body.decode;
+    const userId = id;
     const {
-      userId,
       category,
       description,
       address,
       urgent,
-      serviceName,
+      adminId,
     } = req.body;
 
     if (!parseInt(userId, 10) || description.trim() === '' || address.trim() === '' || category.trim() === '') {
@@ -21,27 +21,25 @@ const RequestController = class {
     if (!urgent && urgent.trim() !== '') {
       return res.status(400).send({ message: 'typeError field urgent must be a boolean' });
     }
-  
+
     return users.findById(parseInt(userId, 10))
       .then((user) => {
-        return requests
-          .create({
-            userId,
-            category,
-            description,
-            address,
-            serviceName,
-            issueDate: 'now()',
-            updatedAt: 'now()',
-            status: 'awaiting confirmation',
-            urgent: urgent || false,
-          })
-          .then((request) => {
-            return res.status(201).send(request);
-          })
-          .catch((error) => {
-            return res.status(400).send(error);
-          });
+        if (user) {
+          requests
+            .create({
+              userId,
+              category,
+              description,
+              address,
+              adminId,
+              issueDate: 'now()',
+              updatedAt: 'now()',
+              status: 'awaiting confirmation',
+              urgent: urgent || false,
+            })
+            .then(request => res.status(201).send(request))
+            .catch(error => res.status(400).send(error));
+        }
       })
       .catch(error => res.status(404).send(error));
   }
@@ -49,7 +47,7 @@ const RequestController = class {
   // get a signle requests for a logged in user
   static getOneRequest(req, res) {
     const requestId = parseInt(req.params.requestId, 10);
-    const userId = parseInt(req.query.userId, 10);
+    const userId = parseInt(req.body.decode.id, 10);
     if (!requestId || !userId) {
       return res.status(400).send({ message: 'missing required field' });
     }
@@ -60,18 +58,18 @@ const RequestController = class {
           id: requestId,
         },
       })
-      .then(request => {
-        if(!request) {
-          return res.status(404).send({ message: 'request not found' })
+      .then((request) => {
+        if (!request) {
+          return res.status(404).send({ message: 'request not found' });
         }
-        return res.status(200).send(request)
+        return res.status(200).send(request);
       })
-     .catch(error => res.status(500).send( error));
+      .catch(error => res.status(500).send(error));
   }
 
   // get all request for a logged in user
   static getAllRequests(req, res) {
-    const userId = parseInt(req.query.userId, 10);
+    const userId = parseInt(req.body.decode.id, 10);
     if (!userId) {
       return res.status(400).send({ message: 'missing required field' });
     }
@@ -91,11 +89,11 @@ const RequestController = class {
       category,
       description,
       address,
-      serviceName,
+      adminId,
       urgent,
     } = req.body;
     const requestId = parseInt(req.params.requestId, 10);
-    const userId = parseInt(req.query.userId, 10);
+    const userId = parseInt(req.body.decode.id, 10);
     if (!requestId || !userId) {
       return res.status(400).send({ message: 'missing required field' });
     }
@@ -121,7 +119,7 @@ const RequestController = class {
               category: category || request.category,
               description: description || request.description,
               address: address || request.address,
-              serviceName: serviceName || request.serviceName,
+              adminId: adminId || request.adminid,
               urgent: urgent || request.urgent,
             },
           )
@@ -133,7 +131,7 @@ const RequestController = class {
 
   static deleteRequest(req, res) {
     const requestId = parseInt(req.params.requestId, 10);
-    const userId = parseInt(req.query.userId, 10);
+    const userId = parseInt(req.body.decode.id, 10);
     if (!requestId || !userId) {
       return res.status(400).send({ message: 'missing required field' });
     }
@@ -146,10 +144,10 @@ const RequestController = class {
       })
       .then((rows) => {
         if (rows.length === 0) {
-          return res.status(404).send({ message: 'request not found, not action taken' })
+          res.status(404).send({ message: 'request not found, not action taken' });
         }
-        res.status(200).send({ message: 'request has been deleted' })
-    })
+        res.status(200).send({ message: 'request has been deleted' });
+      })
       .catch(error => res.status(404).send(error));
   }
 };

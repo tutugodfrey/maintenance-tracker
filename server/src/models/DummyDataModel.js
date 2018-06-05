@@ -1,5 +1,4 @@
 import client from './connection';
-
 /* eslint-disable no-underscore-dangle */
 const DummyDataModel = class {
   constructor(modelName) {
@@ -18,7 +17,7 @@ const DummyDataModel = class {
   _generateCreateQuery(condition) {
     if (!condition) {
       return { message: 'type error! expecting an object' };
-    } 
+    }
     const keys = Object.keys(condition);
     let queryString = `insert into ${this.modelName}`;
     let keyString = '(';
@@ -40,7 +39,7 @@ const DummyDataModel = class {
       }
     });
     valueString = `${valueString})`;
-    queryString = `${queryString} ${keyString} ${valueString} returning *`; 
+    queryString = `${queryString} ${keyString} ${valueString} returning *`;
 
     if (process.env.NODE_ENV !== 'production') {
       /* eslint-disable no-console */
@@ -97,8 +96,9 @@ const DummyDataModel = class {
     } else if (typeof condition === 'number') {
       queryString = `select * from ${this.modelName} where id = ${condition}`;
     } else {
+      /* eslint-disable prefer-destructuring */
       let type;
-      if(!condition.type) {
+      if (!condition.type) {
         type = 'and';
       } else {
         type = condition.type;
@@ -148,15 +148,16 @@ const DummyDataModel = class {
     return queryString;
   }
 
+  /* eslint-disable prefer-promise-reject-errors */
   create(modelToCreate) {
     // create a new model
     const result = new Promise((resolve, reject) => {
       const queryString = this._generateCreateQuery(modelToCreate);
       client.query(queryString)
         .then((res) => {
-            resolve(res.rows[0]);
+          resolve(res.rows[0]);
         })
-        .catch(error => console.log(error));
+        .catch(error => reject(error));
     });
     return result;
   }
@@ -173,7 +174,7 @@ const DummyDataModel = class {
         const queryString = this._generateUpdateQuery(propsToUpdate, modelToUpdate);
         client.query(queryString)
           .then((res) => {
-              resolve(res.rows[0])
+            resolve(res.rows[0]);
           })
           .catch(error => console.log(error));
       } else {
@@ -193,7 +194,7 @@ const DummyDataModel = class {
         // console.log(res.rows[0])
           resolve(res.rows[0]);
         })
-        .catch(error => console.log(error));
+        .catch(error => reject(error));
     });
     return result;
   }
@@ -210,9 +211,9 @@ const DummyDataModel = class {
         const queryString = this._generateGetQuery(condition);
         client.query(queryString)
           .then((res) => {
-           resolve(res.rows[0]);
+            resolve(res.rows[0]);
           })
-         // .catch(error => console.log(error));
+          .catch(error => reject(error));
       }
     });
 
@@ -231,14 +232,14 @@ const DummyDataModel = class {
     return result;
   }
 
-  findServiceName(condition = 'all') {
+  findServiceName() {
     const result = new Promise((resolve, reject) => {
-    const queryString = 'select servicename from users';
-    client.query(queryString)
-      .then((res) => {
-        resolve(res.rows);
-      })
-      .catch(error => reject(error));
+      const queryString = `select id, servicename from ${this.modelName} where isadmin = true`;
+      client.query(queryString)
+        .then((res) => {
+          resolve(res.rows);
+        })
+        .catch(error => reject(error));
     });
     return result;
   }
@@ -253,11 +254,11 @@ const DummyDataModel = class {
     */
     const result = new Promise((resolve, reject) => {
       const queryString = this._generateGetQuery(condition);
-      const res = client.query(queryString);
-      res.then((result) => {
-        const response = result.rows;
-        resolve(response);
-      })
+      client.query(queryString)
+        .then((res) => {
+          const response = res.rows;
+          resolve(response);
+        })
         .catch(err => reject(err));
     });
 

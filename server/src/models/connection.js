@@ -1,17 +1,18 @@
 import { Client } from 'pg';
 import dotenv from 'dotenv-safe';
 import config from './config';
-/* eslint-disable import/no-mutable-export */
+/* eslint-disable no-mutable-exports */
 dotenv.config();
 const env = process.env.NODE_ENV || 'test';
-let client;
+let connectionString;
 if (config[env]) {
   const databaseURL = config[env].use_env_variable;
-  console.log(databaseURL);
-  const connectionString = process.env[databaseURL];
-  client = new Client(connectionString);
-  client.connect();
+  if (process.env.NODE_ENC !== 'production') {
+    /* eslint-disable no-console */
+    console.log(databaseURL);
+  }
+  connectionString = process.env[databaseURL];
 }
-
-
+const client = new Client(connectionString);
+client.connect();
 export default client;

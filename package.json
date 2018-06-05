@@ -4,18 +4,18 @@
   "description": "Maintenance tracker is a platform that allows users to reach out to maintenance department for repairs and to track the progress of the process",
   "scripts": {
     "babel-node": "nodemon --exec babel-node ./server/src/bin/www.js",
-    "build": "babel server/src -s -d server/trans",
+    "build": "babel server/src -s -d server/build",
     "start:dev": "npm run babel-node",
-    "start": "node ./server/trans/bin/www.js",
-    "test": "npm run drop:tables && npm run create:tables2 && mocha server/trans/test/index --timeout 20000 --exit",
-    "test:local": "npm run build && npm run drop:tables2 && npm run create:tables && mocha server/trans/test/index --timeout 20000 --exit",
+    "start": "node ./server/build/bin/www.js",
+    "test": "npm run drop:tables && npm run create:tables2 && mocha server/build/test/index --timeout 20000 --exit",
+    "test:local": "npm run build && npm run drop:tables2 && npm run create:tables && mocha server/build/test/index --timeout 20000 --exit",
     "js:lint": "eslint server/src/",
-    "create:tables2": "babel-node ./server/trans/models/create.js --exit",
-    "drop:tables2": "babel-node ./server/trans/models/droptables.js --exit",
+    "create:tables2": "babel-node ./server/build/models/create.js --exit",
+    "drop:tables2": "babel-node ./server/build/models/droptables.js --exit",
     "create:tables": "babel-node ./server/src/models/create.js --exit",
     "drop:tables": "babel-node ./server/src/models/droptables.js --exit",
-    "istanbul:cover": "istanbul cover ./node_modules/mocha/bin/_mocha -- -R spec ./server/trans/test/ --timeout 20000  --exit",
-    "send:coverage": "istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec ./server/trans/test/ --timeout 20000 --exit && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js"
+    "istanbul:cover": "npm run drop:tables && npm run create:tables2 && istanbul cover ./node_modules/mocha/bin/_mocha -- -R spec ./server/build/test/ --timeout 20000  --exit",
+    "send:coverage": "npm run drop:tables && npm run create:tables2 && istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec ./server/build/test/ --timeout 20000 --exit && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js"
   },
   "engines": {
     "node": "6.10.3"

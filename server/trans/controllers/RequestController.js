@@ -10,10 +10,6 @@ var _index = require('./../models/index');
 
 var _index2 = _interopRequireDefault(_index);
 
-var _Services = require('./../helpers/Services');
-
-var _Services2 = _interopRequireDefault(_Services);
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -31,13 +27,15 @@ var RequestController = function () {
 
     // add a new request
     value: function addRequest(req, res) {
+      var id = req.body.decode.id;
+
+      var userId = id;
       var _req$body = req.body,
-          userId = _req$body.userId,
           category = _req$body.category,
           description = _req$body.description,
           address = _req$body.address,
           urgent = _req$body.urgent,
-          serviceName = _req$body.serviceName;
+          adminId = _req$body.adminId;
 
 
       if (!parseInt(userId, 10) || description.trim() === '' || address.trim() === '' || category.trim() === '') {
@@ -47,21 +45,23 @@ var RequestController = function () {
         return res.status(400).send({ message: 'typeError field urgent must be a boolean' });
       }
       return users.findById(parseInt(userId, 10)).then(function (user) {
-        return requests.create({
-          userId: userId,
-          category: category,
-          description: description,
-          address: address,
-          serviceName: serviceName,
-          issueDate: 'now()',
-          updatedAt: 'now()',
-          status: 'awaiting confirmation',
-          urgent: urgent || false
-        }).then(function (request) {
-          return res.status(201).send(request);
-        }).catch(function (error) {
-          return res.status(400).send(error);
-        });
+        if (user) {
+          requests.create({
+            userId: userId,
+            category: category,
+            description: description,
+            address: address,
+            adminId: adminId,
+            issueDate: 'now()',
+            updatedAt: 'now()',
+            status: 'awaiting confirmation',
+            urgent: urgent || false
+          }).then(function (request) {
+            return res.status(201).send(request);
+          }).catch(function (error) {
+            return res.status(400).send(error);
+          });
+        }
       }).catch(function (error) {
         return res.status(404).send(error);
       });
@@ -73,7 +73,7 @@ var RequestController = function () {
     key: 'getOneRequest',
     value: function getOneRequest(req, res) {
       var requestId = parseInt(req.params.requestId, 10);
-      var userId = parseInt(req.query.userId, 10);
+      var userId = parseInt(req.body.decode.id, 10);
       if (!requestId || !userId) {
         return res.status(400).send({ message: 'missing required field' });
       }
@@ -97,7 +97,7 @@ var RequestController = function () {
   }, {
     key: 'getAllRequests',
     value: function getAllRequests(req, res) {
-      var userId = parseInt(req.query.userId, 10);
+      var userId = parseInt(req.body.decode.id, 10);
       if (!userId) {
         return res.status(400).send({ message: 'missing required field' });
       }
@@ -121,11 +121,11 @@ var RequestController = function () {
           category = _req$body2.category,
           description = _req$body2.description,
           address = _req$body2.address,
-          serviceName = _req$body2.serviceName,
+          adminId = _req$body2.adminId,
           urgent = _req$body2.urgent;
 
       var requestId = parseInt(req.params.requestId, 10);
-      var userId = parseInt(req.query.userId, 10);
+      var userId = parseInt(req.body.decode.id, 10);
       if (!requestId || !userId) {
         return res.status(400).send({ message: 'missing required field' });
       }
@@ -146,7 +146,7 @@ var RequestController = function () {
           category: category || request.category,
           description: description || request.description,
           address: address || request.address,
-          serviceName: serviceName || request.serviceName,
+          adminId: adminId || request.adminid,
           urgent: urgent || request.urgent
         }).then(function (newRequest) {
           return res.status(200).send(newRequest);
@@ -161,7 +161,7 @@ var RequestController = function () {
     key: 'deleteRequest',
     value: function deleteRequest(req, res) {
       var requestId = parseInt(req.params.requestId, 10);
-      var userId = parseInt(req.query.userId, 10);
+      var userId = parseInt(req.body.decode.id, 10);
       if (!requestId || !userId) {
         return res.status(400).send({ message: 'missing required field' });
       }
@@ -172,7 +172,7 @@ var RequestController = function () {
         }
       }).then(function (rows) {
         if (rows.length === 0) {
-          return res.status(404).send({ message: 'request not found, not action taken' });
+          res.status(404).send({ message: 'request not found, not action taken' });
         }
         res.status(200).send({ message: 'request has been deleted' });
       }).catch(function (error) {

@@ -1,6 +1,6 @@
 import client from './connection';
 
-const queryString =   `create table users (
+const queryString = `create table users (
   id serial not null primary key,
   fullname varchar (40) not null,
   imgUrl varchar (100),
@@ -18,7 +18,7 @@ create table requests (
   description text not null,
   address varchar (100) not null,
   status varchar(30) not null,
-  serviceName varchar (50),
+  adminId int not null,
   userId int not null,
   urgent boolean,
   issueDate date not null,
@@ -28,21 +28,19 @@ create table requests (
   id serial not null primary key,
   title varchar (40),
   message text not null,
-  userId int not null,
-  adminId int not null,
+  receiverId int not null,
   senderId int not null
 );
-`
-
+`;
+/* eslint-disable no-console */
+console.log('creating tables');
 client.query(queryString)
-.then(() => {
-  console.log('table created')
-  client.end()
-})
-.catch(error =>{
-   console.log(error)
-   client.end();
-});
-
-
+  .then(() => {
+    console.log('table created');
+    client.end();
+  })
+  .catch((error) => {
+    console.log(error);
+    client.end();
+  });
 

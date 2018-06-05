@@ -10,10 +10,6 @@ var _index = require('./../models/index');
 
 var _index2 = _interopRequireDefault(_index);
 
-var _Services = require('./../helpers/Services');
-
-var _Services2 = _interopRequireDefault(_Services);
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -30,12 +26,18 @@ var AdminController = function () {
 
     // get all request for a logged in user
     value: function getAllRequests(req, res) {
-      var isAdmin = req.query.isAdmin;
+      var _req$body$decode = req.body.decode,
+          isAdmin = _req$body$decode.isAdmin,
+          id = _req$body$decode.id;
 
-      if (isAdmin !== 'true') {
-        return res.status(402).send({ message: 'missing required field' });
+      if (!isAdmin) {
+        return res.status(402).send({ message: 'you are not authorized to perform this action' });
       }
-      return requests.findAll().then(function (allRequests) {
+      return requests.findAll({
+        where: {
+          adminId: parseInt(id, 10)
+        }
+      }).then(function (allRequests) {
         return res.status(200).send(allRequests);
       }).catch(function () {
         return res.status(500).send({ message: 'some went wrong' });
@@ -45,15 +47,27 @@ var AdminController = function () {
     key: 'rejectRequest',
     value: function rejectRequest(req, res) {
       var requestId = parseInt(req.params.requestId, 10);
-      var isAdmin = req.query.isAdmin;
+      var _req$body$decode2 = req.body.decode,
+          isAdmin = _req$body$decode2.isAdmin,
+          id = _req$body$decode2.id;
 
-      if (isAdmin !== 'true') {
+      if (!isAdmin) {
         return res.status(402).send({ message: 'you are not permitted to perform this action' });
       }
-      if (isAdmin !== 'true' || !requestId) {
+      if (!requestId) {
         return res.status(400).send({ message: 'missiging required field' });
       }
+<<<<<<< HEAD
       return requests.findById(requestId).then(function (request) {
+=======
+
+      return requests.find({
+        where: {
+          id: requestId,
+          adminId: parseInt(id, 10)
+        }
+      }).then(function (request) {
+>>>>>>> holder
         return requests.update({
           id: request.id
         }, {
@@ -70,15 +84,27 @@ var AdminController = function () {
     key: 'approveRequest',
     value: function approveRequest(req, res) {
       var requestId = parseInt(req.params.requestId, 10);
-      var isAdmin = req.query.isAdmin;
+      var _req$body$decode3 = req.body.decode,
+          isAdmin = _req$body$decode3.isAdmin,
+          id = _req$body$decode3.id;
 
-      if (isAdmin !== 'true') {
+      if (!isAdmin) {
         return res.status(402).send({ message: 'you are not permitted to perform this action' });
       }
       if (!requestId) {
         return res.status(400).send({ message: 'missiging required field' });
       }
+<<<<<<< HEAD
       return requests.findById(requestId).then(function (request) {
+=======
+
+      return requests.find({
+        where: {
+          id: requestId,
+          adminId: parseInt(id, 10)
+        }
+      }).then(function (request) {
+>>>>>>> holder
         return requests.update({
           id: request.id
         }, {
@@ -95,15 +121,22 @@ var AdminController = function () {
     key: 'resolveRequest',
     value: function resolveRequest(req, res) {
       var requestId = parseInt(req.params.requestId, 10);
-      var isAdmin = req.query.isAdmin;
+      var _req$body$decode4 = req.body.decode,
+          isAdmin = _req$body$decode4.isAdmin,
+          id = _req$body$decode4.id;
 
-      if (isAdmin !== 'true') {
+      if (!isAdmin) {
         return res.status(402).send({ message: 'you are not permitted to perform this action' });
       }
       if (!requestId) {
         return res.status(400).send({ message: 'missiging required field' });
       }
-      return requests.findById(requestId).then(function (request) {
+      return requests.find({
+        where: {
+          id: requestId,
+          adminId: parseInt(id, 10)
+        }
+      }).then(function (request) {
         return requests.update({
           id: request.id
         }, {

@@ -14,8 +14,8 @@
     "drop:tables2": "babel-node ./server/build/models/droptables.js --exit",
     "create:tables": "babel-node ./server/src/models/create.js --exit",
     "drop:tables": "babel-node ./server/src/models/droptables.js --exit",
-    "istanbul:cover": "npm run drop:tables && npm run create:tables2 && istanbul cover ./node_modules/mocha/bin/_mocha -- -R spec ./server/build/test/ --timeout 20000  --exit",
-    "send:coverage": "npm run drop:tables && npm run create:tables2 && istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec ./server/build/test/ --timeout 20000 --exit && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js"
+    "istanbul:cover": "npm run drop:tables2 && npm run create:tables2 && istanbul cover ./node_modules/mocha/bin/_mocha -- -R spec ./server/build/test/ --timeout 20000  --exit",
+    "send:coverage": "npm run drop:tables2 && npm run create:tables2 && istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec ./server/build/test/ --timeout 20000 --exit && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js"
   },
   "engines": {
     "node": "6.10.3"

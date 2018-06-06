@@ -17,7 +17,7 @@ Maintenance tracker is a platform that allows users to reach out to maintenance 
 [![Build Status](https://www.travis-ci.org/tutugodfrey/maintenance-tracker.svg?branch=feature%2Fserver)](https://www.travis-ci.org/tutugodfrey/maintenance-tracker)
 <a href="https://codeclimate.com/github/tutugodfrey/maintenance-tracker/maintainability"><img src="https://api.codeclimate.com/v1/badges/0f04e7782f92cbed6f5f/maintainability" /></a>
 <a href="https://codeclimate.com/github/tutugodfrey/maintenance-tracker/test_coverage"><img src="https://api.codeclimate.com/v1/badges/0f04e7782f92cbed6f5f/test_coverage" /></a>
-[![Coverage Status](https://coveralls.io/repos/github/tutugodfrey/maintenance-tracker/badge.svg?branch=157581278-chores%2FciIntegrations)](https://coveralls.io/github/tutugodfrey/maintenance-tracker?branch=157581278-chores%2FciIntegrations)
+[![Coverage Status](https://coveralls.io/repos/github/tutugodfrey/maintenance-tracker/badge.svg?branch=develop)](https://coveralls.io/github/tutugodfrey/maintenance-tracker?branch=develop)
 
 ---
 

@@ -1,15 +1,6 @@
-// listen for events on any elementObject
-const newEvent = function (elementObject,  eventType, callBack, callBackArgument) {
-  elementObject.addEventListener(eventType, function(event) {
-  event.preventDefault(); 
-    if(callBackArgument === undefined) {
-      callBack();
-    } else {
-      callBack(callBackArgument);
-    }
-  },
-  false );
-}   // end newEvent 
+const domElements = new DomElementActions();
+const storageHandler = new StorageHandler();
+const requestHandler = new RequestHandler();
 
 const storeUserData = function (userData) {
   if (!localStorage.getItem('userdata')) {
@@ -18,61 +9,57 @@ const storeUserData = function (userData) {
   } 
 }
 
-const makeRequest = function (requestData, method, url, callback) {
-	const headers =  new Headers();
-  headers.append('Content-Type', 'application/x-www-form-urlencoded');
- 	headers.append('Accept', 'application/json');
-  	const options = {
-    method,
-    headers,
-    body:requestData,
-  }
-	fetch(url, options)
-  .then(res => res.json())
-  .then(data => {
-    callback(data)
-  })
-  .catch(error => console.log(error));
-}
-
-
 // process server response
-const handleResponse = function(responseData) {
-  storeUserData(responseData);
-  if (responseData.isAdmin === true  || responseData.isAdmin === 'on') {
-    window.location.href= '/admin/dashboard.html';
-  } else if(responseData.isAdmin === false) {
-    window.location.href = '/users/dashboard.html';
-  } 
+const handleResponse = (responseData) => {
+  if (responseData.message) {
+    domElements.showConsoleModal(responseData.message);
+    return;
+  } else {
+    storageHandler.storeData(responseData, 'userdata');
+    storageHandler.redirectUser(responseData);
+  }
 }
 
-const processSignIn = function(ele) {
-	if (document.getElementsByClassName('form-control')) {
-		const formControls = document.getElementsByClassName('form-control');
-    let requestString = '';
-		for(let numOfInput = 0; numOfInput < formControls.length; numOfInput++) {
-			let inputField = formControls[numOfInput];
-			const fieldName = inputField.name;
-			const fieldValue = inputField.value.trim();
-			const eleClass = inputField.getAttribute('class');
-			if (eleClass.indexOf('required-field') > 0) {
-				if (fieldValue.trim() === '') {
-          showConsoleModal('Please fill out the the required fields');
+const processSignin = (ele) => {
+  if (document.getElementsByClassName('form-control')) {
+    const formControls = document.getElementsByClassName('form-control');
+    let requestData = '';
+    for(let numOfInput = 0; numOfInput < formControls.length; numOfInput++) {
+      let inputField = formControls[numOfInput];
+      const fieldName = inputField.name;
+      const fieldValue = inputField.value.trim();
+      const eleClass = inputField.getAttribute('class');
+      if (eleClass.indexOf('required-field') > 0) {
+        if (fieldValue.trim() === '') {
+          domElements.showConsoleModal('Please fill out the the required fields');
           return;
         }
-        requestString  = `${requestString }${fieldName}=${fieldValue}&`;
+        requestData = `${requestData}${fieldName}=${fieldValue}&`;
       } else {
-        requestString  = `${requestString }${fieldName}=${fieldValue}&`;
+      requestData = `${requestData}${fieldName}=${fieldValue}&`;
       }
     }
-    makeRequest(requestString , 'POST', '/api/v1/auth/signin', handleResponse)
+    const headers =  new Headers();
+    headers.append('Content-Type', 'application/x-www-form-urlencoded');
+    headers.append('Accept', 'application/json');
+    const options = {
+      headers,
+      method: 'POST',
+      body:requestData,
+    }
+    requestHandler.makeRequest('/api/v1/auth/signin', options, handleResponse)
   }
-}
+} // end processSignin
 
 const domNotifier = function() {
+  if(document.getElementById('console-modal-button')) {
+    const consoleModalBtn = document.getElementById('console-modal-button');
+    domElements.newEvent(consoleModalBtn, 'click', domElements.closeConsoleModal,  domElements);
+  }
+
 	if(document.getElementById('signin-button')) {
 		const signinButton = document.getElementById('signin-button');
-		newEvent(signinButton, 'click', processSignIn, signinButton);
+		domElements.newEvent(signinButton, 'click', processSignin, signinButton);
 	}
 }
 

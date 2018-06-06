@@ -17,8 +17,8 @@
         <p id="description">We Provide repairs and maintenance services</p>
         <div id="signin-form-container">
           <form action="#" class="inline-form">
-            <input type="text" class="form-control" id = "username" placeholder="USERNAME" >
-            <input type="password" class="form-control" id="passwd" placeholder="password">
+            <input type="text" class="form-control required-field" id = "username" placeholder="USERNAME" name="username">
+            <input type="password" class="form-control required-field" id="passwd" placeholder="password" name="password">
             <button id="inline-signin-button" class="submit-button">Signin</button>
           </form>
         </div>
@@ -59,8 +59,14 @@
         <div id="big-signup-link">
           <a class="signup-link" href="./signup.html">Sign Up For Free</a>
         </div>
+        <div id="console-modal" class="tab-item hide-item green-outline">
+          <p id="message-box">
+          </p>
+          <button id="console-modal-button" class="white-button btn-md">close</button>
+        </div>
       </div>
     </div>
+    <script src="./js/utilities.js" ></script>
     <script src="./js/index.js" ></script>
   </body>
 </html>

@@ -84,6 +84,11 @@
                     <option value="Electrical">Electrical</option>
                     <option value="painting">Painting</option>
                   </select><br />
+                  <label for="services" class="form-label">Please select a service</label>
+                  <span class = "required">*</span><br/>
+                  <select id="services" class="request-data green-outline" name="adminId">
+                    <option value="select">Select</soption>
+                  </select><br />
                   <label for="description" class="form-label">Description</label>
                   <span class = "required">*</span><br />
                   <textarea cols="30" rows="5" class="form-control request-data required-field green-outline" id = "description" placeholder="Problem description" name="description"></textarea><br />
@@ -221,7 +226,6 @@
             <a href="#">&copy; 2018 maintenance tracker. All Right Reserved.</a>
           </p>
       </div>
-
     <script src="./../js/users.js" ></script>
   </body>
 </html>

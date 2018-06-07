@@ -96,6 +96,7 @@ const DomElementActions = class {
       self.changeClassValue (tabSection, 'hide-item', 'show-item');
     }
      self.lastElementClicked = href;
+     domNotifier();
    }
 
   showConsoleModal (message) {
@@ -128,7 +129,76 @@ const DomElementActions = class {
       eleName = checkBoxEle.name;
 			return [eleName, ''];
 		}
-	}
+  }
+  
+  dateSubstring(date) {
+    const indexOfTime = date.indexOf('T');
+    const datePortion = date.substr(0, indexOfTime);
+    return datePortion;
+  }
+
+  displayUsersRequest(usersRequest, displayRequestTab) {
+    usersRequest.forEach((requestObj) => {
+      const requestContainer = document.createElement('div');
+      requestContainer.className = 'requests';
+      requestContainer.id = `request${requestObj.id}`;
+      const header = document.createElement('div');
+      header.className = 'small-header-gradient';
+      const content = document.createElement('div');
+      content.className = 'request-content';
+      const descriptiveList = document.createElement('dl');
+      descriptiveList.className = 'request-details';
+      const requestForm = document.createElement('form');
+      requestForm.className = 'form-inline';
+      const adminIdInput = document.createElement('input');
+      adminIdInput.type = 'hidden';
+      adminIdInput.name = 'adminId';
+      adminIdInput.value = requestObj.adminid;
+      
+      // create and add content to edit buttton
+      const editBtn = document.createElement('button');
+      editBtn.id = 'edit-request';
+      editBtn.className = 'submit-button green-button btn-md';
+      editBtn.value = requestObj.id;
+      editBtn.innerHTML = 'Edit Request';
+
+      // create and add content to delete btn
+      const deleteBtn = document.createElement('button');
+      deleteBtn.id = 'delete-request';
+      deleteBtn.className = 'submit-button delete-request white-button btn-md';
+      deleteBtn.value = requestObj.id;
+      deleteBtn.innerHTML = 'Delete Request';
+
+      // add content to form
+      requestForm.appendChild(adminIdInput);
+      requestForm.appendChild(editBtn);
+      requestForm.appendChild(deleteBtn);
+      const requestKeys = Object.keys(requestObj);
+      requestKeys.forEach((key) => {
+        if (key === 'id' || key === 'userid' || key === 'adminid' || key === 'updatedat' ) {
+          // do nothing
+        } else {
+          let value = requestObj[key];
+          if (key === 'issuedate') {
+            value = domElements.dateSubstring(value);
+          }
+          const listTerm = document.createElement('dt');
+          listTerm.innerHTML = key;
+          listTerm.className = key
+          const listDefinition = document.createElement('dd');
+          listDefinition.className = key;
+          listDefinition.innerHTML = value;
+          descriptiveList.appendChild(listTerm);
+          descriptiveList.appendChild(listDefinition);
+        }
+      });
+      content.appendChild(descriptiveList);
+      requestContainer.appendChild(header);
+      requestContainer.appendChild(content)
+      requestContainer.appendChild(requestForm);
+      displayRequestTab.appendChild(requestContainer);
+    })
+  }
 }
 
 const StorageHandler = class {
@@ -197,6 +267,18 @@ const RequestHandler = class {
       makeRequest(jsonRequest, 'POST', '/api/v1/users/requests', handleResponse)
     }
   } // end createRequest
+
+  getRequests(url, storageHandler, callback){
+    const userData = storageHandler.getDataFromStore('userdata')
+    const headers =  new Headers();
+    headers.append('Content-Type', 'application/x-www-form-urlencoded');
+    headers.append('token', userData.token);
+    const options = {
+      headers,
+      method: 'GET',
+    }
+    requestHandler.makeRequest(url, options, callback);
+  }
 
   makeRequest(url, options, callback) {
     fetch(url, options)

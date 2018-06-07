@@ -28,6 +28,18 @@ const displayServices = (responseData) => {
   }
 }
 
+const displayRequests = (responseData) => {
+  if (responseData.message) {
+    domElements.showConsoleModal(responseData.message);
+    return;
+  }
+  if (Array.isArray(responseData)) {
+    const storageResult = storageHandler.storeData(responseData, 'usersrequests');
+    const displayRequestTab = document.getElementById('view-users-requests');
+    domElements.displayUsersRequest(responseData, displayRequestTab)
+  }
+}
+
 const getServices = () => {
   const headers =  new Headers();
   headers.append('Content-Type', 'application/x-www-form-urlencoded');
@@ -62,7 +74,6 @@ const createRequest = function(ele) {
         }
       }
     }
-    console.log(requestString)
     const headers =  new Headers();
     const userData = storageHandler.getDataFromStore('userdata')
     headers.append('Content-Type', 'application/x-www-form-urlencoded');
@@ -111,6 +122,23 @@ const domNotifier = function() {
     const defaultNav = document.getElementById('default-nav');
     const anchorPos = defaultNav.href.indexOf('#');
     domElements.defaultNavItem = defaultNav.href.substring(anchorPos + 1);
+  }
+
+  // get users request
+  if(document.getElementById('view-users-requests')) {
+    const displayRequestTab = document.getElementById('view-users-requests');
+    const displayRequestClass = displayRequestTab.getAttribute('class');
+    if (displayRequestClass.indexOf('show') >= 0) {
+      const usersRequest = storageHandler.getDataFromStore('usersrequests');
+      // will uncomment this block when feature to use request stored in local storage is finished
+      // such that users can always get an updated version of their request details
+    /*  if (Array.isArray(usersRequest)) {
+        domElements.displayUsersRequest(usersRequest, displayRequestTab)
+      } else { */
+      // get request
+      requestHandler.getRequests('/api/v1/users/requests', storageHandler, displayRequests);
+    //  }
+    }
   }
 }
 

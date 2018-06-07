@@ -1,83 +1,66 @@
-// listen for events on any elementObject
-const newEvent = function (elementObject,  eventType, callBack, callBackArgument) {
-  elementObject.addEventListener(eventType, function(event) {
-  event.preventDefault(); 
-    if(callBackArgument === undefined) {
-      callBack();
-    } else {
-      callBack(callBackArgument);
-    }
-  },
-  false );
-}   // end newEvent 
-
-const storeUserData = function (userData) {
-  if (!localStorage.getItem('userdata')) {
-    const userInfo = JSON.stringify(userData);
-    localStorage.setItem('userdata', userInfo);
-  } 
-}
-
-const makeRequest = function (requestData, method, url, callback) {
-	const headers =  new Headers();
- 	headers.append('Content-Type', 'application/json');
- 	headers.append('Accept', 'application/json');
-  	const options = {
-    method,
-    body:requestData,
-  }
-	fetch(url, options)
-  .then(res => res.json())
-  .then(data => {
-    callback(data)
-  })
-  .catch(error => console.log(error));
-}
-
+const domElements = new DomElementActions();
+const storageHandler = new StorageHandler();
+const requestHandler = new RequestHandler();
 
 // process server response
-const handleResponse = function(responseData) {
-	storeUserData(responseData);
-	if (responseData.isAdmin === true  || responseData.isAdmin === 'on') {
-		window.location.href= '/admin/dashboard.html';
-	} else if (responseData.isAdmin === false ) {
-		window.location.href = '/users/dashboard.html';
-	}
+const handleResponse = (responseData) => {
+  if (responseData.message) {
+    domElements.showConsoleModal(responseData.message);
+    return;
+  } else {
+    storageHandler.storeData(responseData, 'userdata');
+		storageHandler.redirectUser(responseData);
+  }
 }
 
 const processSignUp = function(ele) {
 	if (document.getElementsByClassName('form-control')) {
 		const formControls = document.getElementsByClassName('form-control');
 		const formData = new FormData();
-		const jsonRequest = {}
 		let fileAvailable = false;
 		for(let numOfInput = 0; numOfInput < formControls.length; numOfInput++) {
 			let inputField = formControls[numOfInput];
 			if (inputField.type === 'file') {
 				fileAvailable = true;
 			}
-			const fieldName = inputField.name;
-			const fieldValue = inputField.value.trim();
-			const eleClass = inputField.getAttribute('class');
-			if (eleClass.indexOf('required-field') > 0) {
-				if (fieldValue === '') {
-					return 'Please fill out the the required fields';
+			if (inputField.type === 'checkbox') {
+				const checkboxData = domElements.getCheckboxValue(inputField);
+				formData.append(checkboxData[0], checkboxData[1]);
+			} else {
+				const fieldName = inputField.name;
+				const fieldValue = inputField.value.trim();
+				const eleClass = inputField.getAttribute('class');
+				if (eleClass.indexOf('required-field') > 0) {
+					if (fieldValue.trim() === '') {
+						domElements.showConsoleModal('Please fill out the the required fields');
+						return;
+					}
 				}
+				formData.append(fieldName, fieldValue);
 			}
-			jsonRequest[fieldName] = fieldValue;
-			formData.append(fieldName, fieldValue);
 		}
 		if(fileAvailable) {
-			makeRequest(formData, 'POST', '/api/v1/auth/signup', handleResponse)
+			const headers =  new Headers();
+			headers.append('Content-Type', 'application/json');
+			const options = {
+				method: 'POST',
+				body:formData,
+			}
+			requestHandler.makeRequest('/api/v1/auth/signup', options, handleResponse);
 		} 
 	}
 }
 
 const domNotifier = function() {
-	// localStorage.removeItem('userdata')
+	// localStorage.removeItem('userdata');
+	if(document.getElementById('console-modal-button')) {
+    const consoleModalBtn = document.getElementById('console-modal-button');
+    domElements.newEvent(consoleModalBtn, 'click', domElements.closeConsoleModal,  domElements);
+	}
+	
 	if(document.getElementById('signup-button')) {
 		const signupButton = document.getElementById('signup-button');
-		newEvent(signupButton, 'click', processSignUp, signupButton);
+		domElements.newEvent(signupButton, 'click', processSignUp, signupButton);
 	}
 }
 

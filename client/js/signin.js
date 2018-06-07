@@ -47,7 +47,7 @@ const processSignin = (ele) => {
       method: 'POST',
       body:requestData,
     }
-    requestHandler.makeRequest('/api/v1/auth/signin', options, handleResponse)
+    requestHandler.makeRequest('/api/v1/auth/signin', options, handleResponse);
   }
 } // end processSignin
 

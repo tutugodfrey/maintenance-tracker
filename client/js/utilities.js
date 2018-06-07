@@ -103,6 +103,18 @@ const DomElementActions = class {
       self.changeClassValue(consoleModal, 'show-item', 'hide-item');
     }
   }
+
+  getCheckboxValue(checkBoxEle){
+    let eleName;
+		if(checkBoxEle.checked){
+			const eleValue = checkBoxEle.value;
+			eleName = checkBoxEle.name;
+			return [eleName, eleValue];
+		} else {
+      eleName = checkBoxEle.name;
+			return [eleName, ''];
+		}
+	}
 }
 
 const StorageHandler = class {

@@ -90,7 +90,6 @@ const UsersController = class {
                     const token = jwt.sign(authenKeys, process.env.SECRET_KEY, { expiresIn: '48h' });
                     res.status(201).send({
                       token,
-                      message: 'signup successful',
                       email: signup.email,
                       username: signup.username,
                       imgUrl: signup.imgurl,
@@ -146,7 +145,6 @@ const UsersController = class {
                   const token = jwt.sign(authenKeys, process.env.SECRET_KEY, { expiresIn: '48h' });
                   res.status(201).send({
                     token,
-                    message: 'signup successful',
                     fullname: signup.fullname,
                     email: signup.email,
                     username: signup.username,

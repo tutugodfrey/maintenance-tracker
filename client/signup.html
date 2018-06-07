@@ -47,7 +47,7 @@
                 <fieldset class="green-outline">
                   <legend> I am a service provider</legend>
                   <label for = "confirmisAdmin">check here</label>
-                  <input type = "checkbox" id='confirmisAdmin' class = "form-control green-outline" name = "isAdmin" /><br />
+                  <input type = "checkbox" id='confirmisAdmin' class = "form-control green-outline" name = "isAdmin" value="true" /><br />
                   <label for = "service-name" >Service Name</label>
                   <input type = "text" id="serviceName" class = "form-control green-outline" placeholder="name of service" name = "serviceName" /><br />
                 </fieldset>
@@ -57,7 +57,13 @@
             </div>
           </div>
       </div>
+      <div id="console-modal" class="tab-item hide-item green-outline">
+        <p id="message-box">
+        </p>
+        <button id="console-modal-button" class="white-button btn-md">close</button>
+      </div>
     </div>
+    <script src="./js/utilities.js" ></script>
     <script src = './js/signup.js'></script>
   </body>
 </html>

@@ -43,23 +43,34 @@ const DomElementActions = class {
   }		//end changeClassValue
 
   // display and close vertical nav button
-  showNavigation(toggleBtn) {
+  showNavigation(arrayOfArgu) {
+    const self = arrayOfArgu[0];
+    const toggleBtn = arrayOfArgu[1];
+    if (self === 'undefined') {
+      self = this;
+    }
     const verticalNav = document.getElementById('vertical-nav-bar');
     const classValue = verticalNav.getAttribute('class');
     if(classValue.indexOf('hide-item') >= 0) {
-      this.changeClassValue (verticalNav, 'hide-item', 'show-item');
+      self.changeClassValue (verticalNav, 'hide-item', 'show-item');
     } else if(classValue.indexOf('show-item') >= 0) {
-      this.changeClassValue (verticalNav, 'show-item', 'hide-item');
+      self.changeClassValue (verticalNav, 'show-item', 'hide-item');
     }
   }
 
-  tabNavigation(elem) {
+  tabNavigation(arrayOfArgu) {
+    const self = arrayOfArgu[0];
+    // self = the instance of this class
+    if (self === 'undefined') {
+      self = this;
+    }
+    const elem = arrayOfArgu[1]
     // deactive current activeNav
     const activeNav = document.getElementsByClassName('active')[0];
-    this.changeClassValue (activeNav, 'active', 'inactive');
+    self.changeClassValue (activeNav, 'active', 'inactive');
 
     // activate elem 
-    this.changeClassValue (elem, 'inactive', 'active');
+    self.changeClassValue (elem, 'inactive', 'active');
  
     // display tab elements
     const anchorPos = elem.href.indexOf('#');
@@ -67,24 +78,24 @@ const DomElementActions = class {
     const href = elem.href.substring(anchorPos + 1);
     const tabSection = document.getElementById(href);
     // const classValue = tabSection.getAttribute('class');
-    if((!this.lastElementClicked && href !== defaultNavItem)) {
-      this.changeClassValue (tabSection, 'hide-item', 'show-item');
+    if((!self.lastElementClicked && href !== self.defaultNavItem)) {
+      self.changeClassValue (tabSection, 'hide-item', 'show-item');
       if(document.getElementById('view-requests')) {
-        defaultTab = document.getElementById('view-requests');
-        this.changeClassValue (defaultTab, 'show-item', 'hide-item')
+        self.defaultTab = document.getElementById('view-requests');
+        self.changeClassValue (self.defaultTab, 'show-item', 'hide-item')
       }
       if(document.getElementById('request-repair')) {
-        defaultTab = document.getElementById('request-repair');
-        this.changeClassValue (defaultTab, 'show-item', 'hide-item')
+        self.defaultTab = document.getElementById('request-repair');
+        self.changeClassValue (self.defaultTab, 'show-item', 'hide-item')
       }
-    } else if(this.lastElementClicked && href !== this.lastElementClicked) {
-      this.changeClassValue (tabSection, 'hide-item', 'show-item');
-      const oldTabSection = document.getElementById(this.lastElementClicked);
-      this.changeClassValue (oldTabSection, 'show-item', 'hide-item');
+    } else if(self.lastElementClicked && href !== self.lastElementClicked) {
+      self.changeClassValue (tabSection, 'hide-item', 'show-item');
+      const oldTabSection = document.getElementById(self.lastElementClicked);
+      self.changeClassValue (oldTabSection, 'show-item', 'hide-item');
     } else {
-      this.changeClassValue (tabSection, 'hide-item', 'show-item');
+      self.changeClassValue (tabSection, 'hide-item', 'show-item');
     }
-     this.lastElementClicked = href;
+     self.lastElementClicked = href;
    }
 
   showConsoleModal (message) {
@@ -98,6 +109,9 @@ const DomElementActions = class {
   
   closeConsoleModal (self) {
     // self = the instance of this class
+    if (self === 'undefined') {
+      self = this;
+    }
     if(document.getElementById('console-modal')) {
       const consoleModal = document.getElementById('console-modal');
       self.changeClassValue(consoleModal, 'show-item', 'hide-item');

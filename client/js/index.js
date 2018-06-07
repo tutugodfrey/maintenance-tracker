@@ -48,7 +48,6 @@ const domNotifier = () => {
   // console modal
   const userData = storageHandler.getDataFromStore('userdata');
   storageHandler.redirectUser(userData);
-  storageHandler.redirectUser(userData);
   if(document.getElementById('console-modal-button')) {
     const consoleModalBtn = document.getElementById('console-modal-button');
     domElements.newEvent(consoleModalBtn, 'click', domElements.closeConsoleModal,  domElements);

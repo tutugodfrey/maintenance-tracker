@@ -95,7 +95,7 @@
                   <label for="address" class="form-label">Address</label>
                   <span class = "required">*</span><br />
                   <input type="text" class="form-control request-data required-field green-outline" id = "address"  name="address">
-                  <input type="radio" id="urgent-request" class="form-control request-data green-outlinee" name='urgent'><label for="urgent-request" class="form-label" isAdmin="getValue from localstorage">Mark as urgent</label><br />
+                  <input type="checkbox" id="urgent-request" class="form-control request-data green-outlinee" name="urgent" value="true"><label for="urgent-request" class="form-label" isAdmin="getValue from localstorage">Mark as urgent</label><br />
                   <button id="request-button" class="submit-button green-button btn-md">Submit</button>
                   <button class="submit-button delete-request white-button btn-md">Cancel</button>
                 </form>
@@ -226,6 +226,7 @@
             <a href="#">&copy; 2018 maintenance tracker. All Right Reserved.</a>
           </p>
       </div>
+    <script src="./../js/utilities.js" ></script>
     <script src="./../js/users.js" ></script>
   </body>
 </html>

@@ -95,9 +95,10 @@ const DomElementActions = class {
     } else {
       self.changeClassValue (tabSection, 'hide-item', 'show-item');
     }
-     self.lastElementClicked = href;
-     domNotifier();
-   }
+    self.lastElementClicked = href;
+    domNotifier();
+    return;
+  }
 
   showConsoleModal (message) {
     if(document.getElementById('console-modal')) {
@@ -139,6 +140,10 @@ const DomElementActions = class {
 
   displayUsersRequest(usersRequest, displayRequestTab) {
     usersRequest.forEach((requestObj) => {
+      if (document.getElementById(`request${requestObj.id}`)) {
+        const oldRequestContainer  = document.getElementById(`request${requestObj.id}`)
+        displayRequestTab.removeChild(oldRequestContainer)
+      }
       const requestContainer = document.createElement('div');
       requestContainer.className = 'requests';
       requestContainer.id = `request${requestObj.id}`;

@@ -20,11 +20,35 @@ const displayServices = (responseData) => {
   if (document.getElementById('services')) {
     const services = document.getElementById('services');
     responseData.forEach((service) => {
-      const options = document.createElement('option');
-      options.innerHTML = service.servicename;
-      options.value = service.id;
-      services.appendChild(options)
+      if (document.getElementsByTagName('option')) {
+        let servicePresent = false;
+        const oldOptions = document.getElementsByTagName('option');
+        for(let sizeOfOption = 0; sizeOfOption < oldOptions.length; sizeOfOption++) {
+          if (parseInt(oldOptions[sizeOfOption].value) === service.id) {
+            servicePresent = true;
+          }
+        }
+        if (!servicePresent) {
+          const options = document.createElement('option');
+          options.innerHTML = service.servicename;
+          options.value = service.id;
+          services.appendChild(options);
+          servicePresent = false;
+        }
+      }
     })
+  }
+}
+
+const displayRequests = (responseData) => {
+  if (responseData.message) {
+    domElements.showConsoleModal(responseData.message);
+    return;
+  }
+  if (Array.isArray(responseData)) {
+    const storageResult = storageHandler.storeData(responseData, 'usersrequests');
+    const displayRequestTab = document.getElementById('view-users-requests');
+    domElements.displayUsersRequest(responseData, displayRequestTab)
   }
 }
 
@@ -62,7 +86,6 @@ const createRequest = function(ele) {
         }
       }
     }
-    console.log(requestString)
     const headers =  new Headers();
     const userData = storageHandler.getDataFromStore('userdata')
     headers.append('Content-Type', 'application/x-www-form-urlencoded');
@@ -77,12 +100,18 @@ const createRequest = function(ele) {
 	}
 }
 
-
+let eventListenerAdded = false;
 const domNotifier = function() {
  // localStorage.removeItem('requests')
  // localStorage.removeItem('userdata');
 
- getServices();
+  if(document.getElementById('request-repair')) {
+    const displayRequestTab = document.getElementById('request-repair');
+    const displayRequestClass = displayRequestTab.getAttribute('class');
+    if (displayRequestClass.indexOf('show') >= 0) {
+      getServices();
+    }
+  }
 
 	if(document.getElementById('request-button')) {
 		const createRequestBtn = document.getElementById('request-button');
@@ -101,9 +130,15 @@ const domNotifier = function() {
 
   if(document.getElementsByClassName('nav-link')) {
     const navItems = document.getElementsByClassName('nav-link');
-    for(let size = 0; size < navItems.length; size++) {
-      domElements.newEvent(navItems[size], 'click', domElements.tabNavigation, [domElements, navItems[size]]);
-    }  
+    if (eventListenerAdded) {
+      // this prevent eventListener from being readded to this elements 
+      // resulting in multiple calls to the domNotifier
+    } else {
+      for(let size = 0; size < navItems.length; size++) {
+        domElements.newEvent(navItems[size], 'click', domElements.tabNavigation, [domElements, navItems[size]]);
+      }
+      eventListenerAdded = true;
+    } 
   }
 
   if(document.getElementById('default-nav')) {
@@ -112,6 +147,23 @@ const domNotifier = function() {
     const anchorPos = defaultNav.href.indexOf('#');
     domElements.defaultNavItem = defaultNav.href.substring(anchorPos + 1);
   }
+
+  // get users request
+  if(document.getElementById('view-users-requests')) {
+    const displayRequestTab = document.getElementById('view-users-requests');
+    const displayRequestClass = displayRequestTab.getAttribute('class');
+    if (displayRequestClass.indexOf('show') >= 0) {
+      const usersRequest = storageHandler.getDataFromStore('usersrequests');
+      // will uncomment this block when feature to use request stored in local storage is finished
+      // such that users can always get an updated version of their request details
+    /*  if (Array.isArray(usersRequest)) {
+        domElements.displayUsersRequest(usersRequest, displayRequestTab)
+      } else { */
+      // get request
+     requestHandler.getRequests('/api/v1/users/requests', storageHandler, displayRequests);
+   // }
+   }
+ }
 }
 
 domNotifier()

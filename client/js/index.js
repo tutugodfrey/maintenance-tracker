@@ -31,15 +31,22 @@ const processSignin = (ele) => {
       requestData = `${requestData}${fieldName}=${fieldValue}&`;
       }
     }
-    const headers =  new Headers();
-    headers.append('Content-Type', 'application/x-www-form-urlencoded');
-    headers.append('Accept', 'application/json');
-    const options = {
-      headers,
-      method: 'POST',
-      body:requestData,
+    const userData = storageHandler.getDataFromStore('userdata');
+    if(requestData.indexOf(`username=${userData.username}`) >= 0) {
+      // already has access token
+      storageHandler.redirectUser(userData);
+    } else {
+      // no access token
+      const headers =  new Headers();
+      headers.append('Content-Type', 'application/x-www-form-urlencoded');
+      headers.append('Accept', 'application/json');
+      const options = {
+        headers,
+        method: 'POST',
+        body:requestData,
+      }
+      requestHandler.makeRequest('/api/v1/auth/signin', options, handleResponse);
     }
-    requestHandler.makeRequest('/api/v1/auth/signin', options, handleResponse)
   }
 } // end processSignin
 

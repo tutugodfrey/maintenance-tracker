@@ -2,14 +2,18 @@
 const domElements = new DomElementActions();
 const storageHandler = new StorageHandler();
 const requestHandler = new RequestHandler();
-
+let updatingRequest = false;
+let idOfRequestToUpdate;
 // process server response
 const handleCreateRequest = function(responseData) {
   if (responseData.message) {
     domElements.showConsoleModal(responseData.message);
     return
   }
-  domElements.showConsoleModal('Your request has been recorded')
+  domElements.showConsoleModal('Your request has been recorded');
+  if (updatingRequest) {
+    updatingRequest = false;
+  }
 }
 
 const displayServices = (responseData) => {
@@ -41,15 +45,24 @@ const displayServices = (responseData) => {
 }
 
 const displayRequests = (responseData) => {
+  console.log(responseData)
+  if (responseData.message === 'Invalid Token' || responseData.message === 'Please send a token') {
+    storageHandler.redirectUser(responseData)
+  }
   if (responseData.message) {
     domElements.showConsoleModal(responseData.message);
     return;
   }
   if (Array.isArray(responseData)) {
-    const storageResult = storageHandler.storeData(responseData, 'usersrequests');
-    const displayRequestTab = document.getElementById('view-users-requests');
-    domElements.displayUsersRequest(responseData, displayRequestTab)
+    if(responseData.length === 0) {
+      domElements.showConsoleModal('You have not made any repair request');
+    } else {
+      const storageResult = storageHandler.storeData(responseData, 'usersrequests');
+      const displayRequestTab = document.getElementById('view-users-requests');
+      domElements.displayUsersRequest(responseData, displayRequestTab);
+    }
   }
+  domNotifier();
 }
 
 const getServices = () => {
@@ -86,6 +99,12 @@ const createRequest = function(ele) {
         }
       }
     }
+    let method;
+    if(updatingRequest) {
+      method = 'PUT';
+    } else {
+      method = 'POST'
+    }
     const headers =  new Headers();
     const userData = storageHandler.getDataFromStore('userdata')
     headers.append('Content-Type', 'application/x-www-form-urlencoded');
@@ -93,14 +112,50 @@ const createRequest = function(ele) {
     headers.append('token', userData.token);
     const options = {
       headers,
-      method: 'POST',
+      method,
       body:requestString,
     }
-    requestHandler.makeRequest('/api/v1/users/requests', options, handleCreateRequest);
+    if(updatingRequest) {
+      requestHandler.makeRequest(`/api/v1/users/requests/${idOfRequestToUpdate}`, options, handleCreateRequest);
+    } else {
+      requestHandler.makeRequest('/api/v1/users/requests', options, handleCreateRequest);
+    }
 	}
 }
 
+const getRequestToEdit = (editBtn) => {
+  const requests = storageHandler.getDataFromStore('usersrequests');
+  const requestId = parseInt(editBtn.value);
+  let requestToEdit;
+  requests.filter((request) => {
+    if (request.id === requestId) {
+      requestToEdit = request;
+      return
+    }
+  });
+
+  // show tab with request info
+  if (document.getElementById('request-repair')) {
+    const requestForm = document.getElementById('request-repair');
+    domElements.changeClassValue(requestForm, 'hide-item', 'show-item');
+    const description = document.getElementById('description');
+    const address = document.getElementById('address');
+    description.value = requestToEdit['description'];
+    address.value = requestToEdit['address'];
+    updatingRequest = true;
+    idOfRequestToUpdate =  requestId;
+  }
+  // hide this tab
+  if(document.getElementById('view-users-requests')) {
+    const displayRequestTab = document.getElementById('view-users-requests');
+    domElements.changeClassValue(displayRequestTab, 'show-item', 'hide-item');
+  }
+  console.log(requestToEdit)
+}
+
 let eventListenerAdded = false;
+let displayRequestCalled = false;
+let eventListenerAddedToEditRequest = false;
 const domNotifier = function() {
  // localStorage.removeItem('requests')
  // localStorage.removeItem('userdata');
@@ -141,6 +196,11 @@ const domNotifier = function() {
     } 
   }
 
+    if(document.getElementById('signout-item')) {
+    const signoutLink = document.getElementById('signout-item');
+      domElements.newEvent(signoutLink, 'click', storageHandler.signout);
+  }
+
   if(document.getElementById('default-nav')) {
     // get the default nav item
     const defaultNav = document.getElementById('default-nav');
@@ -152,18 +212,41 @@ const domNotifier = function() {
   if(document.getElementById('view-users-requests')) {
     const displayRequestTab = document.getElementById('view-users-requests');
     const displayRequestClass = displayRequestTab.getAttribute('class');
+    if (displayRequestClass.indexOf('hide-item') >= 0) {
+      displayRequestCalled = false;
+    }
     if (displayRequestClass.indexOf('show') >= 0) {
       const usersRequest = storageHandler.getDataFromStore('usersrequests');
       // will uncomment this block when feature to use request stored in local storage is finished
       // such that users can always get an updated version of their request details
-    /*  if (Array.isArray(usersRequest)) {
-        domElements.displayUsersRequest(usersRequest, displayRequestTab)
-      } else { */
-      // get request
-     requestHandler.getRequests('/api/v1/users/requests', storageHandler, displayRequests);
-   // }
+    if(!displayRequestCalled) {
+      /*  if (Array.isArray(usersRequest)) {
+          domElements.displayUsersRequest(usersRequest, displayRequestTab)
+        } else { */
+        // get request
+      requestHandler.getRequests('/api/v1/users/requests', storageHandler, displayRequests);
+    // }
+      displayRequestCalled = true;
+    } 
    }
  }
+
+  // updating a request
+ 	  if(document.getElementsByClassName('edit-request')) {
+    const editRequestBtn = document.getElementsByClassName('edit-request');
+    if (eventListenerAddedToEditRequest) {
+      // this prevent eventListener from being readded to this elements 
+      // resulting in multiple calls to the domNotifier
+    } else {
+      if (editRequestBtn.length > 0) {
+        for(let size = 0; size < editRequestBtn.length; size++) {
+          domElements.newEvent(editRequestBtn[size], 'click', getRequestToEdit, editRequestBtn[size]);
+        }
+        eventListenerAddedToEditRequest = true;
+      }
+    } 
+  }
+
 }
 
 domNotifier()

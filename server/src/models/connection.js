@@ -3,7 +3,7 @@ import dotenv from 'dotenv-safe';
 import config from './config';
 /* eslint-disable no-mutable-exports */
 dotenv.config();
-const env = process.env.NODE_ENV || 'test';
+const env = process.env.NODE_ENV || 'development';
 let connectionString;
 if (config[env]) {
   const databaseURL = config[env].use_env_variable;

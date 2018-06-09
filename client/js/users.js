@@ -150,7 +150,6 @@ const getRequestToEdit = (editBtn) => {
     const displayRequestTab = document.getElementById('view-users-requests');
     domElements.changeClassValue(displayRequestTab, 'show-item', 'hide-item');
   }
-  console.log(requestToEdit)
 }
 
 let eventListenerAdded = false;

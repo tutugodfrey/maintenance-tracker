@@ -5,6 +5,9 @@ const DomElementActions = class {
     this.lastElementClicked;
     this.defaultNavItem;
     this.changeClassValue = this.changeClassValue.bind(this);
+    this.isAdmin;
+    this.viewStatus;
+    this._formatRequestDetail = this._formatRequestDetail;
     // this._changeClassValue = this._changeClassValue;
   }
   // add eventlistener to elements
@@ -138,71 +141,113 @@ const DomElementActions = class {
     return datePortion;
   }
 
-  displayUsersRequest(usersRequest, displayRequestTab) {
-    usersRequest.forEach((requestObj) => {
-      if (document.getElementById(`request${requestObj.id}`)) {
-        const oldRequestContainer  = document.getElementById(`request${requestObj.id}`)
-        displayRequestTab.removeChild(oldRequestContainer)
-      }
-      const requestContainer = document.createElement('div');
-      requestContainer.className = 'requests';
-      requestContainer.id = `request${requestObj.id}`;
-      const header = document.createElement('div');
-      header.className = 'small-header-gradient';
-      const content = document.createElement('div');
-      content.className = 'request-content';
-      const descriptiveList = document.createElement('dl');
-      descriptiveList.className = 'request-details';
-      const requestForm = document.createElement('form');
-      requestForm.className = 'form-inline';
-      const adminIdInput = document.createElement('input');
-      adminIdInput.type = 'hidden';
-      adminIdInput.name = 'adminId';
-      adminIdInput.value = requestObj.adminid;
-      
+  _formatRequestDetail(requestObj, displayRequestTab) {
+    const requestContainer = document.createElement('div');
+    requestContainer.className = 'requests';
+    requestContainer.id = `request${requestObj.id}`;
+    const header = document.createElement('div');
+    header.className = 'small-header-gradient';
+    const content = document.createElement('div');
+    content.className = 'request-content';
+    const descriptiveList = document.createElement('dl');
+    descriptiveList.className = 'request-details';
+    const requestForm = document.createElement('form');
+    requestForm.className = 'form-inline';
+    const adminIdInput = document.createElement('input');
+    adminIdInput.type = 'hidden';
+    adminIdInput.name = 'adminId';
+    adminIdInput.value = requestObj.adminid;
+    requestForm.appendChild(adminIdInput);
+    
+    if (this.isAdmin && this.viewStatus === 'waiting' && (requestObj.status === 'awaiting confirmation' || requestObj.status === 'rejected')) {
       // create and add content to edit buttton
       const editBtn = document.createElement('button');
+      const deleteBtn = document.createElement('button');
+      editBtn.value = requestObj.id;
+      deleteBtn.value = requestObj.id;
+      editBtn.id = `approve-request${requestObj.id}`;
+      editBtn.className = 'submit-button approve-request green-button btn-md';
+      editBtn.innerHTML = 'Approve';
+
+      // create and add content to delete btn
+      deleteBtn.id = `reject-request${requestObj.id}`;
+      deleteBtn.className = 'submit-button reject-request white-button btn-md';
+      deleteBtn.innerHTML = 'Reject';
+          // add content to form
+    requestForm.appendChild(editBtn);
+    requestForm.appendChild(deleteBtn);
+    } else if (this.isAdmin && this.viewStatus === 'approved' && requestObj.status === 'pending') {
+      // create and add content to edit buttton
+      const editBtn = document.createElement('button');
+      editBtn.value = requestObj.id;
+      editBtn.id = `resolve-request${requestObj.id}`;
+      editBtn.className = 'submit-button resolve-request green-button btn-wide';
+      editBtn.innerHTML = 'Mark As Resolved';
+      requestForm.appendChild(editBtn);
+    } else if (this.isAdmin && this.viewStatus === 'resolved' && requestObj.status === 'resolved') {
+      // no button need to be added
+    } else if (!this.isAdmin) {
+      const editBtn = document.createElement('button');
+      const deleteBtn = document.createElement('button');
       editBtn.id = `edit-request${requestObj.id}`;
       editBtn.className = 'submit-button edit-request green-button btn-md';
-      editBtn.value = requestObj.id;
       editBtn.innerHTML = 'Edit Request';
 
       // create and add content to delete btn
-      const deleteBtn = document.createElement('button');
       deleteBtn.id = `delete-request${requestObj.id}`;
       deleteBtn.className = 'submit-button delete-request white-button btn-md';
-      deleteBtn.value = requestObj.id;
       deleteBtn.innerHTML = 'Delete Request';
-
       // add content to form
-      requestForm.appendChild(adminIdInput);
       requestForm.appendChild(editBtn);
       requestForm.appendChild(deleteBtn);
-      const requestKeys = Object.keys(requestObj);
-      requestKeys.forEach((key) => {
-        if (key === 'id' || key === 'userid' || key === 'adminid' || key === 'updatedat' ) {
-          // do nothing
-        } else {
-          let value = requestObj[key];
-          if (key === 'issuedate') {
-            value = domElements.dateSubstring(value);
-          }
-          const listTerm = document.createElement('dt');
-          listTerm.innerHTML = key;
-          listTerm.className = key
-          const listDefinition = document.createElement('dd');
-          listDefinition.className = key;
-          listDefinition.innerHTML = value;
-          descriptiveList.appendChild(listTerm);
-          descriptiveList.appendChild(listDefinition);
+    }
+    const requestKeys = Object.keys(requestObj);
+    requestKeys.forEach((key) => {
+      if (key === 'id' || key === 'userid' || key === 'adminid' || key === 'updatedat' ) {
+        // do nothing
+      } else {
+        let value = requestObj[key];
+        if (key === 'issuedate') {
+          value = domElements.dateSubstring(value);
         }
-      });
-      content.appendChild(descriptiveList);
-      requestContainer.appendChild(header);
-      requestContainer.appendChild(content)
-      requestContainer.appendChild(requestForm);
-      displayRequestTab.appendChild(requestContainer);
-    })
+        const listTerm = document.createElement('dt');
+        listTerm.innerHTML = key;
+        listTerm.className = key
+        const listDefinition = document.createElement('dd');
+        listDefinition.className = key;
+        listDefinition.innerHTML = value;
+        descriptiveList.appendChild(listTerm);
+        descriptiveList.appendChild(listDefinition);
+      }
+    });
+    content.appendChild(descriptiveList);
+    requestContainer.appendChild(header);
+    requestContainer.appendChild(content)
+    requestContainer.appendChild(requestForm);
+    displayRequestTab.appendChild(requestContainer);
+  }
+
+  displayUsersRequest(usersRequest, displayRequestTab) {
+    usersRequest.forEach((requestObj) => {
+      if (document.getElementById(`request${requestObj.id}`)) {
+        try {
+          const oldRequestContainer  = document.getElementById(`request${requestObj.id}`)
+          displayRequestTab.removeChild(oldRequestContainer)
+        } catch(error) {
+          console.log(error)
+        }
+      }
+
+      if (this.isAdmin && this.viewStatus === 'waiting' && (requestObj.status === 'awaiting confirmation' || requestObj.status === 'rejected')) {
+        this._formatRequestDetail(requestObj, displayRequestTab);
+      } else if (this.isAdmin && this.viewStatus === 'approved' && requestObj.status === 'pending') {
+        this._formatRequestDetail(requestObj, displayRequestTab);
+      } else if (this.isAdmin && this.viewStatus === 'resolved' && requestObj.status === 'resolved') {
+        this._formatRequestDetail(requestObj, displayRequestTab);
+      } else  if (!this.isAdmin) {
+        this._formatRequestDetail(requestObj, displayRequestTab);
+      }
+    });
   }
 }
 

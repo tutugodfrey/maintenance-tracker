@@ -68,85 +68,17 @@
         </div>
       </div>
       <div id="content-area" class="container">
-          <div id="view-requests" class="tab-item show-item"> 
-            <div id="request1" class="requests">
-                <div class="small-header-gradient">
-                    <h3 class="head-title">
-                      Jonn Doe
-                    </h3>
-                  </div>
-              <div class="request-content">
-                <dl class="request-details">
-                <dt class = 'issue-date'>Issue Date</dt>
-                <dd class = 'issue-date'>11-05-2018</dd>
-                <dt class = 'category'>Category</dt>
-                <dd class = 'category'>Electrical</dd>
-                <dt class='description'>Description</dt>
-                <dd class ='description'>Wall Socket get burn and need replacement</dd>
-                <dt class='urgent'>Urgency</dt>
-                <dd class='urgent'>urgent</dd>
-                <dt class='status'>Status</dt>
-                <dd class='status'>Approved</dd>
-                </dl>
-                <form action="" class="form-inline">
-                  <input type="hidden" class="form-control" id = "user-id" value="3"  >
-                  <input type="hidden" class="form-control" id = "request-id" value="1"  >
-                  <button type="reset" id="approve-request" class="submit-button green-button btn-md">Approve</button>
-                  <button  class="submit-button reject-button white-button btn-md">Reject</button>
-                </form>
-              </div>
-            </div>
-          <div id="view-approved-requests" class="tab-item hide-item"> 
-            <div id="request1" class="requests">
-              <div class="small-header-gradient">
-                  <h3 class="head-title">
-                    Jonn Doe
-                  </h3>
-                </div>
-            <div class="request-content">
-              <dl class="request-details">
-                <dt class = 'issue-date'>Issue Date</dt>
-                <dd class = 'issue-date'>11-05-2018</dd>
-                <dt class = 'category'>Category</dt>
-                <dd class = 'category'>Electrical</dd>
-                <dt class='description'>Description</dt>
-                <dd class ='description'>Wall Socket get burn and need replacement</dd>
-                <dt class='urgent'>Urgency</dt>
-                <dd class='urgent'>urgent</dd>
-                <dt class='status'>Status</dt>
-                <dd class='status'>Approved</dd>
-              </dl>
-              <form action="" class="form-inline">
-                <input type="hidden" class="form-control" id = "user-id" value="3"  >
-                <input type="hidden" class="form-control" id = "request-id" value="1"  >
-                <button id="approved-request" class="submit-button green-button btn-wide">Mark As Resolved</button>
-              </form>
-            </div>
-          </div>
+        <div id="view-requests" class="tab-item show-item"> 
+        </div>
+        <div id="view-approved-requests" class="tab-item hide-item"> 
         </div>
         <div id="view-resolved-requests" class="tab-item hide-item"> 
-          <div id="request1" class="requests">
-            <div class="small-header-gradient">
-                <h3 class="head-title">
-                  Jonn Doe
-                </h3>
-              </div>
-          <div class="request-content">
-            <dl class="request-details">
-                <dt class = 'issue-date'>Issue Date</dt>
-                <dd class = 'issue-date'>11-05-2018</dd>
-                <dt class = 'category'>Category</dt>
-                <dd class = 'category'>Electrical</dd>
-                <dt class='description'>Description</dt>
-                <dd class ='description'>Wall Socket get burn and need replacement</dd>
-                <dt class='urgent'>Urgency</dt>
-                <dd class='urgent'>urgent</dd>
-                <dt class='status'>Status</dt>
-                <dd class='status'>Resolved</dd>
-            </dl>
-          </div>
         </div>
-      </div>
+        <div id="console-modal" class="tab-item hide-item green-outline">
+          <p id="message-box">
+          </p>
+          <button id="console-modal-button" class="white-button btn-md">close</button>
+        </div>
       </div>
       <div id="footer-div">
         <div id="site-info">
@@ -182,6 +114,7 @@
           </p>
       </div>
     </div>
-    <script src="./../js/index.js" ></script>
+    <script src="./../js/utilities.js" ></script>
+    <script src="./../js/admin.js" ></script>
   </body>
 </html>

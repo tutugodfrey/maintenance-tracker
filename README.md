@@ -49,13 +49,14 @@ NOTE: ensure you are in test environment before running test. run `export NODE_E
 | /                                            |  GET                      |  Application default route                                               |
 | /api/v1/auth/signup                          |  POST                     |  user signup                                                             |
 | /api/v1/auth/signin                          |  POST                     |  user signin                                                             |
+| /api/v1/auth/services                        |  GET                      |  get info about service providers                                        |
 |                                              |                           |                                                                          |
 | /api/v1/users/requests                       |  POST                     |  Create a new request                                                    |
 | /api/v1/users/requests                       |  GET                      |  get all requests                                                        |
 | /api/v1/users/requests/:requestId            |  GET                      |  get one request                                                         |
 | /api/v1/users/requests/:requestId            |  PUT                      |  update a request                                                        |
-|                                              |                           |                                                                          |
 | /api/v1/users/request/:requestId             |  DELETE                   |  delete a request                                                        |
+|                                              |                           |                                                                          |
 | /api/v1/requests                             |  GET                      |  admin get all requests                                                  |
 | /api/v1/requests/:requestId/disapprove       |  PUT                      |  admin can disapprove a request                                          |
 | /api/v1/requests/:requestId/approve          |  PUT                      |  admin can approve a request                                             |
@@ -69,6 +70,8 @@ NOTE: ensure you are in test environment before running test. run `export NODE_E
 ### Docs and Links
 
 [view project template](https://tutugodfrey.github.io/maintenance-tracker/)
+
+[hosted version of this app](https://mtrackers.herokuapp.com/)
 
 ---
 

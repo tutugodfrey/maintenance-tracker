@@ -21,6 +21,9 @@ const RequestController = class {
     if (!urgent && urgent.trim() !== '') {
       return res.status(400).send({ message: 'typeError field urgent must be a boolean' });
     }
+    if (!parseInt(adminId)) {
+      return res.status(400).send({ message: 'please select a service'})
+    }
 
     return users.findById(parseInt(userId, 10))
       .then((user) => {
@@ -96,6 +99,12 @@ const RequestController = class {
     const userId = parseInt(req.body.decode.id, 10);
     if (!requestId || !userId) {
       return res.status(400).send({ message: 'missing required field' });
+    }
+    if (category === 'select' || category === 'Select') {
+      return res.status(400).send({ message: 'Please select a category for your repair request'})
+    }
+    if (!parseInt(adminId)) {
+      return res.status(400).send({ message: 'please select a service provider'})
     }
     return requests
       .find({

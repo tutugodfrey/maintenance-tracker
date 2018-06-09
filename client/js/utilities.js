@@ -162,14 +162,14 @@ const DomElementActions = class {
       
       // create and add content to edit buttton
       const editBtn = document.createElement('button');
-      editBtn.id = 'edit-request';
-      editBtn.className = 'submit-button green-button btn-md';
+      editBtn.id = `edit-request${requestObj.id}`;
+      editBtn.className = 'submit-button edit-request green-button btn-md';
       editBtn.value = requestObj.id;
       editBtn.innerHTML = 'Edit Request';
 
       // create and add content to delete btn
       const deleteBtn = document.createElement('button');
-      deleteBtn.id = 'delete-request';
+      deleteBtn.id = `delete-request${requestObj.id}`;
       deleteBtn.className = 'submit-button delete-request white-button btn-md';
       deleteBtn.value = requestObj.id;
       deleteBtn.innerHTML = 'Delete Request';
@@ -232,6 +232,12 @@ const StorageHandler = class {
       const stringifyData = JSON.stringify(dataToStore);
       localStorage.setItem(keyString, stringifyData);
       return 'data stored';
+    } else {
+      // store the latest version of data
+      localStorage.removeItem(keyString);
+      const stringifyData = JSON.stringify(dataToStore);
+      localStorage.setItem(keyString, stringifyData);
+      return 'data stored';
     }
   }
   
@@ -239,11 +245,21 @@ const StorageHandler = class {
     if (typeof userData !== 'object') {
       return `typeError: expecting an object but got ${typeof userData}`;
     }
-    if (userData.isAdmin === true  || userData.isAdmin === 'on') {
+    if (userData.message === 'Invalid Token' || userData.message === 'Please send a token') { // userData = response from server on diff operations
+      // remove userdata from localStorage, redirect user to signin page
+      localStorage.removeItem('userdata');
+      window.location.href = '/signin.html';
+      return
+    } else if (userData.isAdmin === true  || userData.isAdmin === 'on') {
       window.location.href= '/admin/dashboard.html';
     } else if (userData.isAdmin === false) {
       window.location.href = '/users/dashboard.html';
     } 
+  }
+
+  signout() {
+    window.location.href = '/signin.html';
+    return
   }
 }
 

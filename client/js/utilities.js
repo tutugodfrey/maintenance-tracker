@@ -346,6 +346,19 @@ const RequestHandler = class {
     requestHandler.makeRequest(url, options, callback);
   }
 
+  updateRequest(url, storageHandler, callback){
+    const userData = storageHandler.getDataFromStore('userdata')
+    const headers =  new Headers();
+    headers.append('Content-Type', 'application/x-www-form-urlencoded');
+    headers.append('token', userData.token);
+    const options = {
+      headers,
+      method: 'PUT',
+      body:'',
+    }
+    requestHandler.makeRequest(url, options, callback);
+  }
+
   makeRequest(url, options, callback) {
     fetch(url, options)
     .then(res => res.json())

@@ -45,7 +45,6 @@ const displayServices = (responseData) => {
 }
 
 const displayRequests = (responseData) => {
-  console.log(responseData)
   if (responseData.message === 'Invalid Token' || responseData.message === 'Please send a token') {
     storageHandler.redirectUser(responseData)
   }

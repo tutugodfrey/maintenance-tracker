@@ -12,7 +12,7 @@ const displayRequests = (responseData) => {
   }
   if (Array.isArray(responseData)) {
     if(responseData.length === 0) {
-      domElements.showConsoleModal('You have not made any repair request');
+      domElements.showConsoleModal('No repair request has been made');
     } else {
       const storageResult = storageHandler.storeData(responseData, 'adminrequests');
       let displayRequestTab;
@@ -55,14 +55,47 @@ const displayRequests = (responseData) => {
   }
   domNotifier();
 }
+const handleUpdateRequest = (updatedRequest) => {
+  const requestId = updatedRequest.id;
+  const requests = storageHandler.getDataFromStore('adminrequests');
+  let requestToReplace;
+  requests.filter((request) => {
+    if (request.id === requestId) {
+      requestToReplace = request;
+    }
+  });
+  const indexOfRequest = requests.indexOf(requestToReplace);
+  requests[indexOfRequest] = updatedRequest;
+  // store updated version of request collection
+  storageHandler.storeData(requests, 'adminrequests')
+}
+const approveRequest = (approveBtn) => {
+
+  const idOfRequestToApprove = approveBtn.value;
+  requestHandler.updateRequest(`/api/v1/requests/${idOfRequestToApprove}/approve`, storageHandler, handleUpdateRequest)
+}
+
+const rejectRequest = (rejectBtn) => {
+  const requests = storageHandler.getDataFromStore('adminrequests');
+  const idOfRequestToReject = rejectBtn.value;
+  requestHandler.updateRequest(`/api/v1/requests/${idOfRequestToReject}/disapprove`, storageHandler, handleUpdateRequest)
+}
+
+const resolveRequest = (resolveBtn) => {
+  const requests = storageHandler.getDataFromStore('adminrequests');
+  const idOfRequestToResolve = resolveBtn.value;
+  requestHandler.updateRequest(`/api/v1/requests/${idOfRequestToResolve}/resolve`, storageHandler, handleUpdateRequest)
+}
 
 let eventListenerAdded = false;
 let displayRequestCalled = false;
 let viewResolvedRequestCalled = false;
 let viewApprovedRequestCalled = false;
-let eventListenerAddedToEditRequest = false;
+let eventListenerAddedToApproveRequest = false;
+let eventListenerAddedToRejectRequest = false;
+let eventListenerAddedToResolveRequest = false;
 const domNotifier = function() {
- // localStorage.removeItem('requests')
+ // localStorage.removeItem('adminrequests')
  // localStorage.removeItem('userdata');
   if (localStorage.getItem('userdata')) {
     const userData = storageHandler.getDataFromStore('userdata');
@@ -178,6 +211,54 @@ const domNotifier = function() {
       // }
         viewResolvedRequestCalled = true;
       } 
+    }
+  }
+
+  if (document.getElementsByClassName('approve-request')) {
+    const approveBtn = document.getElementsByClassName('approve-request');
+    if (approveBtn.length === 0) {
+      //do nothing
+    } else {
+      if (eventListenerAddedToApproveRequest) {
+        // 
+      } else {
+        for(let sizeOfBtn = 0; sizeOfBtn < approveBtn.length; sizeOfBtn++) {
+          domElements.newEvent(approveBtn[sizeOfBtn], 'click', approveRequest, approveBtn[sizeOfBtn]);
+        }
+        eventListenerAddedToApproveRequest = true;
+      }
+    }
+  }
+
+  if (document.getElementsByClassName('reject-request')) {
+    const rejectBtn = document.getElementsByClassName('reject-request');
+    if (rejectBtn.length === 0) {
+      //do nothing
+    } else {
+      if (eventListenerAddedToRejectRequest) {
+        // 
+      } else {
+        for(let sizeOfBtn = 0; sizeOfBtn < rejectBtn.length; sizeOfBtn++) {
+          domElements.newEvent(rejectBtn[sizeOfBtn], 'click', rejectRequest, rejectBtn[sizeOfBtn]);
+        }
+        eventListenerAddedToRejectRequest = true;
+      }
+    }
+  }
+
+  if (document.getElementsByClassName('resolve-request')) {
+    const resolveBtn = document.getElementsByClassName('resolve-request');
+    if (resolveBtn.length === 0) {
+      //do nothing
+    } else {
+      if (eventListenerAddedToResolveRequest) {
+        // 
+      } else {
+        for(let sizeOfBtn = 0; sizeOfBtn < resolveBtn.length; sizeOfBtn++) {
+          domElements.newEvent(resolveBtn[sizeOfBtn], 'click', resolveRequest, resolveBtn[sizeOfBtn]);
+        }
+        eventListenerAddedToResolveRequest = true;
+      }
     }
   }
 }

@@ -1,6 +1,3 @@
-const domElements = new DomElementActions();
-const storageHandler = new StorageHandler();
-const requestHandler = new RequestHandler();
 
 const displayRequests = (responseData) => {
   if (responseData.message === 'Invalid Token' || responseData.message === 'Please send a token') {
@@ -17,9 +14,9 @@ const displayRequests = (responseData) => {
       const storageResult = storageHandler.storeData(responseData, 'adminrequests');
       let displayRequestTab;
       if (domElements.viewStatus === 'waiting') {
-        const waitingRequest = responseData.filter(request => {
-          if (request.status === 'awaiting confirmation' || request.status === 'rejected') {
-            return request;
+        const waitingRequest = responseData.filter(requests => {
+          if (requests.request.status === 'awaiting confirmation' || requests.request.status === 'rejected') {
+            return requests;
           }
         });
         if(waitingRequest.length === 0) {
@@ -28,9 +25,9 @@ const displayRequests = (responseData) => {
         }
         displayRequestTab = document.getElementById('view-requests');
       } else if (domElements.viewStatus === 'approved') {
-        const approvedRequest = responseData.filter(request => {
-          if (request.status === 'pending') {
-            return request;
+        const approvedRequest = responseData.filter(requests => {
+          if (requests.request.status === 'pending') {
+            return requests;
           }
         });
         if(approvedRequest.length === 0) {
@@ -39,9 +36,9 @@ const displayRequests = (responseData) => {
         }
         displayRequestTab = document.getElementById('view-approved-requests');
       } else if (domElements.viewStatus === 'resolved') {
-        const resolvedRequest = responseData.filter(request => {
-          if (request.status === 'resolved') {
-            return request;
+        const resolvedRequest = responseData.filter(requests => {
+          if (requests.request.status === 'resolved') {
+            return requests;
           }
         });
         if(resolvedRequest.length === 0) {
@@ -70,7 +67,6 @@ const handleUpdateRequest = (updatedRequest) => {
   storageHandler.storeData(requests, 'adminrequests')
 }
 const approveRequest = (approveBtn) => {
-
   const idOfRequestToApprove = approveBtn.value;
   requestHandler.updateRequest(`/api/v1/requests/${idOfRequestToApprove}/approve`, storageHandler, handleUpdateRequest)
 }
@@ -87,6 +83,58 @@ const resolveRequest = (resolveBtn) => {
   requestHandler.updateRequest(`/api/v1/requests/${idOfRequestToResolve}/resolve`, storageHandler, handleUpdateRequest)
 }
 
+const getClientInfo = () => {
+  const requestsData = storageHandler.getDataFromStore('adminrequests');
+    if (requestsData.message) {
+      domElements.showConsoleModal(requestsData.message);
+      return;
+    }
+    if (document.getElementById('service-users')) {
+      const users = document.getElementById('service-users');
+      requestsData.forEach((requestData) => {
+        if (document.getElementsByClassName('service-users')) {
+          let userPresent = false;
+          const oldOptions = document.getElementsByClassName('service-users');
+          for(let sizeOfOption = 0; sizeOfOption < oldOptions.length; sizeOfOption++) {
+            if (parseInt(oldOptions[sizeOfOption].value) === requestData.user.id) {
+              userPresent = true;
+            }
+          }
+          if (!userPresent) {
+            const options = document.createElement('option');
+            options.innerHTML = requestData.user.fullname;
+            options.value = requestData.user.id;
+            options.className = 'service-users';
+            users.appendChild(options);
+            userPresent = false;
+          }
+        }
+      });
+    }
+}
+
+// display selected users phone on contact page
+const displayPhone = () => {
+  if (document.getElementById('phone')) {
+    const phoneField = document.getElementById('phone');
+    if (document.getElementById('service-users')) {
+      const userId = document.getElementById('service-users').value;
+      const requestsData = storageHandler.getDataFromStore('adminrequests');
+      let user; 
+      requestsData.filter(requestData => {
+        if (requestData.user.id === parseInt(userId, 10)) {
+          user = requestData.user;
+        }
+      })
+      let phoneNumber = user.phone;
+      if (phoneNumber === 'undefined') {
+        phoneNumber = 'No phone';
+      }
+       phoneField.innerHTML = phoneNumber;
+    }
+  }
+}
+
 let eventListenerAdded = false;
 let displayRequestCalled = false;
 let viewResolvedRequestCalled = false;
@@ -94,9 +142,20 @@ let viewApprovedRequestCalled = false;
 let eventListenerAddedToApproveRequest = false;
 let eventListenerAddedToRejectRequest = false;
 let eventListenerAddedToResolveRequest = false;
+let eventListenerAddedToSendMessage = false;
+let eventListenerAddedToSelectUser = false;
 const domNotifier = function() {
  // localStorage.removeItem('adminrequests')
  // localStorage.removeItem('userdata');
+
+  if(document.getElementById('contact-service-dept')) {
+    const displayContactTab = document.getElementById('contact-service-dept');
+    const displayContactClass = displayContactTab.getAttribute('class');
+    if (displayContactClass.indexOf('show') >= 0) {
+      getClientInfo();
+    }
+  }
+
   if (localStorage.getItem('userdata')) {
     const userData = storageHandler.getDataFromStore('userdata');
     domElements['isAdmin'] = userData.isAdmin;
@@ -261,6 +320,24 @@ const domNotifier = function() {
       }
     }
   }
+
+    // sending messages
+    if(document.getElementById('contact-button')) {
+      const contactBtn = document.getElementById('contact-button');
+      if (!eventListenerAddedToSendMessage) {
+        domElements.newEvent(contactBtn, 'click', sendMessage);
+      }
+      eventListenerAddedToSendMessage = true;
+    }
+
+        // display selected users phone number
+        if(document.getElementById('service-users')) {
+          const selectUser = document.getElementById('service-users');
+          if (!eventListenerAddedToSelectUser) {
+            domElements.newEvent(selectUser, 'change', displayPhone);
+          }
+          eventListenerAddedToSelectUser = true;
+        }
 }
 
 domNotifier()

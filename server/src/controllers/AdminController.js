@@ -1,7 +1,7 @@
 
 import models from './../models/index';
 
-const { requests } = models;
+const { requests, users } = models;
 const AdminController = class {
   // get all request for a logged in user
   static getAllRequests(req, res) {
@@ -13,13 +13,41 @@ const AdminController = class {
       return res.status(402).send({ message: 'you are not authorized to perform this action' });
     }
     return requests
-      .findAll({
-        where: {
-          adminId: parseInt(id, 10),
-        },
-      })
-      .then(allRequests => res.status(200).send(allRequests))
-      .catch(() => res.status(500).send({ message: 'some went wrong' }));
+    .findAll({
+      where: {
+        adminid: id,
+      },
+    })
+    .then((clientRequests) => {
+      if (clientRequests) {
+        const clientsInfo = [];
+        clientRequests.forEach((request) => {
+          return users
+            .getClient(request.userid)
+            .then((clientInfo) => {
+              return clientInfo;
+            })
+            .then(clientInfo => {
+              if (clientInfo) {
+                clientsInfo.push({
+                  request,
+                  user: clientInfo,
+                });
+              } else {
+                clientsInfo.push({
+                  request,
+                  user: { message: 'user not found' },
+              });
+              }
+              if (clientsInfo.length === clientRequests.length) {
+                return res.status(200).send(clientsInfo)
+              }
+            })
+            .catch(error => res.status(500).send(error));
+        })
+      }
+    })
+    .catch(error => res.status(500).send({ message: 'something went wrong. please try again' }))
   }
 
   static rejectRequest(req, res) {

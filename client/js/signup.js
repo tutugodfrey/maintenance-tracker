@@ -1,6 +1,3 @@
-const domElements = new DomElementActions();
-const storageHandler = new StorageHandler();
-const requestHandler = new RequestHandler();
 
 // process server response
 const handleResponse = (responseData) => {

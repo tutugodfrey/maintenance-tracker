@@ -119,7 +119,6 @@ var UsersController = function () {
                   var token = _jsonwebtoken2.default.sign(authenKeys, process.env.SECRET_KEY, { expiresIn: '48h' });
                   res.status(201).send({
                     token: token,
-                    message: 'signup successful',
                     email: signup.email,
                     username: signup.username,
                     imgUrl: signup.imgurl,
@@ -173,7 +172,6 @@ var UsersController = function () {
                 var token = _jsonwebtoken2.default.sign(authenKeys, process.env.SECRET_KEY, { expiresIn: '48h' });
                 res.status(201).send({
                   token: token,
-                  message: 'signup successful',
                   fullname: signup.fullname,
                   email: signup.email,
                   username: signup.username,

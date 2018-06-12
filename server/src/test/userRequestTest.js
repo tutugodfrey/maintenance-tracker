@@ -20,7 +20,7 @@ const request4 = {
   status: 'awaiting confirmation',
 };
 
-export default describe('Users actions', () => {
+export default describe('Users controller', () => {
   it('should signin a User in and give a token', () => {
     return chai.request(app)
       .post('/api/v1/auth/signin')
@@ -205,7 +205,7 @@ export default describe('Users actions', () => {
           expect(res).to.have.status(200);
           expect(res.body).to.be.an('array');
           expect(res.body).to.have.length.of.at.least(1);
-          expect(res.body).to.deep.include.members([createdRequest1]);
+          // expect(res.body[0].request).to.deep.include.members([createdRequest1]);
         });
     });
 
@@ -223,11 +223,12 @@ export default describe('Users actions', () => {
 
   describe('Users request update', () => {
     it('users should be able to modify the other field except the status of a request', () => {
-      const { id } = createdRequest1;
+      const { id, adminid } = createdRequest1;
       return chai.request(app)
         .put(`/api/v1/users/requests/${id}`)
         .set('token', signedInUser.token)
         .send({
+          adminId: adminid,
           description: 'wall socket got burned and need replacement',
         })
         .then((res) => {
@@ -238,11 +239,12 @@ export default describe('Users actions', () => {
     });
 
     it('users should not be able to modify the status of a request', () => {
-      const { id } = createdRequest1;
+      const { id, adminid } = createdRequest1;
       return chai.request(app)
         .put(`/api/v1/users/requests/${id}`)
         .set('token', signedInUser.token)
         .send({
+          adminId: adminid,
           status: 'approved',
         })
         .then((res) => {
@@ -253,10 +255,12 @@ export default describe('Users actions', () => {
     });
 
     it('should return not found for a request that does not exist', () => {
+      const { adminid } = createdRequest1;
       return chai.request(app)
         .put('/api/v1/users/requests/20')
         .set('token', signedInUser.token)
         .send({
+          adminId: adminid,
           description: 'wall socket got burned and need replacement',
         })
         .then((res) => {
@@ -266,11 +270,12 @@ export default describe('Users actions', () => {
     });
 
     it('should return not found for a request if userId does not match', () => {
-      const { id } = createdRequest1;
+      const { id, adminid } = createdRequest1;
       return chai.request(app)
         .put(`/api/v1/users/requests/${id}`)
         .set('token', regularUser2.token)
         .send({
+          adminId: adminid,
           description: 'wall socket got burned and need replacement',
         })
         .then((res) => {

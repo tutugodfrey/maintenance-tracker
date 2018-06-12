@@ -39,7 +39,7 @@ var request4 = {
   status: 'awaiting confirmation'
 };
 
-exports.default = describe('Users actions', function () {
+exports.default = describe('Users controller', function () {
   it('should signin a User in and give a token', function () {
     return _chai2.default.request(app).post('/api/v1/auth/signin').send({
       username: _signupTest.regularUser1.username,
@@ -183,7 +183,7 @@ exports.default = describe('Users actions', function () {
         expect(res).to.have.status(200);
         expect(res.body).to.be.an('array');
         expect(res.body).to.have.length.of.at.least(1);
-        expect(res.body).to.deep.include.members([createdRequest1]);
+        // expect(res.body[0].request).to.deep.include.members([createdRequest1]);
       });
     });
 
@@ -198,9 +198,11 @@ exports.default = describe('Users actions', function () {
 
   describe('Users request update', function () {
     it('users should be able to modify the other field except the status of a request', function () {
-      var id = createdRequest1.id;
+      var id = createdRequest1.id,
+          adminid = createdRequest1.adminid;
 
       return _chai2.default.request(app).put('/api/v1/users/requests/' + id).set('token', signedInUser.token).send({
+        adminId: adminid,
         description: 'wall socket got burned and need replacement'
       }).then(function (res) {
         expect(res).to.have.status(200);
@@ -210,9 +212,11 @@ exports.default = describe('Users actions', function () {
     });
 
     it('users should not be able to modify the status of a request', function () {
-      var id = createdRequest1.id;
+      var id = createdRequest1.id,
+          adminid = createdRequest1.adminid;
 
       return _chai2.default.request(app).put('/api/v1/users/requests/' + id).set('token', signedInUser.token).send({
+        adminId: adminid,
         status: 'approved'
       }).then(function (res) {
         expect(res).to.have.status(200);
@@ -222,7 +226,10 @@ exports.default = describe('Users actions', function () {
     });
 
     it('should return not found for a request that does not exist', function () {
+      var adminid = createdRequest1.adminid;
+
       return _chai2.default.request(app).put('/api/v1/users/requests/20').set('token', signedInUser.token).send({
+        adminId: adminid,
         description: 'wall socket got burned and need replacement'
       }).then(function (res) {
         expect(res).to.have.status(404);
@@ -231,9 +238,11 @@ exports.default = describe('Users actions', function () {
     });
 
     it('should return not found for a request if userId does not match', function () {
-      var id = createdRequest1.id;
+      var id = createdRequest1.id,
+          adminid = createdRequest1.adminid;
 
       return _chai2.default.request(app).put('/api/v1/users/requests/' + id).set('token', _signupTest.regularUser2.token).send({
+        adminId: adminid,
         description: 'wall socket got burned and need replacement'
       }).then(function (res) {
         expect(res).to.have.status(404);

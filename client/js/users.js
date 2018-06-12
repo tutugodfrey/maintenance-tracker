@@ -1,7 +1,4 @@
 
-const domElements = new DomElementActions();
-const storageHandler = new StorageHandler();
-const requestHandler = new RequestHandler();
 let updatingRequest = false;
 let idOfRequestToUpdate;
 // process server response
@@ -18,15 +15,15 @@ const handleCreateRequest = function(responseData) {
 
 const displayServices = (responseData) => {
   if (responseData.message) {
-    domElements.showConsoleModal();
+    domElements.showConsoleModal(responseData.message);
     return;
   }
   if (document.getElementById('services')) {
     const services = document.getElementById('services');
     responseData.forEach((service) => {
-      if (document.getElementsByTagName('option')) {
+      if (document.getElementsByClassName('services')) {
         let servicePresent = false;
-        const oldOptions = document.getElementsByTagName('option');
+        const oldOptions = document.getElementsByClassName('services');
         for(let sizeOfOption = 0; sizeOfOption < oldOptions.length; sizeOfOption++) {
           if (parseInt(oldOptions[sizeOfOption].value) === service.id) {
             servicePresent = true;
@@ -36,11 +33,57 @@ const displayServices = (responseData) => {
           const options = document.createElement('option');
           options.innerHTML = service.servicename;
           options.value = service.id;
+          options.className = 'services';
           services.appendChild(options);
           servicePresent = false;
         }
       }
+    });
+  } // end servives
+
+  if (document.getElementById('services2')) {
+    const services = document.getElementById('services2');
+    responseData.forEach((service) => {
+      if (document.getElementsByClassName('services2')) {
+        let service2Present = false;
+        const oldOptions = document.getElementsByClassName('services2');
+        for(let sizeOfOption = 0; sizeOfOption < oldOptions.length; sizeOfOption++) {
+          if (parseInt(oldOptions[sizeOfOption].value) === service.id) {
+            service2Present = true;
+          }
+        }
+        if (!service2Present) {
+          const options = document.createElement('option');
+          options.innerHTML = service.servicename;
+          options.value = service.id;
+          options.className = 'services2';
+          services.appendChild(options);
+          service2Present = false;
+        }
+      }
     })
+  } // end services2
+}
+
+// display selected users phone on contact page
+const displayPhone = () => {
+  if (document.getElementById('phone')) {
+    const phoneField = document.getElementById('phone');
+    if (document.getElementById('services2')) {
+      const userId = document.getElementById('services2').value;
+      const requestsData = storageHandler.getDataFromStore('usersrequests');
+      let user;
+      requestsData.filter(requestData => {
+        if (requestData.user.id === parseInt(userId, 10)) {
+          user = requestData.user;
+        }
+      })
+     let phoneNumber = user.phone;
+     if (phoneNumber === 'undefined') {
+       phoneNumber = 'No phone';
+     }
+      phoneField.innerHTML = phoneNumber;
+    }
   }
 }
 
@@ -154,6 +197,10 @@ const getRequestToEdit = (editBtn) => {
 let eventListenerAdded = false;
 let displayRequestCalled = false;
 let eventListenerAddedToEditRequest = false;
+let eventListenerAddedToSendMessage = false;
+let eventListenerAddedToSelectService = false;
+
+// notify the dom of changes 
 const domNotifier = function() {
  // localStorage.removeItem('requests')
  // localStorage.removeItem('userdata');
@@ -162,6 +209,14 @@ const domNotifier = function() {
     const displayRequestTab = document.getElementById('request-repair');
     const displayRequestClass = displayRequestTab.getAttribute('class');
     if (displayRequestClass.indexOf('show') >= 0) {
+      getServices();
+    }
+  }
+
+  if(document.getElementById('contact-service-dept')) {
+    const displayContactTab = document.getElementById('contact-service-dept');
+    const displayContactClass = displayContactTab.getAttribute('class');
+    if (displayContactClass.indexOf('show') >= 0) {
       getServices();
     }
   }
@@ -194,9 +249,9 @@ const domNotifier = function() {
     } 
   }
 
-    if(document.getElementById('signout-item')) {
-    const signoutLink = document.getElementById('signout-item');
-      domElements.newEvent(signoutLink, 'click', storageHandler.signout);
+  if(document.getElementById('signout-item')) {
+  const signoutLink = document.getElementById('signout-item');
+    domElements.newEvent(signoutLink, 'click', storageHandler.signout);
   }
 
   if(document.getElementById('default-nav')) {
@@ -245,6 +300,24 @@ const domNotifier = function() {
     } 
   }
 
+  // sending messages
+  if(document.getElementById('contact-button')) {
+    const contactBtn = document.getElementById('contact-button');
+    if (eventListenerAddedToSendMessage) {
+      domElements.newEvent(contactBtn, 'click', sendMessage);
+    } else {
+      eventListenerAddedToSendMessage = true;
+    }
+  }
+
+  // selected users phone number
+  if(document.getElementById('services2')) {
+    const selectService = document.getElementById('services2');
+    if (!eventListenerAddedToSelectService) {
+      domElements.newEvent(selectService, 'change', displayPhone);
+    }
+    eventListenerAddedToSelectService = true;
+  }
 }
 
 domNotifier()

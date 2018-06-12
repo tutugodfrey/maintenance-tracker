@@ -282,7 +282,7 @@ var DummyDataModel = function () {
       var _this6 = this;
 
       var result = new Promise(function (resolve, reject) {
-        var queryString = 'select id, servicename from ' + _this6.modelName + ' where isadmin = true';
+        var queryString = 'select id, servicename, phone from ' + _this6.modelName + ' where isadmin = true';
         _connection2.default.query(queryString).then(function (res) {
           resolve(res.rows);
         }).catch(function (error) {
@@ -292,9 +292,24 @@ var DummyDataModel = function () {
       return result;
     }
   }, {
+    key: 'getClient',
+    value: function getClient(userId) {
+      var _this7 = this;
+
+      var result = new Promise(function (resolve, reject) {
+        var queryString = 'select id, fullname, email, phone from ' + _this7.modelName + ' where id = ' + userId;
+        _connection2.default.query(queryString).then(function (res) {
+          resolve(res.rows[0]);
+        }).catch(function (error) {
+          return reject(error);
+        });
+      });
+      return result;
+    }
+  }, {
     key: 'destroy',
     value: function destroy(condition) {
-      var _this7 = this;
+      var _this8 = this;
 
       /*
         delete the object that meet the condition
@@ -304,7 +319,7 @@ var DummyDataModel = function () {
         be deleted
       */
       var result = new Promise(function (resolve, reject) {
-        var queryString = _this7._generateGetQuery(condition);
+        var queryString = _this8._generateGetQuery(condition);
         _connection2.default.query(queryString).then(function (res) {
           var response = res.rows;
           resolve(response);

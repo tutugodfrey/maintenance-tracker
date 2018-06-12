@@ -1,6 +1,3 @@
-const domElements = new DomElementActions();
-const storageHandler = new StorageHandler();
-const requestHandler = new RequestHandler();
 
 const storeUserData = function (userData) {
   if (!localStorage.getItem('userdata')) {

@@ -144,7 +144,7 @@ const DomElementActions = class {
   _formatRequestDetail(requestObj, displayRequestTab) {
     const requestContainer = document.createElement('div');
     requestContainer.className = 'requests';
-    requestContainer.id = `request${requestObj.id}`;
+    requestContainer.id = `request${requestObj.request.id}`;
     const header = document.createElement('div');
     header.className = 'small-header-gradient';
     const content = document.createElement('div');
@@ -156,57 +156,57 @@ const DomElementActions = class {
     const adminIdInput = document.createElement('input');
     adminIdInput.type = 'hidden';
     adminIdInput.name = 'adminId';
-    adminIdInput.value = requestObj.adminid;
+    adminIdInput.value = requestObj.request.adminid;
     requestForm.appendChild(adminIdInput);
     
-    if (this.isAdmin && this.viewStatus === 'waiting' && (requestObj.status === 'awaiting confirmation' || requestObj.status === 'rejected')) {
+    if (this.isAdmin && this.viewStatus === 'waiting' && (requestObj.request.statuss === 'awaiting confirmation' || requestObj.request.status === 'rejected')) {
       // create and add content to edit buttton
       const editBtn = document.createElement('button');
       const deleteBtn = document.createElement('button');
-      editBtn.value = requestObj.id;
-      deleteBtn.value = requestObj.id;
-      editBtn.id = `approve-request${requestObj.id}`;
+      editBtn.value = requestObj.request.id;
+      deleteBtn.value = requestObj.request.id;
+      editBtn.id = `approve-request${requestObj.request.id}`;
       editBtn.className = 'submit-button approve-request green-button btn-md';
       editBtn.innerHTML = 'Approve';
 
       // create and add content to delete btn
-      deleteBtn.id = `reject-request${requestObj.id}`;
+      deleteBtn.id = `reject-request${requestObj.request.id}`;
       deleteBtn.className = 'submit-button reject-request white-button btn-md';
       deleteBtn.innerHTML = 'Reject';
           // add content to form
     requestForm.appendChild(editBtn);
     requestForm.appendChild(deleteBtn);
-    } else if (this.isAdmin && this.viewStatus === 'approved' && requestObj.status === 'pending') {
+    } else if (this.isAdmin && this.viewStatus === 'approved' && requestObj.request.status === 'pending') {
       // create and add content to edit buttton
       const editBtn = document.createElement('button');
-      editBtn.value = requestObj.id;
-      editBtn.id = `resolve-request${requestObj.id}`;
+      editBtn.value = requestObj.request.id;
+      editBtn.id = `resolve-request${requestObj.request.id}`;
       editBtn.className = 'submit-button resolve-request green-button btn-wide';
       editBtn.innerHTML = 'Mark As Resolved';
       requestForm.appendChild(editBtn);
-    } else if (this.isAdmin && this.viewStatus === 'resolved' && requestObj.status === 'resolved') {
+    } else if (this.isAdmin && this.viewStatus === 'resolved' && requestObj.request.status === 'resolved') {
       // no button need to be added
     } else if (!this.isAdmin) {
       const editBtn = document.createElement('button');
       const deleteBtn = document.createElement('button');
-      editBtn.id = `edit-request${requestObj.id}`;
+      editBtn.id = `edit-request${requestObj.request.id}`;
       editBtn.className = 'submit-button edit-request green-button btn-md';
       editBtn.innerHTML = 'Edit Request';
 
       // create and add content to delete btn
-      deleteBtn.id = `delete-request${requestObj.id}`;
+      deleteBtn.id = `delete-request${requestObj.request.id}`;
       deleteBtn.className = 'submit-button delete-request white-button btn-md';
       deleteBtn.innerHTML = 'Delete Request';
       // add content to form
       requestForm.appendChild(editBtn);
       requestForm.appendChild(deleteBtn);
     }
-    const requestKeys = Object.keys(requestObj);
+    const requestKeys = Object.keys(requestObj.request);
     requestKeys.forEach((key) => {
       if (key === 'id' || key === 'userid' || key === 'adminid' || key === 'updatedat' ) {
         // do nothing
       } else {
-        let value = requestObj[key];
+        let value = requestObj.request[key];
         if (key === 'issuedate') {
           value = domElements.dateSubstring(value);
         }
@@ -229,20 +229,20 @@ const DomElementActions = class {
 
   displayUsersRequest(usersRequest, displayRequestTab) {
     usersRequest.forEach((requestObj) => {
-      if (document.getElementById(`request${requestObj.id}`)) {
+      if (document.getElementById(`request${requestObj.request.id}`)) {
         try {
-          const oldRequestContainer  = document.getElementById(`request${requestObj.id}`)
+          const oldRequestContainer  = document.getElementById(`request${requestObj.request.id}`)
           displayRequestTab.removeChild(oldRequestContainer)
         } catch(error) {
           console.log(error)
         }
       }
 
-      if (this.isAdmin && this.viewStatus === 'waiting' && (requestObj.status === 'awaiting confirmation' || requestObj.status === 'rejected')) {
+      if (this.isAdmin && this.viewStatus === 'waiting' && (requestObj.request.status === 'awaiting confirmation' || requestObj.request.status === 'rejected')) {
         this._formatRequestDetail(requestObj, displayRequestTab);
-      } else if (this.isAdmin && this.viewStatus === 'approved' && requestObj.status === 'pending') {
+      } else if (this.isAdmin && this.viewStatus === 'approved' && requestObj.request.status === 'pending') {
         this._formatRequestDetail(requestObj, displayRequestTab);
-      } else if (this.isAdmin && this.viewStatus === 'resolved' && requestObj.status === 'resolved') {
+      } else if (this.isAdmin && this.viewStatus === 'resolved' && requestObj.request.status === 'resolved') {
         this._formatRequestDetail(requestObj, displayRequestTab);
       } else  if (!this.isAdmin) {
         this._formatRequestDetail(requestObj, displayRequestTab);
@@ -334,6 +334,19 @@ const RequestHandler = class {
     }
   } // end createRequest
 
+  postRequests(url, formInfo, storageHandler, callback){
+    const userData = storageHandler.getDataFromStore('userdata')
+    const headers =  new Headers();
+    headers.append('Content-Type', 'application/x-www-form-urlencoded');
+    headers.append('token', userData.token);
+    const options = {
+      headers,
+      method: 'POST',
+      body: formInfo,
+    }
+    requestHandler.makeRequest(url, options, callback);
+  }
+
   getRequests(url, storageHandler, callback){
     const userData = storageHandler.getDataFromStore('userdata')
     const headers =  new Headers();
@@ -368,3 +381,8 @@ const RequestHandler = class {
     .catch(error => console.log(error));
   }
 }
+
+// instantiate the classes
+const domElements = new DomElementActions();
+const storageHandler = new StorageHandler();
+const requestHandler = new RequestHandler();

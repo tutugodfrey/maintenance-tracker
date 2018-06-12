@@ -234,10 +234,22 @@ const DummyDataModel = class {
 
   findServiceName() {
     const result = new Promise((resolve, reject) => {
-      const queryString = `select id, servicename from ${this.modelName} where isadmin = true`;
+      const queryString = `select id, servicename, phone from ${this.modelName} where isadmin = true`;
       client.query(queryString)
         .then((res) => {
           resolve(res.rows);
+        })
+        .catch(error => reject(error));
+    });
+    return result;
+  }
+
+  getClient(userId) {
+    const result = new Promise((resolve, reject) => {
+      const queryString = `select id, fullname, email, phone from ${this.modelName} where id = ${userId}`;
+      client.query(queryString)
+        .then((res) => {
+          resolve(res.rows[0]);
         })
         .catch(error => reject(error));
     });

@@ -82,8 +82,41 @@ const RequestController = class {
           userId,
         },
       })
-      .then(allRequests => res.status(200).send(allRequests))
-      .catch(error => res.status(500).send(error));
+      .then((clientRequests) => {
+        if (clientRequests) {
+          if (clientRequests.length === 0) {
+            return res.status(200).send([])
+          }
+          const clientsInfo = [];
+          clientRequests.forEach((request) => {
+            return users
+              .getClient(request.adminid)
+              .then((clientInfo) => {
+                return clientInfo;
+              })
+              .then(clientInfo => {
+                if (clientInfo) {
+                  clientsInfo.push({
+                    request,
+                    user: clientInfo,
+                  });
+                } else {
+                  clientsInfo.push({
+                    request,
+                    user: { message: 'user not found' },
+                });
+                }
+                if (clientsInfo.length === clientRequests.length) {
+                  return res.status(200).send(clientsInfo)
+                }
+                
+              })
+              .catch(error => res.status(500).send(error));
+          })
+        }
+       // return res.status(200).send([])
+      })
+      .catch(error => res.status(500).send({ message: 'something went wrong. please try again' }))
   }
 
   // update a request

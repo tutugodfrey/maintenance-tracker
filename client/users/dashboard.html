@@ -114,15 +114,18 @@
             <div class="form-content">
               <div class="contact-phone">
                 <h3>Phone</h3>
-                <p id= "phone">+234(0)7012134212</p>
+                <p id= "phone"></p>
               </div>
               <form action="msilto:somebody@example.com" class="fblock-form">
-                <h3 class="small-heading">Send Email </h3>
+                <h3 class="small-heading">Send message </h3>
+                <select id="services2" class="form-control message-info green-outline" name="receiverId">
+                  <option value="select">Select</soption>
+                </select><br />
                 <label for="message-title" class="form-label">Title</label><br />
-                <input type="text" class="form-control required-field green-outline" id = "message-title" placeholder="Title" name="title" ><br />
+                <input type="text" class="form-control message-info required-field green-outline" id = "message-title" placeholder="Title" name="title" ><br />
                 <label for="message" class="form-label">Message</label>
                 <span class = "required">*</span><br />
-                <textarea cols="30" rows="5" class="form-control required-field bg-outline" id = "message" placeholder="Type your message here" name="message"></textarea><br />
+                <textarea cols="30" rows="5" class="form-control message-info required-field bg-outline" id = "message" placeholder="Type your message here" name="message"></textarea><br />
                 <button id="contact-button" class="submit-button green-button btn-wide btn-center">Send</button>
               </form>
             </div>
@@ -204,6 +207,7 @@
           </p>
       </div>
     <script src="./../js/utilities.js" ></script>
+    <script src="./../js/contacts.js" ></script>
     <script src="./../js/users.js" ></script>
   </body>
 </html>

@@ -44,6 +44,9 @@ var RequestController = function () {
       if (!urgent && urgent.trim() !== '') {
         return res.status(400).send({ message: 'typeError field urgent must be a boolean' });
       }
+      if (!parseInt(adminId)) {
+        return res.status(400).send({ message: 'please select a service' });
+      }
 
       return users.findById(parseInt(userId, 10)).then(function (user) {
         if (user) {
@@ -106,10 +109,38 @@ var RequestController = function () {
         where: {
           userId: userId
         }
-      }).then(function (allRequests) {
-        return res.status(200).send(allRequests);
+      }).then(function (clientRequests) {
+        if (clientRequests) {
+          if (clientRequests.length === 0) {
+            return res.status(200).send([]);
+          }
+          var clientsInfo = [];
+          clientRequests.forEach(function (request) {
+            return users.getClient(request.adminid).then(function (clientInfo) {
+              return clientInfo;
+            }).then(function (clientInfo) {
+              if (clientInfo) {
+                clientsInfo.push({
+                  request: request,
+                  user: clientInfo
+                });
+              } else {
+                clientsInfo.push({
+                  request: request,
+                  user: { message: 'user not found' }
+                });
+              }
+              if (clientsInfo.length === clientRequests.length) {
+                return res.status(200).send(clientsInfo);
+              }
+            }).catch(function (error) {
+              return res.status(500).send(error);
+            });
+          });
+        }
+        // return res.status(200).send([])
       }).catch(function (error) {
-        return res.status(500).send(error);
+        return res.status(500).send({ message: 'something went wrong. please try again' });
       });
     }
 
@@ -129,6 +160,12 @@ var RequestController = function () {
       var userId = parseInt(req.body.decode.id, 10);
       if (!requestId || !userId) {
         return res.status(400).send({ message: 'missing required field' });
+      }
+      if (category === 'select' || category === 'Select') {
+        return res.status(400).send({ message: 'Please select a category for your repair request' });
+      }
+      if (!parseInt(adminId)) {
+        return res.status(400).send({ message: 'please select a service provider' });
       }
       return requests.find({
         where: {

@@ -14,7 +14,8 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var requests = _index2.default.requests;
+var requests = _index2.default.requests,
+    users = _index2.default.users;
 
 var AdminController = function () {
   function AdminController() {
@@ -35,12 +36,36 @@ var AdminController = function () {
       }
       return requests.findAll({
         where: {
-          adminId: parseInt(id, 10)
+          adminid: id
         }
-      }).then(function (allRequests) {
-        return res.status(200).send(allRequests);
-      }).catch(function () {
-        return res.status(500).send({ message: 'some went wrong' });
+      }).then(function (clientRequests) {
+        if (clientRequests) {
+          var clientsInfo = [];
+          clientRequests.forEach(function (request) {
+            return users.getClient(request.userid).then(function (clientInfo) {
+              return clientInfo;
+            }).then(function (clientInfo) {
+              if (clientInfo) {
+                clientsInfo.push({
+                  request: request,
+                  user: clientInfo
+                });
+              } else {
+                clientsInfo.push({
+                  request: request,
+                  user: { message: 'user not found' }
+                });
+              }
+              if (clientsInfo.length === clientRequests.length) {
+                return res.status(200).send(clientsInfo);
+              }
+            }).catch(function (error) {
+              return res.status(500).send(error);
+            });
+          });
+        }
+      }).catch(function (error) {
+        return res.status(500).send({ message: 'something went wrong. please try again' });
       });
     }
   }, {

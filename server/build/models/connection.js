@@ -18,7 +18,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 /* eslint-disable no-mutable-exports */
 _dotenvSafe2.default.config();
-var env = process.env.NODE_ENV || 'test';
+var env = process.env.NODE_ENV || 'development';
 var connectionString = void 0;
 if (_config2.default[env]) {
   var databaseURL = _config2.default[env].use_env_variable;

@@ -183,7 +183,7 @@ exports.default = describe('contacts', function () {
 
   describe('admin get message', function () {
     it('should return all messages if isAdmin === true', function () {
-      return _chai2.default.request(app).get('/api/v1/contacts?isAdmin=true').set('token', signedInUser.token).then(function (res) {
+      return _chai2.default.request(app).get('/api/v1/contacts').set('token', signedInUser.token).then(function (res) {
         expect(res).to.have.status(200);
         expect(res.body).to.be.an('array');
         expect(res.body.length).to.equal(2);

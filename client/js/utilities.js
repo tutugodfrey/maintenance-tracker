@@ -123,6 +123,53 @@ const DomElementActions = class {
     }
   }
 
+  showNoticeModal (self) {
+        // self = the instance of this class
+    if (self === 'undefined') {
+      self = this;
+    }
+    if(document.getElementById('notice-modal')) {
+      const noticeModal = document.getElementById('notice-modal');
+      // const messageBox = document.getElementById('message-box');
+      // messageBox.innerHTML = message;
+      self.changeClassValue(noticeModal, 'hide-item', 'show-item');
+    }
+  }
+
+  closeNoticeModal (self) {
+    // self = the instance of this class
+    if (self === 'undefined') {
+      self = this;
+    }
+    if(document.getElementById('notice-modal')) {
+      const consoleModal = document.getElementById('notice-modal');
+      self.changeClassValue(consoleModal, 'show-item', 'hide-item');
+    }
+  }
+
+  showMessageModal (self) {
+    // self = the instance of this class
+    if (self === 'undefined') {
+      self = this;
+    }
+    if(document.getElementById('message-modal')) {
+      const messageModal = document.getElementById('message-modal');
+      self.changeClassValue(messageModal, 'hide-item', 'show-item');
+    }
+    domNotifier()
+  }
+
+  closeMessageModal (self) {
+    // self = the instance of this class
+    if (self === 'undefined') {
+      self = this;
+    }
+    if(document.getElementById('message-modal')) {
+      const consoleModal = document.getElementById('message-modal');
+      self.changeClassValue(consoleModal, 'show-item', 'hide-item');
+    }
+  }
+
   getCheckboxValue(checkBoxEle){
     let eleName;
 		if(checkBoxEle.checked){
@@ -147,6 +194,8 @@ const DomElementActions = class {
     requestContainer.id = `request${requestObj.request.id}`;
     const header = document.createElement('div');
     header.className = 'small-header-gradient';
+    const headTitle = document.createElement('h3');
+    headTitle.className = 'head-title';
     const content = document.createElement('div');
     content.className = 'request-content';
     const descriptiveList = document.createElement('dl');
@@ -161,6 +210,7 @@ const DomElementActions = class {
     
     if (this.isAdmin && this.viewStatus === 'waiting' && (requestObj.request.statuss === 'awaiting confirmation' || requestObj.request.status === 'rejected')) {
       // create and add content to edit buttton
+      headTitle.innerHTML = requestObj.user.fullname;
       const editBtn = document.createElement('button');
       const deleteBtn = document.createElement('button');
       editBtn.value = requestObj.request.id;
@@ -177,6 +227,7 @@ const DomElementActions = class {
     requestForm.appendChild(editBtn);
     requestForm.appendChild(deleteBtn);
     } else if (this.isAdmin && this.viewStatus === 'approved' && requestObj.request.status === 'pending') {
+      headTitle.innerHTML = requestObj.user.fullname;
       // create and add content to edit buttton
       const editBtn = document.createElement('button');
       editBtn.value = requestObj.request.id;
@@ -185,8 +236,10 @@ const DomElementActions = class {
       editBtn.innerHTML = 'Mark As Resolved';
       requestForm.appendChild(editBtn);
     } else if (this.isAdmin && this.viewStatus === 'resolved' && requestObj.request.status === 'resolved') {
+      headTitle.innerHTML = requestObj.user.fullname;
       // no button need to be added
     } else if (!this.isAdmin) {
+      headTitle.innerHTML = requestObj.user.servicename;
       const editBtn = document.createElement('button');
       const deleteBtn = document.createElement('button');
       editBtn.id = `edit-request${requestObj.request.id}`;
@@ -220,6 +273,7 @@ const DomElementActions = class {
         descriptiveList.appendChild(listDefinition);
       }
     });
+    header.appendChild(headTitle)
     content.appendChild(descriptiveList);
     requestContainer.appendChild(header);
     requestContainer.appendChild(content)
@@ -248,6 +302,63 @@ const DomElementActions = class {
         this._formatRequestDetail(requestObj, displayRequestTab);
       }
     });
+  }
+
+  displayMessages(responseData) {
+    if (responseData.message === 'Invalid Token' || responseData.message === 'Please send a token') {
+      storageHandler.redirectUser(responseData)
+    }
+    if (responseData.message) {
+      domElements.showConsoleModal(responseData.message);
+      return;
+    }
+    if (Array.isArray(responseData)) {
+      if(responseData.length === 0) {
+        domElements.showConsoleModal('You have no message');
+      } else {
+        if (document.getElementById('message-content')) {
+          const userData = storageHandler.getDataFromStore('userdata');
+          const messageContainer = document.getElementById('message-content');
+          responseData.forEach((messageObj) => {
+            const messageHolder = document.createElement('div');
+            const messageSender = document.createElement('h3');
+            const messageTitle = document.createElement('label');
+            const messageBody = document.createElement('p');
+             const seperator = document.createElement('hr')
+            // diff sender and receiver
+            if (userData.id === messageObj.message.senderid) {
+              messageHolder.className = 'sender'
+            } else {
+              messageHolder.className = 'receiver'
+            }
+            if (domElements.isAdmin && userData.id !== messageObj.message.senderid) {
+              messageSender.innerHTML = messageObj.sender.fullname;
+            } else if (domElements.isAdmin && userData.id === messageObj.message.senderid) {
+              messageSender.innerHTML = `You To ${messageObj.receiver.fullname}`;
+            } else if (!domElements.isAdmin && userData.id !== messageObj.message.senderid) {
+              messageSender.innerHTML = messageObj.sender.servicename;
+            } else if (!domElements.isAdmin && userData.id === messageObj.message.senderid) {
+              messageSender.innerHTML = `You To ${messageObj.receiver.servicename}`;
+            }
+            messageBody.innerHTML = messageObj.message.message;
+            messageTitle.innerHTML = messageObj.message.title;
+            messageHolder.appendChild(messageSender);
+            messageHolder.appendChild(messageTitle);
+            messageHolder.appendChild(messageBody);
+            messageHolder.appendChild(seperator);
+            messageContainer.appendChild(messageHolder);
+          });
+
+        }
+      }
+    }
+    domNotifier();
+  }
+
+  // func to display profile photo
+  displayProfilePhoto(imgEle) {
+    const userData = storageHandler.getDataFromStore('userdata');
+    imgEle.src = userData.imgUrl;
   }
 }
 

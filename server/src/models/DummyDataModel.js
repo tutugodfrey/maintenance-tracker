@@ -246,7 +246,7 @@ const DummyDataModel = class {
 
   getClient(userId) {
     const result = new Promise((resolve, reject) => {
-      const queryString = `select id, fullname, email, phone from ${this.modelName} where id = ${userId}`;
+      const queryString = `select id, fullname, servicename, email, phone from ${this.modelName} where id = ${userId}`;
       client.query(queryString)
         .then((res) => {
           resolve(res.rows[0]);

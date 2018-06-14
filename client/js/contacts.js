@@ -30,3 +30,5 @@ const sendMessage = (ele) => {
     requestHandler.postRequests('/api/v1/contacts', formInfo, storageHandler, handlePostMessage)
   }
 } // end sendMessage
+
+

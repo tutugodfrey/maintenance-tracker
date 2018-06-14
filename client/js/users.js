@@ -199,6 +199,7 @@ let displayRequestCalled = false;
 let eventListenerAddedToEditRequest = false;
 let eventListenerAddedToSendMessage = false;
 let eventListenerAddedToSelectService = false;
+let displayMessageCalled = false;
 
 // notify the dom of changes 
 const domNotifier = function() {
@@ -226,6 +227,26 @@ const domNotifier = function() {
 		domElements.newEvent(createRequestBtn, 'click', createRequest, createRequestBtn,);
   }
 
+  if(document.getElementById('close-notice-modal')) {
+    const noticeModalBtn = document.getElementById('close-notice-modal');
+    domElements.newEvent(noticeModalBtn, 'click', domElements.closeNoticeModal,  domElements);
+  }
+
+  if(document.getElementById('notice-modal-link')) {
+    const noticeModalLink = document.getElementById('notice-modal-link');
+    domElements.newEvent(noticeModalLink, 'click', domElements.showNoticeModal,  domElements);
+  }
+
+  if(document.getElementById('message-modal-link')) {
+    const messageModalLink = document.getElementById('message-modal-link');
+    domElements.newEvent(messageModalLink, 'click', domElements.showMessageModal,  domElements);
+  }
+
+  if(document.getElementById('close-message-modal')) {
+    const messageModalBtn = document.getElementById('close-message-modal');
+    domElements.newEvent(messageModalBtn, 'click', domElements.closeMessageModal,  domElements);
+  }
+
 	if(document.getElementById('console-modal-button')) {
     const consoleModalBtn = document.getElementById('console-modal-button');
     domElements.newEvent(consoleModalBtn, 'click', domElements.closeConsoleModal,  domElements);
@@ -249,6 +270,12 @@ const domNotifier = function() {
     } 
   }
 
+    // show user profile photo
+  if(document.getElementById('profile-photo')) {
+		const imgEle = document.getElementById('profile-photo');
+		domElements.displayProfilePhoto(imgEle);
+  }
+  
   if(document.getElementById('signout-item')) {
   const signoutLink = document.getElementById('signout-item');
     domElements.newEvent(signoutLink, 'click', storageHandler.signout);
@@ -282,7 +309,25 @@ const domNotifier = function() {
       displayRequestCalled = true;
     } 
    }
- }
+  }
+
+
+    // showing messages
+  if(document.getElementById('message-modal')) {
+    const displayMessageTab = document.getElementById('message-modal');
+    const displayMessageClass = displayMessageTab.getAttribute('class');
+    if (displayMessageClass.indexOf('hide-item') >= 0) {
+      displayMessageCalled = false;
+    }
+    if (displayMessageClass.indexOf('show') >= 0) {
+      if(!displayMessageCalled) {
+        requestHandler.getRequests('/api/v1/contacts', storageHandler, domElements.displayMessages);
+        displayMessageCalled = true;
+      } 
+    }
+  }
+
+
 
   // updating a request
  	  if(document.getElementsByClassName('edit-request')) {

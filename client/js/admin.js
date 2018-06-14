@@ -144,6 +144,7 @@ let eventListenerAddedToRejectRequest = false;
 let eventListenerAddedToResolveRequest = false;
 let eventListenerAddedToSendMessage = false;
 let eventListenerAddedToSelectUser = false;
+let displayMessageCalled = false;
 const domNotifier = function() {
  // localStorage.removeItem('adminrequests')
  // localStorage.removeItem('userdata');
@@ -188,10 +189,25 @@ const domNotifier = function() {
       eventListenerAdded = true;
     } 
   }
+  // show user profile photo
+  if(document.getElementById('profile-photo')) {
+		const imgEle = document.getElementById('profile-photo');
+		domElements.displayProfilePhoto(imgEle);
+  }
 
-    if(document.getElementById('signout-item')) {
+  if(document.getElementById('signout-item')) {
     const signoutLink = document.getElementById('signout-item');
-      domElements.newEvent(signoutLink, 'click', storageHandler.signout);
+    domElements.newEvent(signoutLink, 'click', storageHandler.signout);
+  }
+
+  if(document.getElementById('message-modal-link')) {
+    const messageModalLink = document.getElementById('message-modal-link');
+    domElements.newEvent(messageModalLink, 'click', domElements.showMessageModal,  domElements);
+  }
+
+  if(document.getElementById('close-message-modal')) {
+    const messageModalBtn = document.getElementById('close-message-modal');
+    domElements.newEvent(messageModalBtn, 'click', domElements.closeMessageModal,  domElements);
   }
 
   if(document.getElementById('default-nav')) {
@@ -330,14 +346,29 @@ const domNotifier = function() {
       eventListenerAddedToSendMessage = true;
     }
 
-        // display selected users phone number
-        if(document.getElementById('service-users')) {
-          const selectUser = document.getElementById('service-users');
-          if (!eventListenerAddedToSelectUser) {
-            domElements.newEvent(selectUser, 'change', displayPhone);
-          }
-          eventListenerAddedToSelectUser = true;
-        }
+    // display selected users phone number
+    if(document.getElementById('service-users')) {
+      const selectUser = document.getElementById('service-users');
+      if (!eventListenerAddedToSelectUser) {
+        domElements.newEvent(selectUser, 'change', displayPhone);
+      }
+      eventListenerAddedToSelectUser = true;
+    }
+
+  // showing messages
+  if(document.getElementById('message-modal')) {
+    const displayMessageTab = document.getElementById('message-modal');
+    const displayMessageClass = displayMessageTab.getAttribute('class');
+    if (displayMessageClass.indexOf('hide-item') >= 0) {
+      displayMessageCalled = false;
+    }
+    if (displayMessageClass.indexOf('show') >= 0) {
+      if(!displayMessageCalled) {
+        requestHandler.getRequests('/api/v1/contacts', storageHandler, domElements.displayMessages);
+        displayMessageCalled = true;
+      } 
+    }
+  }
 }
 
 domNotifier()

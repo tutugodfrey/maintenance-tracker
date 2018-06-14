@@ -297,7 +297,7 @@ var DummyDataModel = function () {
       var _this7 = this;
 
       var result = new Promise(function (resolve, reject) {
-        var queryString = 'select id, fullname, email, phone from ' + _this7.modelName + ' where id = ' + userId;
+        var queryString = 'select id, fullname, servicename, email, phone from ' + _this7.modelName + ' where id = ' + userId;
         _connection2.default.query(queryString).then(function (res) {
           resolve(res.rows[0]);
         }).catch(function (error) {

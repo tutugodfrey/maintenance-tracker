@@ -78,7 +78,46 @@ var ContactController = function () {
         },
         type: 'or'
       }).then(function (messages) {
-        return res.status(200).send(messages);
+        if (messages) {
+          // no messages has been send or received
+          if (messages.length === 0) {
+            return res.status(200).send([]);
+          }
+          var clientsInfo = [];
+          messages.forEach(function (message) {
+            // object to hold message sender and receiver
+            var messageObj = {};
+            messageObj.message = message;
+
+            // get info of message sender
+            return users.getClient(message.senderid).then(function (sender) {
+              return sender;
+            }).then(function (sender) {
+              if (sender) {
+                messageObj.sender = sender;
+              } else {
+                messageObj.sender = { message: 'user not found' };
+              }
+            }).then(function () {
+              // get info of message receiver
+              return users.getClient(message.receiverid).then(function (receiver) {
+                return receiver;
+              }).then(function (receiver) {
+                if (receiver) {
+                  messageObj.receiver = receiver;
+                } else {
+                  messageObj.receiver = { message: 'user not found' };
+                }
+
+                // push messageObj to collection
+                clientsInfo.push(messageObj);
+                if (clientsInfo.length === messages.length) {
+                  return res.status(200).send(clientsInfo);
+                }
+              });
+            });
+          });
+        }
       }).catch(function (error) {
         return res.status(500).send(error);
       });

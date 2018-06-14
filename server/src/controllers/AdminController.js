@@ -20,6 +20,9 @@ const AdminController = class {
     })
     .then((clientRequests) => {
       if (clientRequests) {
+        if (clientRequests.length === 0) {
+          return res.status(200).send([])
+        }
         const clientsInfo = [];
         clientRequests.forEach((request) => {
           return users

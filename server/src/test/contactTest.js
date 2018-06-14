@@ -209,7 +209,7 @@ export default describe('contacts', () => {
   describe('admin get message', () => {
     it('should return all messages if isAdmin === true', () => {
       return chai.request(app)
-        .get('/api/v1/contacts?isAdmin=true')
+        .get('/api/v1/contacts')
         .set('token', signedInUser.token)
         .then((res) => {
           expect(res).to.have.status(200);

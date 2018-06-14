@@ -14,10 +14,11 @@
           <ul>
             <li>
               <a href="" class="user-profile">
-                <img src="./../images/tutug.jpeg" alt="" class="profile-photo">
+                <img id="profile-photo"  alt="" class="profile-photo">
               </a>
             </li>
             <li id="signout-item"><a href="#">Sign Out</a></li>
+            <li id="message-item"><a id="message-modal-link" href="#message-modal" class=""><img id="chat-icaon" src="./../images/chat-icon.png" alt="chat-icon" /></a></li>
           </ul>
         </div>
         <div id="bottom-nav-layer" class="">
@@ -106,6 +107,15 @@
               </form>
             </div>
           </div>
+        </div>
+        <div id="message-modal" class="tab-item hide-item shadow">
+          <button id="close-message-modal">x</button>
+            <h3 id="message-head-title">
+              Messages
+            </h3>
+          <div id="message-content" class="">
+          </div>
+          <a href="#">more</a>
         </div>
         <div id="console-modal" class="tab-item hide-item green-outline">
           <p id="message-box">

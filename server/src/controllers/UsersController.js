@@ -42,6 +42,7 @@ const UsersController = class {
     if (address.trim() === '') {
       return res.status(400).send({ message: 'missing required field' });
     }
+    
     if (!isAdmin && isAdmin.trim() !== '') {
       return res.status(400).send({ message: 'isAdmin must be a true if set' });
     }

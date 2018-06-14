@@ -40,6 +40,9 @@ var AdminController = function () {
         }
       }).then(function (clientRequests) {
         if (clientRequests) {
+          if (clientRequests.length === 0) {
+            return res.status(200).send([]);
+          }
           var clientsInfo = [];
           clientRequests.forEach(function (request) {
             return users.getClient(request.userid).then(function (clientInfo) {

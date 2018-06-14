@@ -179,7 +179,7 @@ const RequestController = class {
     return requests
       .destroy({
         where: {
-          userId,
+          userid: userId,
           id: requestId,
         },
       })

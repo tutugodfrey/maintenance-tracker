@@ -141,6 +141,7 @@ const DummyDataModel = class {
         }
       });
     }
+    queryString = `${queryString} returning *`;
     if (process.env.NODE_ENV !== 'production') {
       /* eslint-disable no-console */
       console.log(queryString);
@@ -265,7 +266,7 @@ const DummyDataModel = class {
       be deleted
     */
     const result = new Promise((resolve, reject) => {
-      const queryString = this._generateGetQuery(condition);
+      const queryString = this._generateDeleteQuery(condition);
       client.query(queryString)
         .then((res) => {
           const response = res.rows;

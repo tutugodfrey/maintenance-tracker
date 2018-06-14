@@ -248,6 +248,7 @@ const DomElementActions = class {
       // create and add content to delete btn
       deleteBtn.id = `delete-request${requestObj.request.id}`;
       deleteBtn.className = 'submit-button delete-request white-button btn-md';
+      deleteBtn.value = requestObj.request.id;
       deleteBtn.innerHTML = 'Delete Request';
       // add content to form
       requestForm.appendChild(editBtn);
@@ -471,6 +472,18 @@ const RequestHandler = class {
     const options = {
       headers,
       method: 'GET',
+    }
+    requestHandler.makeRequest(url, options, callback);
+  }
+
+  deleteRequest(url, storageHandler, callback){
+    const userData = storageHandler.getDataFromStore('userdata')
+    const headers =  new Headers();
+    headers.append('Content-Type', 'application/x-www-form-urlencoded');
+    headers.append('token', userData.token);
+    const options = {
+      headers,
+      method: 'DELETE',
     }
     requestHandler.makeRequest(url, options, callback);
   }

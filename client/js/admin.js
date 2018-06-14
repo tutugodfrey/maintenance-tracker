@@ -80,7 +80,7 @@ const rejectRequest = (rejectBtn) => {
 const resolveRequest = (resolveBtn) => {
   const requests = storageHandler.getDataFromStore('adminrequests');
   const idOfRequestToResolve = resolveBtn.value;
-  requestHandler.updateRequest(`/api/v1/requests/${idOfRequestToResolve}/resolve`, storageHandler, handleUpdateRequest)
+  requestHandler.updateRequest(`/api/v1/requests/${idOfRequestToResolve}/resolve`, storageHandler, handleUpdateRequest);
 }
 
 const getClientInfo = () => {

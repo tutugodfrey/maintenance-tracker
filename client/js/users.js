@@ -194,6 +194,15 @@ const getRequestToEdit = (editBtn) => {
   }
 }
 
+const handleDeleteRequest = (responseData) => {
+  console.log(responseData.message);
+  domElements.showConsoleModal(responseData.message);
+}
+const deleteRequest = (deleteBtn) => {
+  const idOfRequestToDelete = deleteBtn.value;
+  requestHandler.deleteRequest(`/api/v1/users/requests/${idOfRequestToDelete}`, storageHandler, handleDeleteRequest)
+}
+
 const clearStorage = () => {
  localStorage.removeItem('usersrequests')
  localStorage.removeItem('userdata');
@@ -209,6 +218,7 @@ let eventListenerAddedToSendMessage = false;
 let eventListenerAddedToSelectService = false;
 let displayMessageCalled = false;
 let eventListenerAddedToClearStorage = false;
+let eventListenerAddedToDeleteRequest = false;
 
 // notify the dom of changes 
 const domNotifier = function() {
@@ -322,6 +332,21 @@ const domNotifier = function() {
    }
   }
 
+    // delete request
+    if(document.getElementsByClassName('delete-request')) {
+      const deleteRequestBtn = document.getElementsByClassName('delete-request');
+      if (eventListenerAddedToDeleteRequest) {
+        // this prevent eventListener from being readded to this elements 
+        // resulting in multiple calls to the domNotifier
+      } else {
+        if (deleteRequestBtn.length > 0) {
+          for(let size = 0; size < deleteRequestBtn.length; size++) {
+            domElements.newEvent(deleteRequestBtn[size], 'click', deleteRequest, deleteRequestBtn[size]);
+          }
+          eventListenerAddedToDeleteRequest = true;
+        }
+      }
+    }
 
     // showing messages
   if(document.getElementById('message-modal')) {
@@ -341,7 +366,7 @@ const domNotifier = function() {
 
 
   // updating a request
- 	  if(document.getElementsByClassName('edit-request')) {
+ 	if(document.getElementsByClassName('edit-request')) {
     const editRequestBtn = document.getElementsByClassName('edit-request');
     if (eventListenerAddedToEditRequest) {
       // this prevent eventListener from being readded to this elements 

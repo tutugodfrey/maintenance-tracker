@@ -681,6 +681,16 @@ dt.category, dd.category {
     left:-10%;
   }
 
+  dt.address, dd.address {
+    position:relative;
+    left:1%;
+    top:-50px;
+  }
+
+  dd.address {
+    left:-10%;
+  }
+
   dt.urgent, dd.urgent {
     position:relative;
     left:1%;

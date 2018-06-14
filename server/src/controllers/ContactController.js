@@ -56,7 +56,55 @@ const ContactController = class {
         },
         type: 'or',
       })
-      .then(messages => res.status(200).send(messages))
+      .then((messages) => { 
+        if (messages) {
+          // no messages has been send or received
+          if (messages.length === 0) {
+            return res.status(200).send([])
+          }
+          const clientsInfo = [];
+          messages.forEach((message) => {
+            // object to hold message sender and receiver
+            const messageObj = {};
+            messageObj.message = message;
+
+            // get info of message sender
+            return users
+              .getClient(message.senderid)
+              .then((sender) => {
+                return sender;
+              })
+              .then(sender => {
+                if (sender) {
+                  messageObj.sender = sender;
+                } else {
+                  messageObj.sender = { message: 'user not found' };
+                }
+              })
+              .then(() => {
+                // get info of message receiver
+                return users
+                  .getClient(message.receiverid)
+                  .then((receiver) => {
+                    return receiver;
+                  })
+                  .then(receiver => {
+                    if (receiver) {
+                      messageObj.receiver = receiver;
+                    } else {
+                      messageObj.receiver = { message: 'user not found' };
+                    }
+
+                    // push messageObj to collection
+                    clientsInfo.push(messageObj);
+                    if (clientsInfo.length === messages.length) {
+                      return res.status(200).send(clientsInfo)
+                    }
+                  })
+              })
+          });
+        }
+      })
       .catch(error => res.status(500).send(error));
   }
 };

@@ -114,7 +114,6 @@ const RequestController = class {
               .catch(error => res.status(500).send(error));
           })
         }
-       // return res.status(200).send([])
       })
       .catch(error => res.status(500).send({ message: 'something went wrong. please try again' }))
   }

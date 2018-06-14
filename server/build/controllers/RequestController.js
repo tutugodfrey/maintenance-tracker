@@ -138,7 +138,6 @@ var RequestController = function () {
             });
           });
         }
-        // return res.status(200).send([])
       }).catch(function (error) {
         return res.status(500).send({ message: 'something went wrong. please try again' });
       });

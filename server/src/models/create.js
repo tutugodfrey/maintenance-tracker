@@ -14,14 +14,14 @@ const queryString = `create table users (
 );
 create table requests (
   id serial not null primary key,
+  issueDate date not null,
   category varchar (50) not null,
   description text not null,
   address varchar (100) not null,
+  urgent boolean,
   status varchar(30) not null,
   adminId int not null,
   userId int not null,
-  urgent boolean,
-  issueDate date not null,
   updatedAt date
 );
  create table contacts (

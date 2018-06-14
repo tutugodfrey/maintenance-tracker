@@ -135,6 +135,13 @@ const displayPhone = () => {
   }
 }
 
+const clearStorage = () => {
+ localStorage.removeItem('adminrequests');
+ localStorage.removeItem('userdata');
+ storageHandler.redirectUser();
+ console.log('storageCleared');
+}
+
 let eventListenerAdded = false;
 let displayRequestCalled = false;
 let viewResolvedRequestCalled = false;
@@ -145,10 +152,9 @@ let eventListenerAddedToResolveRequest = false;
 let eventListenerAddedToSendMessage = false;
 let eventListenerAddedToSelectUser = false;
 let displayMessageCalled = false;
-const domNotifier = function() {
- // localStorage.removeItem('adminrequests')
- // localStorage.removeItem('userdata');
+let eventListenerAddedToClearStorage = false;
 
+const domNotifier = function() {
   if(document.getElementById('contact-service-dept')) {
     const displayContactTab = document.getElementById('contact-service-dept');
     const displayContactClass = displayContactTab.getAttribute('class');
@@ -368,6 +374,15 @@ const domNotifier = function() {
         displayMessageCalled = true;
       } 
     }
+  }
+
+  // clear data from local storage
+  if(document.getElementById('reset-app')) {
+    const clearStorageLink = document.getElementById('reset-app');
+    if (!eventListenerAddedToClearStorage) {
+      domElements.newEvent(clearStorageLink, 'click', clearStorage);
+    }
+    eventListenerAddedToClearStorage = true;
   }
 }
 

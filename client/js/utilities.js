@@ -401,6 +401,12 @@ const StorageHandler = class {
     if (typeof userData !== 'object') {
       return `typeError: expecting an object but got ${typeof userData}`;
     }
+    if (!userData) {
+      // remove userdata from localStorage, redirect user to signin page
+      localStorage.removeItem('userdata');
+      window.location.href = '/signin.html';
+      return
+    }
     if (userData.message === 'Invalid Token' || userData.message === 'Please send a token') { // userData = response from server on diff operations
       // remove userdata from localStorage, redirect user to signin page
       localStorage.removeItem('userdata');

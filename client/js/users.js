@@ -194,18 +194,23 @@ const getRequestToEdit = (editBtn) => {
   }
 }
 
+const clearStorage = () => {
+ localStorage.removeItem('usersrequests')
+ localStorage.removeItem('userdata');
+ storageHandler.redirectUser();
+  console.log('storageCleared');
+ }
+
 let eventListenerAdded = false;
 let displayRequestCalled = false;
 let eventListenerAddedToEditRequest = false;
 let eventListenerAddedToSendMessage = false;
 let eventListenerAddedToSelectService = false;
 let displayMessageCalled = false;
+let eventListenerAddedToClearStorage = false;
 
 // notify the dom of changes 
 const domNotifier = function() {
- // localStorage.removeItem('requests')
- // localStorage.removeItem('userdata');
-
   if(document.getElementById('request-repair')) {
     const displayRequestTab = document.getElementById('request-repair');
     const displayRequestClass = displayRequestTab.getAttribute('class');
@@ -363,6 +368,15 @@ const domNotifier = function() {
     }
     eventListenerAddedToSelectService = true;
   }
+
+    // clear data from local storage
+    if(document.getElementById('reset-app')) {
+      const clearStorageLink = document.getElementById('reset-app');
+      if (!eventListenerAddedToClearStorage) {
+        domElements.newEvent(clearStorageLink, 'click', clearStorage);
+      }
+      eventListenerAddedToClearStorage = true;
+    }
 }
 
 domNotifier()

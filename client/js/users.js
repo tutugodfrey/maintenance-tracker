@@ -203,6 +203,7 @@ const clearStorage = () => {
 
 let eventListenerAdded = false;
 let displayRequestCalled = false;
+let eventListenerAddedToCreateRequest = false;
 let eventListenerAddedToEditRequest = false;
 let eventListenerAddedToSendMessage = false;
 let eventListenerAddedToSelectService = false;
@@ -225,11 +226,6 @@ const domNotifier = function() {
     if (displayContactClass.indexOf('show') >= 0) {
       getServices();
     }
-  }
-
-	if(document.getElementById('request-button')) {
-		const createRequestBtn = document.getElementById('request-button');
-		domElements.newEvent(createRequestBtn, 'click', createRequest, createRequestBtn,);
   }
 
   if(document.getElementById('close-notice-modal')) {
@@ -276,21 +272,31 @@ const domNotifier = function() {
   }
 
     // show user profile photo
-  if(document.getElementById('profile-photo')) {
+  if (document.getElementById('profile-photo')) {
 		const imgEle = document.getElementById('profile-photo');
 		domElements.displayProfilePhoto(imgEle);
   }
   
-  if(document.getElementById('signout-item')) {
+  if (document.getElementById('signout-item')) {
   const signoutLink = document.getElementById('signout-item');
     domElements.newEvent(signoutLink, 'click', storageHandler.signout);
   }
 
-  if(document.getElementById('default-nav')) {
+  if (document.getElementById('default-nav')) {
     // get the default nav item
     const defaultNav = document.getElementById('default-nav');
     const anchorPos = defaultNav.href.indexOf('#');
     domElements.defaultNavItem = defaultNav.href.substring(anchorPos + 1);
+  }
+  // create requests
+  if (document.getElementById('request-button')) {
+    const createRequestBtn = document.getElementById('request-button');
+    if (eventListenerAddedToCreateRequest) {
+      // no action
+    } else {
+      domElements.newEvent(createRequestBtn, 'click', createRequest, createRequestBtn);
+      eventListenerAddedToCreateRequest = true;
+    }
   }
 
   // get users request

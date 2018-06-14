@@ -207,8 +207,7 @@ const DomElementActions = class {
     adminIdInput.name = 'adminId';
     adminIdInput.value = requestObj.request.adminid;
     requestForm.appendChild(adminIdInput);
-    
-    if (this.isAdmin && this.viewStatus === 'waiting' && (requestObj.request.statuss === 'awaiting confirmation' || requestObj.request.status === 'rejected')) {
+    if (this.isAdmin && this.viewStatus === 'waiting' && (requestObj.request.status === 'awaiting confirmation' || requestObj.request.status === 'rejected')) {
       // create and add content to edit buttton
       headTitle.innerHTML = requestObj.user.fullname;
       const editBtn = document.createElement('button');
@@ -223,9 +222,9 @@ const DomElementActions = class {
       deleteBtn.id = `reject-request${requestObj.request.id}`;
       deleteBtn.className = 'submit-button reject-request white-button btn-md';
       deleteBtn.innerHTML = 'Reject';
-          // add content to form
-    requestForm.appendChild(editBtn);
-    requestForm.appendChild(deleteBtn);
+      // add content to form
+      requestForm.appendChild(editBtn);
+      requestForm.appendChild(deleteBtn);
     } else if (this.isAdmin && this.viewStatus === 'approved' && requestObj.request.status === 'pending') {
       headTitle.innerHTML = requestObj.user.fullname;
       // create and add content to edit buttton

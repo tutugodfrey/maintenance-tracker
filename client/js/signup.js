@@ -19,8 +19,10 @@ const processSignUp = function(ele) {
 			let inputField = formControls[numOfInput];
 			if (inputField.type === 'file') {
 				fileAvailable = true;
-			}
-			if (inputField.type === 'checkbox') {
+				const fileObj = inputField.files[0];
+				const fieldName = inputField.name;
+				formData.append(fieldName, fileObj);
+			} else if (inputField.type === 'checkbox') {
 				const checkboxData = domElements.getCheckboxValue(inputField);
 				formData.append(checkboxData[0], checkboxData[1]);
 			} else {

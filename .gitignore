@@ -3,4 +3,4 @@ node_modules/
 coverage
 .env
 npm-debug.log
-/users-photo/*.*
+public/users-photo/*.*

@@ -168,6 +168,7 @@ const DomElementActions = class {
       const consoleModal = document.getElementById('message-modal');
       self.changeClassValue(consoleModal, 'show-item', 'hide-item');
     }
+    domNotifier();
   }
 
   getCheckboxValue(checkBoxEle){

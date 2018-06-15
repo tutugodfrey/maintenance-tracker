@@ -197,6 +197,7 @@ const getRequestToEdit = (editBtn) => {
 const handleDeleteRequest = (responseData) => {
   console.log(responseData.message);
   domElements.showConsoleModal(responseData.message);
+  // splice this request from local storage
 }
 const deleteRequest = (deleteBtn) => {
   const idOfRequestToDelete = deleteBtn.value;
@@ -385,8 +386,9 @@ const domNotifier = function() {
   if(document.getElementById('contact-button')) {
     const contactBtn = document.getElementById('contact-button');
     if (eventListenerAddedToSendMessage) {
-      domElements.newEvent(contactBtn, 'click', sendMessage);
+      // do nothing
     } else {
+      domElements.newEvent(contactBtn, 'click', sendMessage);
       eventListenerAddedToSendMessage = true;
     }
   }

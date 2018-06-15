@@ -335,18 +335,18 @@ const DomElementActions = class {
             if (domElements.isAdmin && userData.id !== messageObj.message.senderid) {
               messageSender.innerHTML = messageObj.sender.fullname;
             } else if (domElements.isAdmin && userData.id === messageObj.message.senderid) {
-              messageSender.innerHTML = `You To ${messageObj.receiver.fullname}`;
+              messageSender.innerHTML = `You &#10148; ${messageObj.receiver.fullname}`;
             } else if (!domElements.isAdmin && userData.id !== messageObj.message.senderid) {
               messageSender.innerHTML = messageObj.sender.servicename;
             } else if (!domElements.isAdmin && userData.id === messageObj.message.senderid) {
-              messageSender.innerHTML = `You To ${messageObj.receiver.servicename}`;
+              messageSender.innerHTML = `You &#10148; ${messageObj.receiver.servicename}`;
             }
             messageBody.innerHTML = messageObj.message.message;
             messageTitle.innerHTML = messageObj.message.title;
             messageHolder.appendChild(messageSender);
             messageHolder.appendChild(messageTitle);
             messageHolder.appendChild(messageBody);
-            messageHolder.appendChild(seperator);
+            // messageHolder.appendChild(seperator);
             messageContainer.appendChild(messageHolder);
           });
 

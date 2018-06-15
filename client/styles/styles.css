@@ -763,16 +763,49 @@ p#copyright > a {
 }
 div#notice-modal, div#message-modal {
   width:85%;
-  height:350px;
   position:fixed;
-  top:150px;
+  height:340px;
+  top:130px;
   right:5%;
-  overflow:scroll;
   border:1px solid #7dcc46;
   border-radius: 2px;
   background-color:white;
   padding:2px 10px 15px 10px;
   z-index:300;
+}
+div#message-mdoal-header {
+  background-color:#7dcc46;
+  height:35px;
+  width:98%;
+  position:absolute;
+  top:0px;
+  left:0px;
+  padding:3px 6px 7px 4px;
+}
+div#message-mdoal-header #message-head-title {
+color:#ffffff;
+text-align:center;
+font-size:18px;
+}
+#message-content {
+  position:relative;
+  top:45px;
+  height:310px;
+  overflow:scroll;
+}
+#message-content  .sender {
+background-color:#a8c7e4;
+padding:5px;
+padding-left:15px;
+position:relative;
+top:-5px;
+}
+#message-content .receiver{
+  background-color:#c1e4a8;
+  padding:5px;
+  padding-left:15px;
+  position:relative;
+  top:-5px;
 }
 #notice-head-title {
   margin:40px 0 20px 0;

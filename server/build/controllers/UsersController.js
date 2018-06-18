@@ -107,7 +107,7 @@ var UsersController = function () {
                   serviceName: serviceName,
                   password: hash,
                   isAdmin: Boolean(isAdmin) || false,
-                  imgUrl: 'no/file/uploaded'
+                  imgUrl: '/users-photo/default.png'
                 }).then(function (signup) {
                   var authenKeys = {
                     fullname: signup.fullname,

@@ -145,7 +145,7 @@ export default describe('Users controller', () => {
         .then((res) => {
           expect(res).to.have.status(200);
           expect(res.body).to.be.an('object');
-          expect(res.body).to.have.any.keys('userid');
+          expect(res.body.request).to.have.any.keys('userid');
         });
     });
 

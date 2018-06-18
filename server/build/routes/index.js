@@ -34,6 +34,14 @@ var _uploadfile = require('./../middlewares/uploadfile');
 
 var _uploadfile2 = _interopRequireDefault(_uploadfile);
 
+var _swaggerUiExpress = require('swagger-ui-express');
+
+var _swaggerUiExpress2 = _interopRequireDefault(_swaggerUiExpress);
+
+var _swaggerApiDoc = require('./../../../swaggerApiDoc/swaggerApiDoc.json');
+
+var _swaggerApiDoc2 = _interopRequireDefault(_swaggerApiDoc);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -57,6 +65,7 @@ var Routes = function () {
       app.get('/', function (req, res) {
         res.status(200).sendFile(_path2.default.join(__dirname, './../../../client/index.html'));
       });
+      app.use('/api/v1/docs', _swaggerUiExpress2.default.serve, _swaggerUiExpress2.default.setup(_swaggerApiDoc2.default));
       // routes for us
       app.post('/api/v1/auth/signup', _uploadfile2.default.single('profile-photo'), this.UsersController.signup);
       app.post('/api/v1/auth/signin', this.UsersController.signin);

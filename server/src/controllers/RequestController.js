@@ -65,7 +65,20 @@ const RequestController = class {
         if (!request) {
           return res.status(404).send({ message: 'request not found' });
         }
-        return res.status(200).send(request);
+        return users
+        .getClient(request.userid)
+        .then((client) => {
+          if (client) {
+            return res.status(200).send({
+              request,
+              user: client,
+            })
+          }
+          return res.status(200).send({
+            request,
+            user: { message: 'user not found' },
+          })
+        })
       })
       .catch(error => res.status(500).send(error));
   }

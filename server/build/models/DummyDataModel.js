@@ -165,6 +165,7 @@ var DummyDataModel = function () {
           }
         });
       }
+      queryString = queryString + ' returning *';
       if (process.env.NODE_ENV !== 'production') {
         /* eslint-disable no-console */
         console.log(queryString);
@@ -319,7 +320,7 @@ var DummyDataModel = function () {
         be deleted
       */
       var result = new Promise(function (resolve, reject) {
-        var queryString = _this8._generateGetQuery(condition);
+        var queryString = _this8._generateDeleteQuery(condition);
         _connection2.default.query(queryString).then(function (res) {
           var response = res.rows;
           resolve(response);

@@ -1,0 +1,1056 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Maintenance tracker",
+    "description": "Documentation for maintenance tracker app",
+    "termsOfService": "https://#",
+    "contact": {
+      "name": "Tutu Godfrey",
+      "url": "http://www.example.com/support",
+      "email": "godfrey_tutu@yahoo.com"
+    }
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8080/api/v1",
+      "description": "Development server"
+    },
+    {
+      "url": "https://mtrackers.herokuapp.com/api/v1",
+      "description": "production server"
+    }
+  ],
+  "paths":{
+    "/auth/signup": {
+      "post": {
+        "summary": "user signup",
+        "description": "route for user to signup. user must signup with a unique username and email. upon successful signup users is provided authentication along with other user data",
+        "operationId": "signup",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "fullname": {
+                    "$ref": "#/components/schemas/user/fullname"
+                  },
+                  "username": {
+                    "$ref": "#/components/schemas/user/username"
+                  },
+                  "email": {
+                    "$ref": "#/components/schemas/user/email"
+                  },
+                  "phone": {
+                    "$ref": "#/components/schemas/user/phone"
+                  },
+                  "address": {
+                    "$ref": "#/components/schemas/user/address"
+                  },
+                  "isAdmin": {
+                    "$ref": "#/components/schemas/user/isAdmin"
+                  },
+                  "serviceName": {
+                    "$ref": "#/components/schemas/user/serviceName"
+                  },
+                  "password": {
+                    "$ref": "#/components/schemas/user/password"
+                  },
+                  "confirmPassword": {
+                    "$ref": "#/components/schemas/user/password"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Response when signup is successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "token": {
+                      "$ref": "#/components/schemas/token"
+                    },
+                    "id": {
+                      "$ref": "#/components/schemas/id"
+                    },
+                    "fullname": {
+                      "$ref": "#/components/schemas/user/fullname"
+                    },
+                    "username": {
+                      "$ref": "#/components/schemas/user/username"
+                    },
+                    "email": {
+                      "$ref": "#/components/schemas/user/email"
+                    },
+                    "isAdmin": {
+                      "$ref": "#/components/schemas/user/isAdmin"
+                    },
+                    "imgUrl": {
+                      "$ref": "#/components/schemas/imgUrl"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "209": {
+            "$ref": "#/components/schemas/responses/209Responses"
+          },
+          "400": {
+            "$ref": "#/components/schemas/responses/400Responses"
+          },
+          "500": {
+            "$ref": "#/components/schemas/responses/500Responses"
+          }
+        }
+      }
+    },
+    "/auth/signin": {
+      "post": {
+        "summary": "user signin",
+        "description": "route for user to signin. require users unique username and password. upon successful signin the user receive a token along with some basic user info",
+        "operationId": "signin",
+        "requestBody": {
+            "required": true,
+            "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "username": {
+                    "$ref": "#/components/schemas/user/username"
+                  },
+                  "password": {
+                    "$ref": "#/components/schemas/user/password"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Response when signin is successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "token": {
+                      "$ref": "#/components/schemas/token"
+                    },
+                    "id": {
+                      "$ref": "#/components/schemas/id"
+                    },
+                    "fullname": {
+                      "$ref": "#/components/schemas/user/fullname"
+                    },
+                    "username": {
+                      "$ref": "#/components/schemas/user/username"
+                    },
+                    "email": {
+                      "$ref": "#/components/schemas/user/email"
+                    },
+                    "isAdmin": {
+                      "$ref": "#/components/schemas/user/isAdmin"
+                    },
+                    "imgUrl": {
+                      "$ref": "#/components/schemas/imgUrl"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/schemas/responses/400Response"
+          },
+          "500": {
+            "$ref": "#/components/schemas/responses/500Response"
+          }
+        }
+      }
+    },
+    "/auth/services": {
+      "get": {
+        "summary": "get services",
+        "description": "This route return the id and services name of services providers",
+        "responses": {
+          "200": {
+            "description": "successfully fetch services",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "$ref": "#/components/schemas/id"
+                    },
+                    "servicename": {
+                      "$ref": "#/components/schemas/user/serviceName"
+                    },
+                    "phone": {
+                      "$ref": "#/components/schemas/user/phone"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/schemas/responses/404Response"
+          },
+          "500": {
+            "$ref": "#/components/schemas/responses/500Response"
+          }
+        }
+      }
+    },
+    "/users/requests": {
+      "post": {
+        "summary": "posting repair requests",
+        "description": "Route to submit repair request. requests should be targeted at a service provider identified by their user id",
+        "parameters": [
+          {
+            "$ref": "#/components/schemas/parameters/token"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "category": {
+                    "$ref": "#/components/schemas/request/properties/category"
+                  },
+                  "description": {
+                    "$ref": "#/components/schemas/request/properties/description"
+                  },
+                  "address": {
+                    "$ref": "#/components/schemas/request/properties/address"
+                  },
+                  "urgent": {
+                    "$ref": "#/components/schemas/request/properties/urgent"
+                  },
+                  "adminId": {
+                    "$ref": "#/components/schemas/id"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "summary": "successfully post request",
+            "description": "When a request is posted successfully, the responses body include all field in the request body, along with id, status, issuedate, updatedat fields",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/request"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/schemas/responses/400Response"
+          },
+          "402": {
+            "$ref": "#/components/schemas/responses/402Response"
+          },
+          "500": {
+            "$ref": "#/components/schemas/responses/500Response"
+          }
+        }
+      },
+      "get": {
+        "description": "Route for users to get all their requests. will return an array of objects containing the requests. each object return hold the request object and object holding the basic info about the service provider",
+        "parameters": [
+          {
+            "$ref": "#/components/schemas/parameters/token"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "sucessfully fetch all requests made my user whose id is contained in the token variable",
+            "content": {
+              "application/json": {
+                "type": "array",
+                "schema": {
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "request": {
+                        "$ref": "#/components/schemas/request"
+                      },
+                      "user": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "$ref": "#/components/schemas/id"
+                          },
+                          "fullname": {
+                            "$ref": "#/components/schemas/user/fullname"
+                          },
+                          "servicename": {
+                            "$ref": "#/components/schemas/user/serviceName"
+                          },
+                          "email": {
+                            "$ref": "#/components/schemas/user/email"
+                          },
+                          "phone": {
+                            "$ref": "#/components/schemas/user/phone"
+                          }     
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/schemas/responses/400Response"
+          },
+          "402": {
+            "$ref": "#/components/schemas/responses/402Response"
+          },
+          "404": {
+            "$ref": "#/components/schemas/responses/404Response"
+          },
+          "500": {
+            "$ref": "#/components/schemas/responses/500Response"
+          }
+        }
+      }
+    },
+    "/users/requests/{requestId}": {
+      "get": {
+        "description": "route that allows logged in users get the request with requestId",
+        "parameters": [
+          {
+            "$ref": "#/components/schemas/parameters/token"
+          },
+           {
+            "$ref": "#/components/schemas/parameters/requestId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successfully fetch the request with the given id",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type":"object",
+                  "properties": {
+                    "request": {
+                      "$ref": "#/components/schemas/request"
+                    },
+                    "user": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "$ref": "#/components/schemas/id"
+                        },
+                        "fullname": {
+                          "$ref": "#/components/schemas/user/fullname"
+                        },
+                        "servicename": {
+                          "$ref": "#/components/schemas/user/serviceName"
+                        },
+                        "email": {
+                          "$ref": "#/components/schemas/user/email"
+                        },
+                        "phone": {
+                          "$ref": "#/components/schemas/user/phone"
+                        }     
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/schemas/responses/400Response"
+          },
+          "402": {
+            "$ref": "#/components/schemas/responses/402Response"
+          },
+          "404": {
+            "$ref": "#/components/schemas/responses/404Response"
+          },
+          "500": {
+            "$ref": "#/components/schemas/responses/500Response"
+          }
+        }
+      },
+      "put": {
+        "description": "Route for user to update a request with the id given in requestId",
+        "operationId": "userUpdateRequest",
+        "parameters": [
+          {
+            "$ref": "#/components/schemas/parameters/token"
+          },
+          {
+            "$ref": "#/components/schemas/parameters/requestId"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "category": {
+                    "$ref": "#/components/schemas/request/properties/category"
+                  },
+                  "description": {
+                    "$ref": "#/components/schemas/request/properties/description"
+                  },
+                  "address": {
+                    "$ref": "#/components/schemas/request/properties/address"
+                  },
+                  "urgent": {
+                    "$ref": "#/components/schemas/request/properties/urgent"
+                  },
+                  "adminId": {
+                    "$ref": "#/components/schemas/id"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "request was successfully updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/request"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/schemas/responses/400Response"
+          },
+          "402": {
+            "$ref": "#/components/schemas/responses/402Response"
+          },
+          "404": {
+            "$ref": "#/components/schemas/responses/404Response"
+          },
+          "500": {
+            "$ref": "#/components/schemas/responses/500Response"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete a request",
+        "description": "Route for users to delete/cancel a request with the id given in requestId",
+        "operationId": "deleteRequest",
+        "parameters": [
+          {
+            "$ref": "#/components/schemas/parameters/token"
+          },
+          {
+            "$ref": "#/components/schemas/parameters/requestId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The request with the given id was successfully deleted",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "request has been deleted"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/schemas/responses/500Responses"
+          },
+          "402": {
+            "$ref": "#/components/schemas/responses/500Responses"
+          },
+          "500": {
+            "$ref": "#/components/schemas/responses/500Responses"
+          }
+        }
+      }
+    },
+    "/requests": {
+      "get": {
+        "description": "Route for users to get all their requests. will return an array of objects containing the requests. each object return hold the request object and object holding the basic info about the service provider",
+        "parameters": [
+          {
+            "$ref": "#/components/schemas/parameters/token"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "sucessfully fetch all requests made my user whose id is contained in the token variable",
+            "content": {
+              "application/json": {
+                "type": "array",
+                "schema": {
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "request": {
+                        "$ref": "#/components/schemas/request"
+                      },
+                      "user": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "$ref": "#/components/schemas/id"
+                          },
+                          "fullname": {
+                            "$ref": "#/components/schemas/user/fullname"
+                          },
+                          "servicename": {
+                            "$ref": "#/components/schemas/user/serviceName"
+                          },
+                          "email": {
+                            "$ref": "#/components/schemas/user/email"
+                          },
+                          "phone": {
+                            "$ref": "#/components/schemas/user/phone"
+                          }     
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/schemas/responses/400Response"
+          },
+          "402": {
+            "$ref": "#/components/schemas/responses/402Response"
+          },
+          "404": {
+            "$ref": "#/components/schemas/responses/404Response"
+          },
+          "500": {
+            "$ref": "#/components/schemas/responses/500Response"
+          }
+        }
+
+      }
+    },
+    "/requests/{requestId}/approve": {
+      "put": {
+        "description": "This route allows an admin/service provider to approve a request",
+        "parameters": [
+          {
+            "$ref": "#/components/schemas/parameters/token"
+          },
+          {
+            "$ref": "#/components/schemas/parameters/requestId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The requiest with requestId was successfully update the status to approved",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/request"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/schemas/responses/400Response"
+          },
+          "402": {
+            "$ref": "#/components/schemas/responses/402Response"
+          },
+          "404": {
+            "$ref": "#/components/schemas/responses/404Response"    
+          },
+          "500": {
+            "$ref": "#/components/schemas/responses/500Response"
+          }
+        }
+      }
+    },
+    "/requests/{requestId}/disapprove": {
+      "put": {
+        "description": "This route allows an admin/service provider to approve a request",
+        "parameters": [
+          {
+            "$ref": "#/components/schemas/parameters/token"
+          },
+          {
+            "$ref": "#/components/schemas/parameters/requestId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The requiest with requestId was successfully update the status to rejected",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/request"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/schemas/responses/400Response"
+          },
+          "402": {
+            "$ref": "#/components/schemas/responses/402Response"
+          },
+          "404": {
+            "$ref": "#/components/schemas/responses/404Response"    
+          },
+          "500": {
+            "$ref": "#/components/schemas/responses/500Response"
+          }
+        }
+      }
+    },
+    "/requests/{requestId}/resolve": {
+      "put": {
+        "description": "This route allows an admin/service provider to approve a request",
+        "parameters": [
+          {
+            "$ref": "#/components/schemas/parameters/token"
+          },
+          {
+            "$ref": "#/components/schemas/parameters/requestId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The requiest with requestId was successfully update the status to resolved",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/request"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/schemas/responses/400Response"
+          },
+          "402": {
+            "$ref": "#/components/schemas/responses/402Response"
+          },
+          "404": {
+            "$ref": "#/components/schemas/responses/404Response"    
+          },
+          "500": {
+            "$ref": "#/components/schemas/responses/500Response"
+          }
+        }
+      }
+    },
+    "/contacts": {
+      "post": {
+        "summary": "sending messages",
+        "description": "Route for sendig messages between a user and the service provider they are connected with",
+        "operationId": "sending messages",
+        "parameters": [
+          {
+            "$ref": "#/components/schemas/parameters/token"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string",
+                    "example": "No response to my request"
+                  },
+                  "message": {
+                    "type": "string",
+                    "example": "I made a request to fix my car. it's been four day now, and I have not receive an update"
+                  },
+                  "receiverId": {
+                    "$ref": "#/components/schemas/id"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "The message was successfully sent",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/contactMessage"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/schemas/responses/400Response"
+          },
+          "402": {
+            "$ref": "#/components/schemas/responses/402Response"
+          },
+          "500": {
+            "$ref": "#/components/schemas/responses/500Response"
+          }
+        }
+      },
+      "get": {
+        "description": "Route allows users/admin get messages that are connected to them. ie if they are the sender or receiver",
+        "parameters": [
+          {
+            "$ref": "#/components/schemas/parameters/token"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Messages were fetch successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "$ref": "#/components/schemas/contactMessage"
+                      },
+                      "sender": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "$ref": "#/components/schemas/id"
+                          },
+                          "fullname": {
+                            "$ref": "#/components/schemas/user/fullname"
+                          },
+                          "servicename": {
+                            "$ref": "#/components/schemas/user/serviceName"
+                          },
+                          "email": {
+                            "$ref": "#/components/schemas/user/email"
+                          },
+                          "phone": {
+                            "$ref": "#/components/schemas/user/phone"
+                          }     
+                        }
+                      },
+                      "receiver": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "$ref": "#/components/schemas/id"
+                          },
+                          "fullname": {
+                            "$ref": "#/components/schemas/user/fullname"
+                          },
+                          "servicename": {
+                            "$ref": "#/components/schemas/user/serviceName"
+                          },
+                          "email": {
+                            "$ref": "#/components/schemas/user/email"
+                          },
+                          "phone": {
+                            "$ref": "#/components/schemas/user/phone"
+                          }     
+                        }                   
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/schemas/responses/400Response"
+          },
+          "402": {
+            "$ref": "#/components/schemas/responses/402Response"
+          },
+          "500": {
+            "$ref": "#/components/schemas/responses/500Response"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "token": {
+        "type": "string",
+        "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFwaXQiLCJmdWxsbmFtZSI6ImFwaXQgYW51aSIsImlzQWRtaW4iOmZhbHNlLCJpZCI6MiwiaW1nVXJsIjoibm8vZmlsZS91cGxvYWRlZCIsImlhdCI6MTUyOTE3NzY0NiwiZXhwIjoxNTI5MzUwNDQ2fQ.ob_m9DrMP6Hxmu-hTW5XOiNE15ycY0xluk6QrVzoj6U"
+      },
+      "id": {
+        "type": "integer",
+        "example": 1
+      },
+      "imgUrl": {
+        "type": "string",
+        "example": "/path/to/photo/uploaded"
+      },
+      "user": {
+        "id": {
+          "$ref": "#/components/schemas/id"
+        },
+        "fullname": {
+          "type": "string",
+          "example": "John Doe"
+        },
+        "username": {
+          "type": "string",
+          "example": "john"
+        },
+        "email": {
+          "type": "string",
+          "example": "johnd@example.com"
+        },
+        "phone": {
+          "type": "string",
+          "example": "07011223344"
+        },
+        "address": {
+          "type": "string",
+          "example": "address of user"
+        },
+        "password": {
+          "type": "string",
+          "example": "123ac12"
+        },
+        "confirmPassword": {
+          "type": "string",
+          "example": "123ac12"
+        },
+        "isAdmin": {
+          "type": "boolean",
+          "example": true
+        },
+        "serviceName": {
+          "type": "string",
+          "example": "mt-services"
+        }
+      },
+      "request": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/id"
+          },
+          "issueData": {
+            "type": "string",
+            "example": "2018-06-17T23:00:00.000Z"
+          },
+          "category": {
+            "type": "string",
+            "example": "electrical"
+          },
+          "description": {
+            "type": "string",
+            "example": "my wall socket got burnt and need replacement"
+          },
+          "address": {
+            "type": "string",
+            "example": "provide for user making request"
+          },
+          "urgent":{ 
+            "type": "boolean",
+            "example": true
+          },
+          "userId": {
+            "type": "integer",
+            "example": 1
+          },
+          "adminId": {
+            "type": "integer",
+            "example": 1
+          },
+          "status": {
+            "type": "string",
+            "example": "resolved"
+          },
+          "updatedAt": {
+            "type": "string",
+            "example": "2018-06-17T23:00:00.000Z"
+          }
+        }
+      },
+      "contactMessage": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/id"
+          },       
+          "messageTitle": {
+            "type": "string",
+            "example": "short title"
+          },
+          "message": {
+            "type": "string",
+            "example": "longer description of message"
+          },
+          "senderId": {
+            "type": "integer",
+            "example": 1
+          },
+          "receiverId": {
+            "type": "integer",
+            "example": 2
+          }
+        }
+      },
+      "parameters": {
+        "token": {
+          "name": "token",
+          "in": "header",
+          "description": "Access token generated for the login users upon signup and when he/she sign in",
+          "schema": {
+            "$ref": "#/components/schemas/token"
+          }
+        },
+        "receiverId": {
+          "name": "receiverId",
+          "in": "body",
+          "description": "the id of the user who the target when sending a messages",
+          "schema": {
+            "$ref": "#/components/schemas/id"
+          }
+        },
+        "requestId": {
+          "name": "requestId",
+          "in": "path",
+          "description": "unique id assigned to the request when it was created",
+          "schema": {
+            "$ref": "#/components/schemas/id"
+          }
+        }
+      },
+      "responses": {
+        "400Response": {
+          "description": "The response receive when a required field is not supplied",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "message": {
+                    "type": "string",
+                    "example": "missing required field"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "401Response": {
+          "description": "The response receive when a required field is not supplied",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "message": {
+                    "type": "string",
+                    "example": "missing required field"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "402Response": {
+          "description": "The response received when user does not provide a token or the token is invalid",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "message": {
+                    "type": "string",
+                    "example": "please send a token"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "404Response": {
+          "description": "The response received when a model is not found",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "message": {
+                    "type": "string",
+                    "example": "request not found"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "209Response": {
+          "description": "The response received when trying to create a model with a unique properties that already exist",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "message": {
+                    "type": "object",
+                    "example": "user already exist"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "500Response": {
+          "description": "The response received when the request could not be proces be cause the server could not be reached or something when wrong while processing the request",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "message": {
+                    "type": "string",
+                    "example": "internal server error"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

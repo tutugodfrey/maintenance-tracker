@@ -235,7 +235,7 @@ var UsersController = function () {
           res.status(400).send({ message: 'authentication fail! check your username or password' });
         }
       }).catch(function (error) {
-        return res.status(400).send(error);
+        return res.status(500).send(error);
       });
     }
   }, {

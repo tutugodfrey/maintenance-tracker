@@ -100,8 +100,8 @@ export default describe('Users controller', () => {
           expect(res.body.id).to.equal(2);
           expect(res.body).to.have.any.keys('description');
           expect(res.body).to.have.any.keys('category');
-          expect(res.body).to.have.any.keys('userid');
-          expect(res.body).to.have.any.keys('adminid');
+          expect(res.body).to.have.any.keys('userId');
+          expect(res.body).to.have.any.keys('adminId');
         });
     });
     it('should not create request for users that does not exist', () => {
@@ -110,7 +110,7 @@ export default describe('Users controller', () => {
         description: 'Socket burned',
         urgent: true,
         address: 'somewhere in the world',
-        userid: 9,
+        userId: 9,
       };
       return chai.request(app)
         .post('/api/v1/users/requests')
@@ -145,7 +145,7 @@ export default describe('Users controller', () => {
         .then((res) => {
           expect(res).to.have.status(200);
           expect(res.body).to.be.an('object');
-          expect(res.body.request).to.have.any.keys('userid');
+          expect(res.body.request).to.have.any.keys('userId');
         });
     });
 
@@ -223,12 +223,12 @@ export default describe('Users controller', () => {
 
   describe('Users request update', () => {
     it('users should be able to modify the other field except the status of a request', () => {
-      const { id, adminid } = createdRequest1;
+      const { id, adminId } = createdRequest1;
       return chai.request(app)
         .put(`/api/v1/users/requests/${id}`)
         .set('token', signedInUser.token)
         .send({
-          adminId: adminid,
+          adminId: adminId,
           description: 'wall socket got burned and need replacement',
         })
         .then((res) => {
@@ -239,12 +239,12 @@ export default describe('Users controller', () => {
     });
 
     it('users should not be able to modify the status of a request', () => {
-      const { id, adminid } = createdRequest1;
+      const { id, adminId } = createdRequest1;
       return chai.request(app)
         .put(`/api/v1/users/requests/${id}`)
         .set('token', signedInUser.token)
         .send({
-          adminId: adminid,
+          adminId: adminId,
           status: 'approved',
         })
         .then((res) => {
@@ -255,12 +255,12 @@ export default describe('Users controller', () => {
     });
 
     it('should return not found for a request that does not exist', () => {
-      const { adminid } = createdRequest1;
+      const { adminId } = createdRequest1;
       return chai.request(app)
         .put('/api/v1/users/requests/20')
         .set('token', signedInUser.token)
         .send({
-          adminId: adminid,
+          adminId,
           description: 'wall socket got burned and need replacement',
         })
         .then((res) => {
@@ -270,12 +270,12 @@ export default describe('Users controller', () => {
     });
 
     it('should return not found for a request if userId does not match', () => {
-      const { id, adminid } = createdRequest1;
+      const { id, adminId } = createdRequest1;
       return chai.request(app)
         .put(`/api/v1/users/requests/${id}`)
         .set('token', regularUser2.token)
         .send({
-          adminId: adminid,
+          adminId,
           description: 'wall socket got burned and need replacement',
         })
         .then((res) => {

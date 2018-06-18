@@ -66,7 +66,7 @@ const RequestController = class {
           return res.status(404).send({ message: 'request not found' });
         }
         return users
-        .getClient(request.userid)
+        .getClient(request.userId)
         .then((client) => {
           if (client) {
             return res.status(200).send({
@@ -103,7 +103,7 @@ const RequestController = class {
           const clientsInfo = [];
           clientRequests.forEach((request) => {
             return users
-              .getClient(request.adminid)
+              .getClient(request.adminId)
               .then((clientInfo) => {
                 return clientInfo;
               })
@@ -173,7 +173,7 @@ const RequestController = class {
               category: category || request.category,
               description: description || request.description,
               address: address || request.address,
-              adminId: adminId || request.adminid,
+              adminId: adminId || request.adminId,
               urgent: urgent || request.urgent,
             },
           )
@@ -192,7 +192,7 @@ const RequestController = class {
     return requests
       .destroy({
         where: {
-          userid: userId,
+          userId: userId,
           id: requestId,
         },
       })

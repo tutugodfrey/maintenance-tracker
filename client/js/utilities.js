@@ -206,7 +206,7 @@ const DomElementActions = class {
     const adminIdInput = document.createElement('input');
     adminIdInput.type = 'hidden';
     adminIdInput.name = 'adminId';
-    adminIdInput.value = requestObj.request.adminid;
+    adminIdInput.value = requestObj.request.adminId;
     requestForm.appendChild(adminIdInput);
     if (this.isAdmin && this.viewStatus === 'waiting' && (requestObj.request.status === 'awaiting confirmation' || requestObj.request.status === 'rejected')) {
       // create and add content to edit buttton
@@ -239,7 +239,7 @@ const DomElementActions = class {
       headTitle.innerHTML = requestObj.user.fullname;
       // no button need to be added
     } else if (!this.isAdmin) {
-      headTitle.innerHTML = requestObj.user.servicename;
+      headTitle.innerHTML = requestObj.user.serviceName;
       const editBtn = document.createElement('button');
       const deleteBtn = document.createElement('button');
       editBtn.id = `edit-request${requestObj.request.id}`;
@@ -257,11 +257,11 @@ const DomElementActions = class {
     }
     const requestKeys = Object.keys(requestObj.request);
     requestKeys.forEach((key) => {
-      if (key === 'id' || key === 'userid' || key === 'adminid' || key === 'updatedat' ) {
+      if (key === 'id' || key === 'userId' || key === 'adminId' || key === 'updatedAt' ) {
         // do nothing
       } else {
         let value = requestObj.request[key];
-        if (key === 'issuedate') {
+        if (key === 'issueDate') {
           value = domElements.dateSubstring(value);
         }
         const listTerm = document.createElement('dt');
@@ -327,19 +327,19 @@ const DomElementActions = class {
             const messageBody = document.createElement('p');
              const seperator = document.createElement('hr')
             // diff sender and receiver
-            if (userData.id === messageObj.message.senderid) {
+            if (userData.id === messageObj.message.senderId) {
               messageHolder.className = 'sender'
             } else {
               messageHolder.className = 'receiver'
             }
-            if (domElements.isAdmin && userData.id !== messageObj.message.senderid) {
+            if (domElements.isAdmin && userData.id !== messageObj.message.senderId) {
               messageSender.innerHTML = messageObj.sender.fullname;
-            } else if (domElements.isAdmin && userData.id === messageObj.message.senderid) {
+            } else if (domElements.isAdmin && userData.id === messageObj.message.senderId) {
               messageSender.innerHTML = `You &#10148; ${messageObj.receiver.fullname}`;
-            } else if (!domElements.isAdmin && userData.id !== messageObj.message.senderid) {
-              messageSender.innerHTML = messageObj.sender.servicename;
-            } else if (!domElements.isAdmin && userData.id === messageObj.message.senderid) {
-              messageSender.innerHTML = `You &#10148; ${messageObj.receiver.servicename}`;
+            } else if (!domElements.isAdmin && userData.id !== messageObj.message.senderId) {
+              messageSender.innerHTML = messageObj.sender.serviceName;
+            } else if (!domElements.isAdmin && userData.id === messageObj.message.senderId) {
+              messageSender.innerHTML = `You &#10148; ${messageObj.receiver.serviceName}`;
             }
             messageBody.innerHTML = messageObj.message.message;
             messageTitle.innerHTML = messageObj.message.title;

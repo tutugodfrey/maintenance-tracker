@@ -44,9 +44,9 @@ var DummyDataModel = function () {
       var keyString = '(';
       keys.forEach(function (key) {
         if (keyString === '(') {
-          keyString = keyString + ' ' + key;
+          keyString = keyString + ' "' + key + '"';
         } else {
-          keyString = keyString + ', ' + key;
+          keyString = keyString + ', "' + key + '"';
         }
       });
       keyString = keyString + ') values';
@@ -83,18 +83,18 @@ var DummyDataModel = function () {
       var propString = '';
       newPropsKeys.forEach(function (prop) {
         if (propString === '') {
-          propString = '' + propString + prop + ' = \'' + newProps[prop] + '\'';
+          propString = propString + '"' + prop + '" = \'' + newProps[prop] + '\'';
         } else {
-          propString = propString + ', ' + prop + ' = \'' + newProps[prop] + '\'';
+          propString = propString + ', "' + prop + '" = \'' + newProps[prop] + '\'';
         }
       });
 
       var whereString = '';
       whereKeys.forEach(function (prop) {
         if (whereString === '') {
-          whereString = '' + whereString + prop + ' = \'' + condition[prop] + '\'';
+          whereString = whereString + '"' + prop + '" = \'' + condition[prop] + '\'';
         } else {
-          whereString = whereString + ' and ' + prop + ' = \'' + condition[prop] + '\'';
+          whereString = whereString + ' and "' + prop + '" = \'' + condition[prop] + '\'';
         }
       });
 
@@ -117,7 +117,7 @@ var DummyDataModel = function () {
       if (condition === 'all') {
         queryString = 'select * from ' + this.modelName;
       } else if (typeof condition === 'number') {
-        queryString = 'select * from ' + this.modelName + ' where id = ' + condition;
+        queryString = 'select * from ' + this.modelName + ' where "id" = ' + condition;
       } else {
         /* eslint-disable prefer-destructuring */
         var type = void 0;
@@ -130,9 +130,9 @@ var DummyDataModel = function () {
         queryString = 'select * from ' + this.modelName;
         keys.forEach(function (key) {
           if (queryString.indexOf('where') < 0) {
-            queryString = queryString + ' where ' + key + ' = \'' + condition.where[key] + '\'';
+            queryString = queryString + ' where "' + key + '" = \'' + condition.where[key] + '\'';
           } else {
-            queryString = queryString + ' ' + type + ' ' + key + ' = \'' + condition.where[key] + '\'';
+            queryString = queryString + ' ' + type + ' "' + key + '" = \'' + condition.where[key] + '\'';
           }
         });
       }
@@ -159,9 +159,9 @@ var DummyDataModel = function () {
         queryString = 'delete from ' + this.modelName;
         keys.forEach(function (key) {
           if (queryString.indexOf('where') < 0) {
-            queryString = queryString + ' where ' + key + ' = \'' + condition.where[key] + '\'';
+            queryString = queryString + ' where "' + key + '" = \'' + condition.where[key] + '\'';
           } else {
-            queryString = queryString + ' and ' + key + ' = \'' + condition.where[key] + '\'';
+            queryString = queryString + ' and "' + key + '" = \'' + condition.where[key] + '\'';
           }
         });
       }
@@ -283,7 +283,7 @@ var DummyDataModel = function () {
       var _this6 = this;
 
       var result = new Promise(function (resolve, reject) {
-        var queryString = 'select id, servicename, phone from ' + _this6.modelName + ' where isadmin = true';
+        var queryString = 'select "id", "serviceName", "phone" from ' + _this6.modelName + ' where "isAdmin" = true';
         _connection2.default.query(queryString).then(function (res) {
           resolve(res.rows);
         }).catch(function (error) {
@@ -298,7 +298,7 @@ var DummyDataModel = function () {
       var _this7 = this;
 
       var result = new Promise(function (resolve, reject) {
-        var queryString = 'select id, fullname, servicename, email, phone from ' + _this7.modelName + ' where id = ' + userId;
+        var queryString = 'select "id", "fullname", "serviceName", "email", "phone" from ' + _this7.modelName + ' where "id" = ' + userId;
         _connection2.default.query(queryString).then(function (res) {
           resolve(res.rows[0]);
         }).catch(function (error) {

@@ -77,25 +77,25 @@ const UsersController = class {
                     serviceName,
                     password: hash,
                     isAdmin: Boolean(isAdmin) || false,
-                    imgUrl: 'no/file/uploaded',
+                    imgUrl: '/users-photo/default.png',
                   })
                   .then((signup) => {
                     const authenKeys = {
                       fullname: signup.fullname,
                       email: signup.email,
                       username: signup.username,
-                      imgUrl: signup.imgurl,
+                      imgUrl: signup.imgUrl,
                       id: signup.id,
-                      isAdmin: signup.isadmin,
+                      isAdmin: signup.isAdmin,
                     };
                     const token = jwt.sign(authenKeys, process.env.SECRET_KEY, { expiresIn: '48h' });
                     res.status(201).send({
                       token,
                       email: signup.email,
                       username: signup.username,
-                      imgUrl: signup.imgurl,
+                      imgUrl: signup.imgUrl,
                       id: signup.id,
-                      isAdmin: signup.isadmin,
+                      isAdmin: signup.isAdmin,
                     });
                   })
                   .catch(error => res.status(400).send({ error }));
@@ -139,9 +139,9 @@ const UsersController = class {
                     email: signup.email,
                     username: signup.username,
                     phone: signup.phone,
-                    imgUrl: signup.imgurl,
+                    imgUrl: signup.imgUrl,
                     id: signup.id,
-                    isAdmin: signup.isadmin,
+                    isAdmin: signup.isAdmin,
                   };
                   const token = jwt.sign(authenKeys, process.env.SECRET_KEY, { expiresIn: '48h' });
                   res.status(201).send({
@@ -149,9 +149,9 @@ const UsersController = class {
                     fullname: signup.fullname,
                     email: signup.email,
                     username: signup.username,
-                    imgUrl: signup.imgurl,
+                    imgUrl: signup.imgUrl,
                     id: signup.id,
-                    isAdmin: signup.isadmin,
+                    isAdmin: signup.isAdmin,
                   });
                 })
                 .catch(error => res.status(400).send({ error }));
@@ -182,9 +182,9 @@ const UsersController = class {
             const authenKeys = {
               username: user.username,
               fullname: user.fullname,
-              isAdmin: user.isadmin,
+              isAdmin: user.isAdmin,
               id: user.id,
-              imgUrl: user.imgurl,
+              imgUrl: user.imgUrl,
             };
             const token = jwt.sign(authenKeys, process.env.SECRET_KEY, { expiresIn: '48h' });
             res.status(200).send({
@@ -193,9 +193,9 @@ const UsersController = class {
               fullname: user.fullname,
               email: user.email,
               username: user.username,
-              imgUrl: user.imgurl,
+              imgUrl: user.imgUrl,
               id: user.id,
-              isAdmin: user.isadmin,
+              isAdmin: user.isAdmin,
             });
           } else {
             res.status(400).send({ message: 'authentication fail! check your username or password' });

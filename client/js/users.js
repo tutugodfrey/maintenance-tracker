@@ -31,7 +31,7 @@ const displayServices = (responseData) => {
         }
         if (!servicePresent) {
           const options = document.createElement('option');
-          options.innerHTML = service.servicename;
+          options.innerHTML = service.serviceName;
           options.value = service.id;
           options.className = 'services';
           services.appendChild(options);
@@ -54,7 +54,7 @@ const displayServices = (responseData) => {
         }
         if (!service2Present) {
           const options = document.createElement('option');
-          options.innerHTML = service.servicename;
+          options.innerHTML = service.serviceName;
           options.value = service.id;
           options.className = 'services2';
           services.appendChild(options);

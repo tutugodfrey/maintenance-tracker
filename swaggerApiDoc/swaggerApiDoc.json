@@ -100,13 +100,13 @@
             }
           },
           "209": {
-            "$ref": "#/components/schemas/responses/209Responses"
+            "$ref": "#/components/schemas/responses/209Response"
           },
           "400": {
-            "$ref": "#/components/schemas/responses/400Responses"
+            "$ref": "#/components/schemas/responses/400Response"
           },
           "500": {
-            "$ref": "#/components/schemas/responses/500Responses"
+            "$ref": "#/components/schemas/responses/500Response"
           }
         }
       }

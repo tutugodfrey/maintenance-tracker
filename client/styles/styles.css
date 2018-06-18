@@ -16,6 +16,10 @@ body {
   width:100%;
 }
 
+.red-outline {
+  border:1px solid red;
+}
+
 .bg-secondary {
   background-color:#ffffff;
 }
@@ -428,27 +432,22 @@ padding-top:12px;
 
 #top-nav-layer {
   width:60%;
-  height:36px;
+  height:39px;
   position:relative;
-  top:-1px;
-  left:35%;
-  padding:1px 4px;
+  top:2px;
+  left:39%;
 }
 #top-nav-layer  ul {
   align-items:right;
-  width:180px;
-  height:30px;
+  height:39px;
   list-style:none;
   position:relative;
-  right:15%;
-  top:-12px;
+  top:-18px;
+  padding:0px;
 }
 #top-nav-layer  ul  li{
   display:inline-block;
-  height:30px;
-  position:relative;
-  left:35px;
-  padding-left:2px;
+  height:39px;
 }
 #top-nav-layer > ul > li > a {
   color:#ffffff;
@@ -456,24 +455,44 @@ padding-top:12px;
 }
 
 li#signout-item {
+  position:absolute;
+  right:31px;
   word-spacing:-3px;
+  padding-left:3px;
+  padding-right:3px;
+}
+li#profile {
+  position:absolute;
+  right:87px;
+}
+li#signout-item a {
+  position:relative;
+  top:9px;
 }
 li#message-item {
+  position:absolute;
+  right:2px;
+}
+li#message-item a {
   position:relative;
-  top:5px;
+  top:9px;
+  padding-left:3px;
+  padding-right:3px;
 }
 
 .profile-photo {
   width:39px;
   height:39px;
   border-radius:3px;
-}
+  padding-left:3px;
+  padding-right:3px;
+} 
 
 #bottom-nav-layer {
   width:68%;
   height:40px;
   position:relative;
-  bottom:-3px;
+  bottom:12px;
   left:28%;
   padding:2px 3px;
 }
@@ -619,15 +638,17 @@ dl.request-details {
   position:relative;
   left:15%;
 }
-
-dt.issuedate, dd.issuedate {
+dt.issueDate, dt.category, dt.description, dt.urgent, dt.status, dt.address {
+text-transform:capitalize;
+}
+dt.issuedate, dd.issueDate {
   position:relative;
   left:2%;
   top:0px;
 
 }
 
-dd.issuedate {
+dd.issueDate {
   left:-22%;
 }
 
@@ -872,14 +893,14 @@ top:-5px;
 }
 
 @media only screen and (min-width:320px) {
-  #top-nav-layer {
+ /* #top-nav-layer {
     width:30%;
     left:44%;
-  }
-  #top-nav-layer  ul {
+  } */
+/*  #top-nav-layer  ul {
     right:-5%;
   }
-
+*/
   div#site-info {
     left:19%;
   }
@@ -948,13 +969,7 @@ top:-5px;
   #toggle-navigation-btn {
     left:88%;
   }
-  #top-nav-layer {
-    width:50%;
-    left:48%;
-  }
-  #top-nav-layer  ul {
-    right:-19%;
-  }
+
   #footer-div {
     padding:0px 4px;
     width:98%;
@@ -1010,9 +1025,6 @@ top:-5px;
     position:relative;
     right:-21%;
   }
-  #top-nav-layer  ul {
-    right:-29%;
-  }
 
   #footer-div {
     padding:0px 5px;
@@ -1055,10 +1067,6 @@ top:-5px;
 }
 
 @media only screen and (min-width:620px) {
-  #top-nav-layer  ul {
-    right:-42%;
-  }
-
   div#notice-modal, div#message-modal {
     width:60%;
   }
@@ -1118,9 +1126,7 @@ top:-5px;
   #toggle-navigation-btn {
     left:92%;
   }
-  #top-nav-layer  ul {
-    right:-50%;
-  }
+
   #search-form-container {
     width:280px;
   }
@@ -1192,15 +1198,13 @@ top:-5px;
 }
 
 @media only screen and (min-width:920px) {
-  #top-nav-layer  ul {
-    right:-68%;
-  }
-
-  #top-nav-layer  ul {
-    right:-60%;
-  }
   #toggle-navigation-btn {
     display:none;
+  }
+
+  #bottom-nav-layer {
+    width:65%;
+    left:18%;
   }
   #bottom-nav-layer > #vertical-nav-bar {
     display:none;
@@ -1211,11 +1215,7 @@ top:-5px;
     height:40px;
     width:100%;
   }
-  #bottom-nav-layer {
-    width:65%;
-    bottom:-3px;
-    left:18%;
-  }
+
   #bottom-nav-layer > div > ul > li{
     display:inline-block;
     padding:5px 0px;
@@ -1286,10 +1286,6 @@ top:-5px;
   #signup-form-container, #signin2-form-container, #request-form-container, #contact-form-container {
     width:30%;
     left:35%;
-  }
-
-  #top-nav-layer  ul {
-    left:70%;
   }
 
   /* admin */

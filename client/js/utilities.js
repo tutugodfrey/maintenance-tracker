@@ -136,6 +136,15 @@ const DomElementActions = class {
     }
   }
 
+  resetRequiredFields (arrayOfArgu) {
+    const inputEle = arrayOfArgu[0];
+    const self = arrayOfArgu[1];
+    if (!self) {
+      self = this;
+    }
+    self.changeClassValue(inputEle, 'red-outline', 'green-outline');
+  }
+
   closeNoticeModal (self) {
     // self = the instance of this class
     if (self === 'undefined') {

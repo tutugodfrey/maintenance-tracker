@@ -12,7 +12,7 @@
       <div id="user-dashboard" class="page-header container shadow-bottom">
         <div id="top-nav-layer" class="">
           <ul id="menu-items">
-            <li>
+            <li id="profile">
               <a href="" class="user-profile">
                 <img id="profile-photo" alt="" class="profile-photo">
               </a>
@@ -91,7 +91,7 @@
                   </select><br />
                   <label for="services" class="form-label">Please select a service</label>
                   <span class = "required">*</span><br/>
-                  <select id="services" class="request-data green-outline" name="adminId">
+                  <select id="services" class="request-data required-field green-outline" name="adminId">
                     <option value="select">Select</soption>
                   </select><br />
                   <label for="description" class="form-label">Description</label>
@@ -123,14 +123,16 @@
               </div>
               <form action="mailto:somebody@example.com" class="fblock-form">
                 <h3 class="small-heading">Send message </h3>
-                <select id="services2" class="form-control message-info green-outline" name="receiverId">
+                <label for="services2" class="form-label">Service Provider</label>
+                <span class = "required">*</span><br />
+                <select id="services2" class="form-control message-info required-field green-outline" name="receiverId">
                   <option value="select">Select</soption>
                 </select><br />
                 <label for="message-title" class="form-label">Title</label><br />
-                <input type="text" class="form-control message-info required-field green-outline" id = "message-title" placeholder="Title" name="title" ><br />
+                <input type="text" class="form-control message-info green-outline" id = "message-title" placeholder="Title" name="title" ><br />
                 <label for="message" class="form-label">Message</label>
                 <span class = "required">*</span><br />
-                <textarea cols="30" rows="5" class="form-control message-info required-field bg-outline" id = "message" placeholder="Type your message here" name="message"></textarea><br />
+                <textarea cols="30" rows="5" class="form-control message-info required-field green-outline" id = "message" placeholder="Type your message here" name="message"></textarea><br />
                 <button id="contact-button" class="submit-button green-button btn-wide btn-center">Send</button>
               </form>
             </div>

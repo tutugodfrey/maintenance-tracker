@@ -90,7 +90,7 @@ var ContactController = function () {
             messageObj.message = message;
 
             // get info of message sender
-            return users.getClient(message.senderid).then(function (sender) {
+            return users.getClient(message.senderId).then(function (sender) {
               return sender;
             }).then(function (sender) {
               if (sender) {
@@ -100,7 +100,7 @@ var ContactController = function () {
               }
             }).then(function () {
               // get info of message receiver
-              return users.getClient(message.receiverid).then(function (receiver) {
+              return users.getClient(message.receiverId).then(function (receiver) {
                 return receiver;
               }).then(function (receiver) {
                 if (receiver) {

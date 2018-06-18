@@ -90,7 +90,7 @@ var RequestController = function () {
         if (!request) {
           return res.status(404).send({ message: 'request not found' });
         }
-        return users.getClient(request.userid).then(function (client) {
+        return users.getClient(request.userId).then(function (client) {
           if (client) {
             return res.status(200).send({
               request: request,
@@ -127,7 +127,7 @@ var RequestController = function () {
           }
           var clientsInfo = [];
           clientRequests.forEach(function (request) {
-            return users.getClient(request.adminid).then(function (clientInfo) {
+            return users.getClient(request.adminId).then(function (clientInfo) {
               return clientInfo;
             }).then(function (clientInfo) {
               if (clientInfo) {
@@ -194,7 +194,7 @@ var RequestController = function () {
           category: category || request.category,
           description: description || request.description,
           address: address || request.address,
-          adminId: adminId || request.adminid,
+          adminId: adminId || request.adminId,
           urgent: urgent || request.urgent
         }).then(function (newRequest) {
           return res.status(200).send(newRequest);
@@ -215,7 +215,7 @@ var RequestController = function () {
       }
       return requests.destroy({
         where: {
-          userid: userId,
+          userId: userId,
           id: requestId
         }
       }).then(function (rows) {

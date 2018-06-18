@@ -70,7 +70,7 @@ const ContactController = class {
 
             // get info of message sender
             return users
-              .getClient(message.senderid)
+              .getClient(message.senderId)
               .then((sender) => {
                 return sender;
               })
@@ -84,7 +84,7 @@ const ContactController = class {
               .then(() => {
                 // get info of message receiver
                 return users
-                  .getClient(message.receiverid)
+                  .getClient(message.receiverId)
                   .then((receiver) => {
                     return receiver;
                   })

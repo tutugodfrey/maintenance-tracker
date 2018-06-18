@@ -816,7 +816,7 @@
       },
       "imgUrl": {
         "type": "string",
-        "example": "/path/to/photo/uploaded"
+        "example": "/users-photo/default.png"
       },
       "user": {
         "id": {

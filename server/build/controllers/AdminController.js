@@ -36,7 +36,7 @@ var AdminController = function () {
       }
       return requests.findAll({
         where: {
-          adminid: id
+          adminId: id
         }
       }).then(function (clientRequests) {
         if (clientRequests) {
@@ -45,7 +45,7 @@ var AdminController = function () {
           }
           var clientsInfo = [];
           clientRequests.forEach(function (request) {
-            return users.getClient(request.userid).then(function (clientInfo) {
+            return users.getClient(request.userId).then(function (clientInfo) {
               return clientInfo;
             }).then(function (clientInfo) {
               if (clientInfo) {

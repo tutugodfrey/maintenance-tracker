@@ -23,9 +23,9 @@ const DummyDataModel = class {
     let keyString = '(';
     keys.forEach((key) => {
       if (keyString === '(') {
-        keyString = `${keyString} ${key}`;
+        keyString = `${keyString} "${key}"`;
       } else {
-        keyString = `${keyString}, ${key}`;
+        keyString = `${keyString}, "${key}"`;
       }
     });
     keyString = `${keyString}) values`;
@@ -61,18 +61,18 @@ const DummyDataModel = class {
     let propString = '';
     newPropsKeys.forEach((prop) => {
       if (propString === '') {
-        propString = `${propString}${prop} = '${newProps[prop]}'`;
+        propString = `${propString}"${prop}" = '${newProps[prop]}'`;
       } else {
-        propString = `${propString}, ${prop} = '${newProps[prop]}'`;
+        propString = `${propString}, "${prop}" = '${newProps[prop]}'`;
       }
     });
 
     let whereString = '';
     whereKeys.forEach((prop) => {
       if (whereString === '') {
-        whereString = `${whereString}${prop} = '${condition[prop]}'`;
+        whereString = `${whereString}"${prop}" = '${condition[prop]}'`;
       } else {
-        whereString = `${whereString} and ${prop} = '${condition[prop]}'`;
+        whereString = `${whereString} and "${prop}" = '${condition[prop]}'`;
       }
     });
 
@@ -94,7 +94,7 @@ const DummyDataModel = class {
     if (condition === 'all') {
       queryString = `select * from ${this.modelName}`;
     } else if (typeof condition === 'number') {
-      queryString = `select * from ${this.modelName} where id = ${condition}`;
+      queryString = `select * from ${this.modelName} where "id" = ${condition}`;
     } else {
       /* eslint-disable prefer-destructuring */
       let type;
@@ -107,9 +107,9 @@ const DummyDataModel = class {
       queryString = `select * from ${this.modelName}`;
       keys.forEach((key) => {
         if (queryString.indexOf('where') < 0) {
-          queryString = `${queryString} where ${key} = '${condition.where[key]}'`;
+          queryString = `${queryString} where "${key}" = '${condition.where[key]}'`;
         } else {
-          queryString = `${queryString} ${type} ${key} = '${condition.where[key]}'`;
+          queryString = `${queryString} ${type} "${key}" = '${condition.where[key]}'`;
         }
       });
     }
@@ -135,9 +135,9 @@ const DummyDataModel = class {
       queryString = `delete from ${this.modelName}`;
       keys.forEach((key) => {
         if (queryString.indexOf('where') < 0) {
-          queryString = `${queryString} where ${key} = '${condition.where[key]}'`;
+          queryString = `${queryString} where "${key}" = '${condition.where[key]}'`;
         } else {
-          queryString = `${queryString} and ${key} = '${condition.where[key]}'`;
+          queryString = `${queryString} and "${key}" = '${condition.where[key]}'`;
         }
       });
     }
@@ -235,7 +235,7 @@ const DummyDataModel = class {
 
   findServiceName() {
     const result = new Promise((resolve, reject) => {
-      const queryString = `select id, servicename, phone from ${this.modelName} where isadmin = true`;
+      const queryString = `select "id", "serviceName", "phone" from ${this.modelName} where "isAdmin" = true`;
       client.query(queryString)
         .then((res) => {
           resolve(res.rows);
@@ -247,7 +247,7 @@ const DummyDataModel = class {
 
   getClient(userId) {
     const result = new Promise((resolve, reject) => {
-      const queryString = `select id, fullname, servicename, email, phone from ${this.modelName} where id = ${userId}`;
+      const queryString = `select "id", "fullname", "serviceName", "email", "phone" from ${this.modelName} where "id" = ${userId}`;
       client.query(queryString)
         .then((res) => {
           resolve(res.rows[0]);

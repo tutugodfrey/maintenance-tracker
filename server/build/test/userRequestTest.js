@@ -102,8 +102,8 @@ exports.default = describe('Users controller', function () {
         expect(res.body.id).to.equal(2);
         expect(res.body).to.have.any.keys('description');
         expect(res.body).to.have.any.keys('category');
-        expect(res.body).to.have.any.keys('userid');
-        expect(res.body).to.have.any.keys('adminid');
+        expect(res.body).to.have.any.keys('userId');
+        expect(res.body).to.have.any.keys('adminId');
       });
     });
     it('should not create request for users that does not exist', function () {
@@ -112,7 +112,7 @@ exports.default = describe('Users controller', function () {
         description: 'Socket burned',
         urgent: true,
         address: 'somewhere in the world',
-        userid: 9
+        userId: 9
       };
       return _chai2.default.request(app).post('/api/v1/users/requests').set('token', signedInUser.token).send(request3).then(function (res) {
         expect(res).to.have.status(400);
@@ -137,7 +137,7 @@ exports.default = describe('Users controller', function () {
       return _chai2.default.request(app).get('/api/v1/users/requests/' + id).set('token', signedInUser.token).then(function (res) {
         expect(res).to.have.status(200);
         expect(res.body).to.be.an('object');
-        expect(res.body.request).to.have.any.keys('userid');
+        expect(res.body.request).to.have.any.keys('userId');
       });
     });
 
@@ -199,10 +199,10 @@ exports.default = describe('Users controller', function () {
   describe('Users request update', function () {
     it('users should be able to modify the other field except the status of a request', function () {
       var id = createdRequest1.id,
-          adminid = createdRequest1.adminid;
+          adminId = createdRequest1.adminId;
 
       return _chai2.default.request(app).put('/api/v1/users/requests/' + id).set('token', signedInUser.token).send({
-        adminId: adminid,
+        adminId: adminId,
         description: 'wall socket got burned and need replacement'
       }).then(function (res) {
         expect(res).to.have.status(200);
@@ -213,10 +213,10 @@ exports.default = describe('Users controller', function () {
 
     it('users should not be able to modify the status of a request', function () {
       var id = createdRequest1.id,
-          adminid = createdRequest1.adminid;
+          adminId = createdRequest1.adminId;
 
       return _chai2.default.request(app).put('/api/v1/users/requests/' + id).set('token', signedInUser.token).send({
-        adminId: adminid,
+        adminId: adminId,
         status: 'approved'
       }).then(function (res) {
         expect(res).to.have.status(200);
@@ -226,10 +226,10 @@ exports.default = describe('Users controller', function () {
     });
 
     it('should return not found for a request that does not exist', function () {
-      var adminid = createdRequest1.adminid;
+      var adminId = createdRequest1.adminId;
 
       return _chai2.default.request(app).put('/api/v1/users/requests/20').set('token', signedInUser.token).send({
-        adminId: adminid,
+        adminId: adminId,
         description: 'wall socket got burned and need replacement'
       }).then(function (res) {
         expect(res).to.have.status(404);
@@ -239,10 +239,10 @@ exports.default = describe('Users controller', function () {
 
     it('should return not found for a request if userId does not match', function () {
       var id = createdRequest1.id,
-          adminid = createdRequest1.adminid;
+          adminId = createdRequest1.adminId;
 
       return _chai2.default.request(app).put('/api/v1/users/requests/' + id).set('token', _signupTest.regularUser2.token).send({
-        adminId: adminid,
+        adminId: adminId,
         description: 'wall socket got burned and need replacement'
       }).then(function (res) {
         expect(res).to.have.status(404);

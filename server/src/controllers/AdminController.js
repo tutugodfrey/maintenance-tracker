@@ -15,7 +15,7 @@ const AdminController = class {
     return requests
     .findAll({
       where: {
-        adminid: id,
+        adminId: id,
       },
     })
     .then((clientRequests) => {
@@ -26,7 +26,7 @@ const AdminController = class {
         const clientsInfo = [];
         clientRequests.forEach((request) => {
           return users
-            .getClient(request.userid)
+            .getClient(request.userId)
             .then((clientInfo) => {
               return clientInfo;
             })

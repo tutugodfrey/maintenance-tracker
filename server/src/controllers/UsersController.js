@@ -204,7 +204,7 @@ const UsersController = class {
           res.status(400).send({ message: 'authentication fail! check your username or password' });
         }
       })
-      .catch(error => res.status(400).send(error));
+      .catch(error => res.status(500).send(error));
   }
 
   static getServiceName(req, res) {

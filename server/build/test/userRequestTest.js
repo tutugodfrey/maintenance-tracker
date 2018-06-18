@@ -137,7 +137,7 @@ exports.default = describe('Users controller', function () {
       return _chai2.default.request(app).get('/api/v1/users/requests/' + id).set('token', signedInUser.token).then(function (res) {
         expect(res).to.have.status(200);
         expect(res.body).to.be.an('object');
-        expect(res.body).to.have.any.keys('userid');
+        expect(res.body.request).to.have.any.keys('userid');
       });
     });
 

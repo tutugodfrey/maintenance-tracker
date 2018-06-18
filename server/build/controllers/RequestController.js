@@ -90,7 +90,18 @@ var RequestController = function () {
         if (!request) {
           return res.status(404).send({ message: 'request not found' });
         }
-        return res.status(200).send(request);
+        return users.getClient(request.userid).then(function (client) {
+          if (client) {
+            return res.status(200).send({
+              request: request,
+              user: client
+            });
+          }
+          return res.status(200).send({
+            request: request,
+            user: { message: 'user not found' }
+          });
+        });
       }).catch(function (error) {
         return res.status(500).send(error);
       });
@@ -204,7 +215,7 @@ var RequestController = function () {
       }
       return requests.destroy({
         where: {
-          userId: userId,
+          userid: userId,
           id: requestId
         }
       }).then(function (rows) {

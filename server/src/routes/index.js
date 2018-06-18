@@ -5,6 +5,8 @@ import ContactController from './../controllers/ContactController';
 import AdminController from './../controllers/AdminController';
 import secureRoute from './../middlewares/getToken';
 import usersUpload from './../middlewares/uploadfile';
+import swaggerUi from 'swagger-ui-express';
+import swaggerApiDoc from './../../../swaggerApiDoc/swaggerApiDoc.json';
 
 // const requestController = new RequestController();
 const Routes = class {
@@ -19,6 +21,7 @@ const Routes = class {
     app.get('/', (req, res) => {
       res.status(200).sendFile(path.join(__dirname, './../../../client/index.html'));
     });
+    app.use('/api/v1/docs', swaggerUi.serve, swaggerUi.setup(swaggerApiDoc));
     // routes for us
     app.post('/api/v1/auth/signup', usersUpload.single('profile-photo'), this.UsersController.signup);
     app.post('/api/v1/auth/signin', this.UsersController.signin);

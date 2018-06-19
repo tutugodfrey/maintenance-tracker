@@ -42,6 +42,10 @@ const UsersController = class {
     if (address.trim() === '') {
       return res.status(400).send({ message: 'missing required field' });
     }
+
+    if (phone.trim() === '') {
+      return res.status(400).send({ message: 'missing required field' });
+    }
     
     if (!isAdmin && isAdmin.trim() !== '') {
       return res.status(400).send({ message: 'isAdmin must be a true if set' });
@@ -62,6 +66,7 @@ const UsersController = class {
             username,
             email,
           },
+          type: 'or',
         })
         .then((user) => {
           if (!user) {
@@ -166,17 +171,23 @@ const UsersController = class {
 
   // signin controller
   static signin(req, res) {
+    const {
+      username,
+      password,
+    } = req.body;
+    if (username.trim() === '' || password.trim() === '') {
+      res.status(400).send({ message: 'Please fill in the required fields' });
+    }
     return users
       .find({
         where: {
-          username: req.body.username,
+          username,
         },
       })
       .then((user) => {
         if (user) {
           let passwordConfirmed = false;
           const hashedPassword = user.password;
-          const { password } = req.body;
           passwordConfirmed = bcrypt.compareSync(password, hashedPassword);
           if (passwordConfirmed) {
             const authenKeys = {
@@ -198,10 +209,10 @@ const UsersController = class {
               isAdmin: user.isAdmin,
             });
           } else {
-            res.status(400).send({ message: 'authentication fail! check your username or password' });
+            res.status(401).send({ message: 'authentication fail! check your username or password' });
           }
         } else {
-          res.status(400).send({ message: 'authentication fail! check your username or password' });
+          res.status(401).send({ message: 'authentication fail! check your username or password' });
         }
       })
       .catch(error => res.status(500).send(error));

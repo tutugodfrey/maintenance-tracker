@@ -39,18 +39,18 @@ export default describe('Admin controller test', () => {
         });
     });
 
-    it('should return 402 status code for unauthorized user', () => {
+    it('should return 401 status code for unauthorized user', () => {
       return chai.request(app)
         .get('/api/v1/requests')
         .set('token', regularUser1.token)
         .then((res) => {
-          expect(res).to.have.status(402);
+          expect(res).to.have.status(401);
         });
     });
   });
 
-  describe('Update a request', () => {
-    describe('approve request', () => {
+  describe('Update requests', () => {
+    describe('approve request method', () => {
       it('should update a request status to pending when approved', () => {
         return chai.request(app)
           .put(`/api/v1/requests/${createdRequest1.id}/approve`)
@@ -62,12 +62,12 @@ export default describe('Admin controller test', () => {
           });
       });
 
-      it('should return all request', () => {
+      it('users should not be able to mark their requests as approve', () => {
         return chai.request(app)
           .put(`/api/v1/requests/${createdRequest1.id}/approve`)
           .set('token', regularUser1.token)
           .then((res) => {
-            expect(res).to.have.status(402);
+            expect(res).to.have.status(401);
             expect(res.body).to.be.an('object');
           });
       });
@@ -93,7 +93,7 @@ export default describe('Admin controller test', () => {
       });
     });
 
-    describe('reject request', () => {
+    describe('reject request method', () => {
       it('should reject a request', () => {
         return chai.request(app)
           .put(`/api/v1/requests/${createdRequest1.id}/disapprove`)
@@ -105,12 +105,12 @@ export default describe('Admin controller test', () => {
           });
       });
 
-      it('should return all request', () => {
+      it('users should not be able to disapprove a request', () => {
         return chai.request(app)
           .put(`/api/v1/requests/${createdRequest1.id}/disapprove`)
           .set('token', regularUser1.token)
           .then((res) => {
-            expect(res).to.have.status(402);
+            expect(res).to.have.status(401);
             expect(res.body).to.be.an('object');
           });
       });
@@ -136,7 +136,7 @@ export default describe('Admin controller test', () => {
       });
     });
 
-    describe('resolve request', () => {
+    describe('resolve request method', () => {
       it('should mark a request as resolve', () => {
         return chai.request(app)
           .put(`/api/v1/requests/${createdRequest1.id}/resolve`)
@@ -148,12 +148,12 @@ export default describe('Admin controller test', () => {
           });
       });
 
-      it('should not resolve a request', () => {
+      it('users should not be able to resolve their requests', () => {
         return chai.request(app)
           .put(`/api/v1/requests/${createdRequest1.id}/resolve`)
           .set('token', regularUser1.token)
           .then((res) => {
-            expect(res).to.have.status(402);
+            expect(res).to.have.status(401);
             expect(res.body).to.be.an('object');
           });
       });

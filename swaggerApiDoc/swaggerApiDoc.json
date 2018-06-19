@@ -12,12 +12,12 @@
   },
   "servers": [
     {
-      "url": "http://localhost:8080/api/v1",
-      "description": "Development server"
-    },
-    {
       "url": "https://mtrackers.herokuapp.com/api/v1",
       "description": "production server"
+    },
+    {
+      "url": "http://localhost:8080/api/v1",
+      "description": "Development server"
     }
   ],
   "paths":{
@@ -171,6 +171,9 @@
           "400": {
             "$ref": "#/components/schemas/responses/400Response"
           },
+          "401": {
+            "$ref": "#/components/schemas/responses/400Response"
+          },
           "500": {
             "$ref": "#/components/schemas/responses/500Response"
           }
@@ -263,8 +266,8 @@
           "400": {
             "$ref": "#/components/schemas/responses/400Response"
           },
-          "402": {
-            "$ref": "#/components/schemas/responses/402Response"
+          "401": {
+            "$ref": "#/components/schemas/responses/401Response"
           },
           "500": {
             "$ref": "#/components/schemas/responses/500Response"
@@ -320,8 +323,8 @@
           "400": {
             "$ref": "#/components/schemas/responses/400Response"
           },
-          "402": {
-            "$ref": "#/components/schemas/responses/402Response"
+          "401": {
+            "$ref": "#/components/schemas/responses/401Response"
           },
           "404": {
             "$ref": "#/components/schemas/responses/404Response"
@@ -382,8 +385,8 @@
           "400": {
             "$ref": "#/components/schemas/responses/400Response"
           },
-          "402": {
-            "$ref": "#/components/schemas/responses/402Response"
+          "401": {
+            "$ref": "#/components/schemas/responses/401Response"
           },
           "404": {
             "$ref": "#/components/schemas/responses/404Response"
@@ -444,8 +447,8 @@
           "400": {
             "$ref": "#/components/schemas/responses/400Response"
           },
-          "402": {
-            "$ref": "#/components/schemas/responses/402Response"
+          "401": {
+            "$ref": "#/components/schemas/responses/401Response"
           },
           "404": {
             "$ref": "#/components/schemas/responses/404Response"
@@ -485,10 +488,10 @@
             }
           },
           "400": {
-            "$ref": "#/components/schemas/responses/500Responses"
+            "$ref": "#/components/schemas/responses/400Responses"
           },
-          "402": {
-            "$ref": "#/components/schemas/responses/500Responses"
+          "401": {
+            "$ref": "#/components/schemas/responses/401Responses"
           },
           "500": {
             "$ref": "#/components/schemas/responses/500Responses"
@@ -546,8 +549,8 @@
           "400": {
             "$ref": "#/components/schemas/responses/400Response"
           },
-          "402": {
-            "$ref": "#/components/schemas/responses/402Response"
+          "401": {
+            "$ref": "#/components/schemas/responses/401Response"
           },
           "404": {
             "$ref": "#/components/schemas/responses/404Response"
@@ -584,8 +587,8 @@
           "400": {
             "$ref": "#/components/schemas/responses/400Response"
           },
-          "402": {
-            "$ref": "#/components/schemas/responses/402Response"
+          "401": {
+            "$ref": "#/components/schemas/responses/401Response"
           },
           "404": {
             "$ref": "#/components/schemas/responses/404Response"    
@@ -621,8 +624,8 @@
           "400": {
             "$ref": "#/components/schemas/responses/400Response"
           },
-          "402": {
-            "$ref": "#/components/schemas/responses/402Response"
+          "401": {
+            "$ref": "#/components/schemas/responses/401Response"
           },
           "404": {
             "$ref": "#/components/schemas/responses/404Response"    
@@ -658,8 +661,8 @@
           "400": {
             "$ref": "#/components/schemas/responses/400Response"
           },
-          "402": {
-            "$ref": "#/components/schemas/responses/402Response"
+          "401": {
+            "$ref": "#/components/schemas/responses/401Response"
           },
           "404": {
             "$ref": "#/components/schemas/responses/404Response"    
@@ -954,6 +957,22 @@
         }
       },
       "responses": {
+        "209Response": {
+          "description": "The response received when trying to create a model with a unique properties that already exist",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "message": {
+                    "type": "object",
+                    "example": "user already exist"
+                  }
+                }
+              }
+            }
+          }
+        },
         "400Response": {
           "description": "The response receive when a required field is not supplied",
           "content": {
@@ -979,23 +998,7 @@
                 "properties": {
                   "message": {
                     "type": "string",
-                    "example": "missing required field"
-                  }
-                }
-              }
-            }
-          }
-        },
-        "402Response": {
-          "description": "The response received when user does not provide a token or the token is invalid",
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "message": {
-                    "type": "string",
-                    "example": "please send a token"
+                    "example": "authentication fail! check your username or password"
                   }
                 }
               }
@@ -1012,22 +1015,6 @@
                   "message": {
                     "type": "string",
                     "example": "request not found"
-                  }
-                }
-              }
-            }
-          }
-        },
-        "209Response": {
-          "description": "The response received when trying to create a model with a unique properties that already exist",
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "message": {
-                    "type": "object",
-                    "example": "user already exist"
                   }
                 }
               }

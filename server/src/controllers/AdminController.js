@@ -10,7 +10,7 @@ const AdminController = class {
       id,
     } = req.body.decode;
     if (!isAdmin) {
-      return res.status(402).send({ message: 'you are not authorized to perform this action' });
+      return res.status(401).send({ message: 'you are not authorized to perform this action' });
     }
     return requests
     .findAll({
@@ -60,7 +60,7 @@ const AdminController = class {
       id,
     } = req.body.decode;
     if (!isAdmin) {
-      return res.status(402).send({ message: 'you are not permitted to perform this action' });
+      return res.status(401).send({ message: 'you are not permitted to perform this action' });
     }
     if (!requestId) {
       return res.status(400).send({ message: 'missiging required field' });
@@ -96,7 +96,7 @@ const AdminController = class {
       id,
     } = req.body.decode;
     if (!isAdmin) {
-      return res.status(402).send({ message: 'you are not permitted to perform this action' });
+      return res.status(401).send({ message: 'you are not permitted to perform this action' });
     }
     if (!requestId) {
       return res.status(400).send({ message: 'missiging required field' });
@@ -132,7 +132,7 @@ const AdminController = class {
       id,
     } = req.body.decode;
     if (!isAdmin) {
-      return res.status(402).send({ message: 'you are not permitted to perform this action' });
+      return res.status(401).send({ message: 'you are not permitted to perform this action' });
     }
     if (!requestId) {
       return res.status(400).send({ message: 'missiging required field' });

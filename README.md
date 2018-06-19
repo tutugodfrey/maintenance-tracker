@@ -47,6 +47,8 @@ NOTE: ensure you are in test environment before running test. run `export NODE_E
 |                    Paths                     |          Methods          |                                     Actions                              |
 | -------------------------------------------- | ------------------------- | ------------------------------------------------------------------------ |
 | /                                            |  GET                      |  Application default route                                               |
+| /api/v1/docs                                 |  GET                      |  Documentation                                                           |
+|                                              |                           |                                                                          |
 | /api/v1/auth/signup                          |  POST                     |  user signup                                                             |
 | /api/v1/auth/signin                          |  POST                     |  user signin                                                             |
 | /api/v1/auth/services                        |  GET                      |  get info about service providers                                        |

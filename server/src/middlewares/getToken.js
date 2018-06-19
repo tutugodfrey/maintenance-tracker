@@ -7,14 +7,14 @@ const getToken = (req, res, next) => {
     if (token) {
       jwt.verify(token, process.env.SECRET_KEY, (err, decode) => {
         if (err) {
-          resolve(res.status(401).send({ message: 'Invalid Token' }));
+          resolve(res.status(401).send({ message: 'authentication fail! invalid Token' }));
         } else {
           req.body.decode = decode;
           resolve(next());
         }
       });
     } else {
-      resolve(res.status(402).send({ message: 'Please send a token' }));
+      resolve(res.status(401).send({ message: 'authentication fail! please send a token' }));
     }
   });
   return promise;

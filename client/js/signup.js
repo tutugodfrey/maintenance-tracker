@@ -14,8 +14,13 @@ const processSignUp = function(ele) {
 	if (document.getElementsByClassName('form-control')) {
 		const formControls = document.getElementsByClassName('form-control');
 		const formData = new FormData();
+		const emailRegExp = /\w+@\w+\.(net|com|org)/;
+		let password = '';
+		let confirmPassword = '';
 		let fileAvailable = false;
 		let allRequiredFieldPass = true;
+		let emailPass = true;
+		let passwordPass = true;
 		for(let numOfInput = 0; numOfInput < formControls.length; numOfInput++) {
 			let inputField = formControls[numOfInput];
 			if (inputField.type === 'file') {
@@ -36,12 +41,28 @@ const processSignUp = function(ele) {
 						// change default green-outline to red-outline
 						domElements.changeClassValue(inputField, "green-outline", "red-outline");
 					}
+					if (fieldName === 'email' && !fieldValue.match(emailRegExp)) {
+						emailPass = false;
+						// change default green-outline to red-outline
+						domElements.changeClassValue(inputField, "green-outline", "red-outline");
+					}
+					if (fieldName === 'password') {
+						password = fieldValue;
+					}
+					if (fieldName === 'password') {
+						confirmPassword = fieldValue;
+					}
+					if (password !== confirmPassword) {
+						passwordPass = false;
+					} else {
+						passwordPass = true;
+					}
 				}
 				formData.append(fieldName, fieldValue);
 			}
 		}
-		if(allRequiredFieldPass) {
-			if(fileAvailable) {
+		if (allRequiredFieldPass && emailPass && passwordPass) {
+			if (fileAvailable) {
 				const headers =  new Headers();
 				headers.append('Content-Type', 'application/json');
 				const options = {
@@ -50,8 +71,16 @@ const processSignUp = function(ele) {
 				}
 				requestHandler.makeRequest('/api/v1/auth/signup', options, handleResponse);
 			}
-		} else {
+		} else if (!allRequiredFieldPass) {
 			domElements.showConsoleModal('Please fill out the the required fields');
+			domNotifier();
+			return;
+		} else if (!emailPass) {
+			domElements.showConsoleModal('Invalid email format');
+			domNotifier();
+			return;
+		} else if (!passwordPass) {
+			domElements.showConsoleModal('Please enter matching password');
 			domNotifier();
 			return;
 		}

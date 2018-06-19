@@ -198,16 +198,21 @@ var UsersController = function () {
   }, {
     key: 'signin',
     value: function signin(req, res) {
+      var _req$body2 = req.body,
+          username = _req$body2.username,
+          password = _req$body2.password;
+
+      if (username.trim() === '' || password.trim() === '') {
+        res.status(400).send({ message: 'Please fill in the required fields' });
+      }
       return users.find({
         where: {
-          username: req.body.username
+          username: username
         }
       }).then(function (user) {
         if (user) {
           var passwordConfirmed = false;
           var hashedPassword = user.password;
-          var password = req.body.password;
-
           passwordConfirmed = _bcrypt2.default.compareSync(password, hashedPassword);
           if (passwordConfirmed) {
             var authenKeys = {
@@ -229,10 +234,10 @@ var UsersController = function () {
               isAdmin: user.isAdmin
             });
           } else {
-            res.status(400).send({ message: 'authentication fail! check your username or password' });
+            res.status(401).send({ message: 'authentication fail! check your username or password' });
           }
         } else {
-          res.status(400).send({ message: 'authentication fail! check your username or password' });
+          res.status(401).send({ message: 'authentication fail! check your username or password' });
         }
       }).catch(function (error) {
         return res.status(500).send(error);

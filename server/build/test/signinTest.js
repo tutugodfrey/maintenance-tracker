@@ -46,17 +46,17 @@ exports.default = describe('Signin', function () {
       username: _signupTest.regularUser1.username,
       password: '134567'
     }).then(function (res) {
-      expect(res).to.have.status(400);
+      expect(res).to.have.status(401);
       expect(res.body).to.be.an('Object');
     });
   });
 
-  it('should not signin a user if password is not correct', function () {
+  it('should not signin a user if username is not correct', function () {
     return _chai2.default.request(app).post('/api/v1/auth/signin').send({
       username: 'someoneelse',
       password: '123456'
     }).then(function (res) {
-      expect(res).to.have.status(400);
+      expect(res).to.have.status(401);
       expect(res.body).to.be.an('Object');
     });
   });

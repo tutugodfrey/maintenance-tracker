@@ -52,15 +52,15 @@ exports.default = describe('Admin controller test', function () {
       });
     });
 
-    it('should return 402 status code for unauthorized user', function () {
+    it('should return 401 status code for unauthorized user', function () {
       return _chai2.default.request(app).get('/api/v1/requests').set('token', _signupTest.regularUser1.token).then(function (res) {
-        expect(res).to.have.status(402);
+        expect(res).to.have.status(401);
       });
     });
   });
 
-  describe('Update a request', function () {
-    describe('approve request', function () {
+  describe('Update requests', function () {
+    describe('approve request method', function () {
       it('should update a request status to pending when approved', function () {
         return _chai2.default.request(app).put('/api/v1/requests/' + _userRequestTest.createdRequest1.id + '/approve').set('token', signedInUser.token).then(function (res) {
           expect(res).to.have.status(200);
@@ -69,9 +69,9 @@ exports.default = describe('Admin controller test', function () {
         });
       });
 
-      it('should return all request', function () {
+      it('users should not be able to mark their requests as approve', function () {
         return _chai2.default.request(app).put('/api/v1/requests/' + _userRequestTest.createdRequest1.id + '/approve').set('token', _signupTest.regularUser1.token).then(function (res) {
-          expect(res).to.have.status(402);
+          expect(res).to.have.status(401);
           expect(res.body).to.be.an('object');
         });
       });
@@ -91,7 +91,7 @@ exports.default = describe('Admin controller test', function () {
       });
     });
 
-    describe('reject request', function () {
+    describe('reject request method', function () {
       it('should reject a request', function () {
         return _chai2.default.request(app).put('/api/v1/requests/' + _userRequestTest.createdRequest1.id + '/disapprove').set('token', signedInUser.token).then(function (res) {
           expect(res).to.have.status(200);
@@ -100,9 +100,9 @@ exports.default = describe('Admin controller test', function () {
         });
       });
 
-      it('should return all request', function () {
+      it('users should not be able to disapprove a request', function () {
         return _chai2.default.request(app).put('/api/v1/requests/' + _userRequestTest.createdRequest1.id + '/disapprove').set('token', _signupTest.regularUser1.token).then(function (res) {
-          expect(res).to.have.status(402);
+          expect(res).to.have.status(401);
           expect(res.body).to.be.an('object');
         });
       });
@@ -122,7 +122,7 @@ exports.default = describe('Admin controller test', function () {
       });
     });
 
-    describe('resolve request', function () {
+    describe('resolve request method', function () {
       it('should mark a request as resolve', function () {
         return _chai2.default.request(app).put('/api/v1/requests/' + _userRequestTest.createdRequest1.id + '/resolve').set('token', signedInUser.token).then(function (res) {
           expect(res).to.have.status(200);
@@ -131,9 +131,9 @@ exports.default = describe('Admin controller test', function () {
         });
       });
 
-      it('should not resolve a request', function () {
+      it('users should not be able to resolve their requests', function () {
         return _chai2.default.request(app).put('/api/v1/requests/' + _userRequestTest.createdRequest1.id + '/resolve').set('token', _signupTest.regularUser1.token).then(function (res) {
-          expect(res).to.have.status(402);
+          expect(res).to.have.status(401);
           expect(res.body).to.be.an('object');
         });
       });

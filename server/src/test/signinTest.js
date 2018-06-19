@@ -34,12 +34,12 @@ export default describe('Signin', () => {
         password: '134567',
       })
       .then((res) => {
-        expect(res).to.have.status(400);
+        expect(res).to.have.status(401);
         expect(res.body).to.be.an('Object');
       });
   });
 
-  it('should not signin a user if password is not correct', () => {
+  it('should not signin a user if username is not correct', () => {
     return chai.request(app)
       .post('/api/v1/auth/signin')
       .send({
@@ -47,7 +47,7 @@ export default describe('Signin', () => {
         password: '123456',
       })
       .then((res) => {
-        expect(res).to.have.status(400);
+        expect(res).to.have.status(401);
         expect(res.body).to.be.an('Object');
       });
   });

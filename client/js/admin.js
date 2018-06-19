@@ -384,6 +384,13 @@ const domNotifier = function() {
     }
     eventListenerAddedToClearStorage = true;
   }
+
+  if(document.getElementsByClassName('red-outline')) {
+		const requiredInputFields = document.getElementsByClassName('red-outline');
+		for (let requiredField of requiredInputFields) {
+			domElements.newEvent(requiredField, 'focus', domElements.resetRequiredFields, [requiredField, domElements]);
+		}
+	}
 }
 
 domNotifier()

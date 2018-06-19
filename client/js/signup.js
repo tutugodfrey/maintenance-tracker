@@ -15,6 +15,7 @@ const processSignUp = function(ele) {
 		const formControls = document.getElementsByClassName('form-control');
 		const formData = new FormData();
 		let fileAvailable = false;
+		let allRequiredFieldPass = true;
 		for(let numOfInput = 0; numOfInput < formControls.length; numOfInput++) {
 			let inputField = formControls[numOfInput];
 			if (inputField.type === 'file') {
@@ -31,35 +32,49 @@ const processSignUp = function(ele) {
 				const eleClass = inputField.getAttribute('class');
 				if (eleClass.indexOf('required-field') > 0) {
 					if (fieldValue.trim() === '') {
-						domElements.showConsoleModal('Please fill out the the required fields');
-						return;
+						allRequiredFieldPass = false;
+						// change default green-outline to red-outline
+						domElements.changeClassValue(inputField, "green-outline", "red-outline");
 					}
 				}
 				formData.append(fieldName, fieldValue);
 			}
 		}
-		if(fileAvailable) {
-			const headers =  new Headers();
-			headers.append('Content-Type', 'application/json');
-			const options = {
-				method: 'POST',
-				body:formData,
+		if(allRequiredFieldPass) {
+			if(fileAvailable) {
+				const headers =  new Headers();
+				headers.append('Content-Type', 'application/json');
+				const options = {
+					method: 'POST',
+					body:formData,
+				}
+				requestHandler.makeRequest('/api/v1/auth/signup', options, handleResponse);
 			}
-			requestHandler.makeRequest('/api/v1/auth/signup', options, handleResponse);
-		} 
+		} else {
+			domElements.showConsoleModal('Please fill out the the required fields');
+			domNotifier();
+			return;
+		}
 	}
 }
 
 const domNotifier = function() {
 	// localStorage.removeItem('userdata');
-	if(document.getElementById('console-modal-button')) {
+	if (document.getElementById('console-modal-button')) {
     const consoleModalBtn = document.getElementById('console-modal-button');
     domElements.newEvent(consoleModalBtn, 'click', domElements.closeConsoleModal,  domElements);
 	}
 	
-	if(document.getElementById('signup-button')) {
+	if (document.getElementById('signup-button')) {
 		const signupButton = document.getElementById('signup-button');
 		domElements.newEvent(signupButton, 'click', processSignUp, signupButton);
+	}
+
+	if(document.getElementsByClassName('red-outline')) {
+		const requiredInputFields = document.getElementsByClassName('red-outline');
+		for (let requiredField of requiredInputFields) {
+			domElements.newEvent(requiredField, 'focus', domElements.resetRequiredFields, [requiredField, domElements]);
+		}
 	}
 }
 

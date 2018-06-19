@@ -11,23 +11,31 @@ const sendMessage = (ele) => {
   if (document.getElementsByClassName('message-info')) {
     const formControls = document.getElementsByClassName('message-info');
     let formInfo = '';
-    let fileAvailable = false;
+    let allRequiredFieldPass = true;
     for(let numOfInput = 0; numOfInput < formControls.length; numOfInput++) {
       let inputField = formControls[numOfInput];
       const fieldName = inputField.name;
       const fieldValue = inputField.value.trim();
       const eleClass = inputField.getAttribute('class');
-      if (eleClass.indexOf('required-field') > 0) {
-        if (fieldValue.trim() === '') {
-          domElements.showConsoleModal('Please fill out the the required fields');
-          return;
+      if (eleClass.indexOf('required-field') >= 0) {
+        if (fieldValue.trim() === '' || fieldValue.trim() === 'select' ) {
+
+          allRequiredFieldPass = false;
+          // change default green-outline to red-outline
+          domElements.changeClassValue(inputField, "green-outline", "red-outline");
         }
         formInfo = `${formInfo}${fieldName}=${fieldValue}&`;
       } else {
         formInfo = `${formInfo}${fieldName}=${fieldValue}&`;
       }
     }
-    requestHandler.postRequests('/api/v1/contacts', formInfo, storageHandler, handlePostMessage)
+    if (allRequiredFieldPass) {
+      requestHandler.postRequests('/api/v1/contacts', formInfo, storageHandler, handlePostMessage)
+    } else {
+      domElements.showConsoleModal('Please fill out the the required fields');
+			domNotifier();
+			return;
+    }
   }
 } // end sendMessage
 

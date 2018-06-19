@@ -121,6 +121,7 @@ const createRequest = function(ele) {
 	if (document.getElementsByClassName('form-control')) {
 		const formControls = document.getElementsByClassName('request-data');
     let requestString = '';
+    let allRequiredFieldPass = true;
 		for(let numOfInput = 0; numOfInput < formControls.length; numOfInput++) {
       let inputField = formControls[numOfInput];
       if (inputField.type === 'checkbox') {
@@ -131,9 +132,10 @@ const createRequest = function(ele) {
         const fieldValue = inputField.value.trim();
         const eleClass = inputField.getAttribute('class');
         if (eleClass.indexOf('required-field') > 0) {
-          if (fieldValue.trim() === '') {
-            domElements.showConsoleModal('Please fill out the the required fields');
-            return;
+          if (fieldValue.trim() === '' || fieldValue.trim() === 'select') {
+            allRequiredFieldPass = false;
+						// change default green-outline to red-outline
+						domElements.changeClassValue(inputField, "green-outline", "red-outline");
           }
           requestString = `${requestString}${fieldName}=${fieldValue}&`;
         } else {
@@ -141,26 +143,32 @@ const createRequest = function(ele) {
         }
       }
     }
-    let method;
-    if(updatingRequest) {
-      method = 'PUT';
+    if (allRequiredFieldPass) {
+      let method;
+      if(updatingRequest) {
+        method = 'PUT';
+      } else {
+        method = 'POST'
+      }
+      const headers =  new Headers();
+      const userData = storageHandler.getDataFromStore('userdata')
+      headers.append('Content-Type', 'application/x-www-form-urlencoded');
+      headers.append('Accept', 'application/json');
+      headers.append('token', userData.token);
+      const options = {
+        headers,
+        method,
+        body:requestString,
+      }
+      if(updatingRequest) {
+        requestHandler.makeRequest(`/api/v1/users/requests/${idOfRequestToUpdate}`, options, handleCreateRequest);
+      } else {
+        requestHandler.makeRequest('/api/v1/users/requests', options, handleCreateRequest);
+      }
     } else {
-      method = 'POST'
-    }
-    const headers =  new Headers();
-    const userData = storageHandler.getDataFromStore('userdata')
-    headers.append('Content-Type', 'application/x-www-form-urlencoded');
-    headers.append('Accept', 'application/json');
-    headers.append('token', userData.token);
-    const options = {
-      headers,
-      method,
-      body:requestString,
-    }
-    if(updatingRequest) {
-      requestHandler.makeRequest(`/api/v1/users/requests/${idOfRequestToUpdate}`, options, handleCreateRequest);
-    } else {
-      requestHandler.makeRequest('/api/v1/users/requests', options, handleCreateRequest);
+      domElements.showConsoleModal('Please fill out the the required fields');
+			domNotifier();
+			return;
     }
 	}
 }
@@ -402,14 +410,21 @@ const domNotifier = function() {
     eventListenerAddedToSelectService = true;
   }
 
-    // clear data from local storage
-    if(document.getElementById('reset-app')) {
-      const clearStorageLink = document.getElementById('reset-app');
-      if (!eventListenerAddedToClearStorage) {
-        domElements.newEvent(clearStorageLink, 'click', clearStorage);
-      }
-      eventListenerAddedToClearStorage = true;
+  // clear data from local storage
+  if(document.getElementById('reset-app')) {
+    const clearStorageLink = document.getElementById('reset-app');
+    if (!eventListenerAddedToClearStorage) {
+      domElements.newEvent(clearStorageLink, 'click', clearStorage);
     }
+    eventListenerAddedToClearStorage = true;
+  }
+
+  if(document.getElementsByClassName('red-outline')) {
+		const requiredInputFields = document.getElementsByClassName('red-outline');
+		for (let requiredField of requiredInputFields) {
+			domElements.newEvent(requiredField, 'focus', domElements.resetRequiredFields, [requiredField, domElements]);
+		}
+	}
 }
 
 domNotifier()

@@ -31,18 +31,19 @@
           </ul>
         </div>
         <div id="bottom-nav-layer" class="">
-          <div class="logo-div">
+          <div id="logo-div">
             <a id="img-link-to-home" href="./../index.html">
-              <img class="logo" src="./../images/mt-logo-white.png" alt="logo" />
+              <p class="logo"> Mtracker</p>
+              <!-- <img class="logo" src="./../images/mt-logo-white.png" alt="logo" /> -->
             </a>
           </div>
           <div class="nav-bar">
             <ul class="nav-menu">
               <li class="nav-item">
-                <a href="#request-repair" id="default-nav" class="nav-link active">Request Repair</a>
+                <a href="#view-users-requests" class="nav-link active">View Requests</a>
               </li>
               <li class="nav-item">
-                <a href="#view-users-requests" class="nav-link inactive">View Requests</a>
+                <a href="#request-repair" id="default-nav" class="nav-link inactive">Request Repair</a>
               </li>
               <li class="nav-item">
                 <a href="#contact-service-dept" class="nav-link inactive">Contacts</a>
@@ -52,10 +53,10 @@
           <div id="vertical-nav-bar" class="hide-item">
             <ul class="nav-menu">
               <li class="nav-item nav-toggle">
-                <a href="#request-repair" class="nav-link active">Request Repair</a>
+                <a href="#view-users-requests" class="nav-link active">View Requests</a>
               </li>
               <li class="nav-item nav-toggle">
-                <a href="#view-users-requests" class="nav-link inactive">View Requests</a>
+                <a href="#request-repair" class="nav-link inactive">Request Repair</a>
               </li>
               <li class="nav-item nav-toggle">
                 <a href="#contact-service-dept" class="nav-link inactive">Contacts</a>
@@ -72,8 +73,10 @@
         </div>
       </div>
       <div id="content-area" class="container">
-        <div id="request-repair" class="tab-item show-item">
-          <div id="request-form-container" class="form-gradient shadow">
+        <div id="view-users-requests" class="tab-item show-item">
+        </div>
+        <div id="request-repair" class="tab-item hide-item">
+          <div id="request-form-container" class="form-gradient">
               <div class="small-header-gradient">
                 <h3 class="head-title">
                   Request
@@ -83,7 +86,7 @@
                 <form action="" class="form-block">
                   <label for="problem-type" class="form-label">Category</label>
                   <span class = "required">*</span><br/>
-                  <select id="problem-type" class="request-data green-outline" name="category">
+                  <select id="problem-type" class="request-data  required-field green-outline" name="category">
                     <option value="select">Select</soption>
                     <option value="automobile">Automobile</option>
                     <option value="Electrical">Electrical</option>
@@ -102,15 +105,13 @@
                   <input type="text" class="form-control request-data required-field green-outline" id = "address"  name="address">
                   <input type="checkbox" id="urgent-request" class="form-control request-data green-outlinee" name="urgent" value="true"><label for="urgent-request" class="form-label" isAdmin="getValue from localstorage">Mark as urgent</label><br />
                   <button id="request-button" class="submit-button green-button btn-md">Submit</button>
-                  <button type="reset" class="submit-button white-button btn-md">Cancel</button>
+                  <button type="reset" class="submit-button white-button btn-md">Reset</button>
                 </form>
               </div>
           </div>
         </div>
-        <div id="view-users-requests" class="tab-item hide-item">
-        </div>
         <div id="contact-service-dept" class="tab-item hide-item">
-          <div id="contact-form-container" class="form-gradient shadow">
+          <div id="contact-form-container" class="form-gradient">
             <div class="small-header-gradient">
               <h3 class="head-title">
                 Contact Service Department
@@ -138,7 +139,7 @@
             </div>
           </div>
         </div>
-        <div id="message-modal" class="tab-item hide-item shadow">
+        <div id="message-modal" class="tab-item hide-item">
             <div id="message-mdoal-header">
                 <h3 id="message-head-title">
                   Messages

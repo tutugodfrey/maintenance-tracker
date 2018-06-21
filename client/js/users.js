@@ -129,18 +129,27 @@ const createRequest = function(ele) {
         requestString = `${requestString}${checkboxData[0]}=${checkboxData[1]}&`;
 			} else {
         const fieldName = inputField.name;
-        const fieldValue = inputField.value.trim();
+        let fieldValue = inputField.value.trim();
         const eleClass = inputField.getAttribute('class');
-        if (eleClass.indexOf('required-field') > 0) {
-          if (fieldValue.trim() === '' || fieldValue.trim() === 'select') {
-            allRequiredFieldPass = false;
-						// change default green-outline to red-outline
-						domElements.changeClassValue(inputField, "green-outline", "red-outline");
+        if (updatingRequest) {
+          // do not check for required fields
+          if (fieldValue.trim() === 'select') {
+            fieldValue = '';
           }
           requestString = `${requestString}${fieldName}=${fieldValue}&`;
         } else {
-          requestString = `${requestString}${fieldName}=${fieldValue}&`;
+          if (eleClass.indexOf('required-field') > 0) {
+            if (fieldValue.trim() === '' || fieldValue.trim() === 'select') {
+              allRequiredFieldPass = false;
+              // change default green-outline to red-outline
+              domElements.changeClassValue(inputField, "green-outline", "red-outline");
+            }
+            requestString = `${requestString}${fieldName}=${fieldValue}&`;
+          } else {
+            requestString = `${requestString}${fieldName}=${fieldValue}&`;
+          }
         }
+
       }
     }
     if (allRequiredFieldPass) {
@@ -178,20 +187,19 @@ const getRequestToEdit = (editBtn) => {
   const requestId = parseInt(editBtn.value);
   let requestToEdit;
   requests.filter((request) => {
-    if (request.id === requestId) {
+    if (request.request.id === requestId) {
       requestToEdit = request;
       return
     }
   });
-
   // show tab with request info
   if (document.getElementById('request-repair')) {
     const requestForm = document.getElementById('request-repair');
     domElements.changeClassValue(requestForm, 'hide-item', 'show-item');
     const description = document.getElementById('description');
     const address = document.getElementById('address');
-    description.value = requestToEdit['description'];
-    address.value = requestToEdit['address'];
+    description.value = requestToEdit.request['description'];
+    address.value = requestToEdit.request['address'];
     updatingRequest = true;
     idOfRequestToUpdate =  requestId;
   }
@@ -205,7 +213,9 @@ const getRequestToEdit = (editBtn) => {
 const handleDeleteRequest = (responseData) => {
   console.log(responseData.message);
   domElements.showConsoleModal(responseData.message);
-  // splice this request from local storage
+  if (responseData.message === 'request has been deleted') {
+    // splice this request from local storage
+  }
 }
 const deleteRequest = (deleteBtn) => {
   const idOfRequestToDelete = deleteBtn.value;
@@ -371,9 +381,7 @@ const domNotifier = function() {
       } 
     }
   }
-
-
-
+  
   // updating a request
  	if(document.getElementsByClassName('edit-request')) {
     const editRequestBtn = document.getElementsByClassName('edit-request');

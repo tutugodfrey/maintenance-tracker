@@ -5,6 +5,7 @@ import ContactController from './../controllers/ContactController';
 import AdminController from './../controllers/AdminController';
 import secureRoute from './../middlewares/getToken';
 import usersUpload from './../middlewares/uploadfile';
+import { validateSignup, validateSignin } from './../middlewares/validateUsers';
 import swaggerUi from 'swagger-ui-express';
 import swaggerApiDoc from './../../../swaggerApiDoc/swaggerApiDoc.json';
 
@@ -14,8 +15,8 @@ const routes = (app) => {
   });
   app.use('/api/v1/docs', swaggerUi.serve, swaggerUi.setup(swaggerApiDoc));
   // routes for us
-  app.post('/api/v1/auth/signup', usersUpload.single('profile-photo'), UsersController.signup);
-  app.post('/api/v1/auth/signin', UsersController.signin);
+  app.post('/api/v1/auth/signup', usersUpload.single('profile-photo'), validateSignup,  UsersController.signup);
+  app.post('/api/v1/auth/signin', validateSignin, UsersController.signin);
   app.get('/api/v1/auth/services', UsersController.getServiceName);
 
   // admin routes

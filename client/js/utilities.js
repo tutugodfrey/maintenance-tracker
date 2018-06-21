@@ -87,10 +87,10 @@ const DomElementActions = class {
         self.defaultTab = document.getElementById('view-requests');
         self.changeClassValue (self.defaultTab, 'show-item', 'hide-item')
       }
-      if(document.getElementById('request-repair')) {
-        self.defaultTab = document.getElementById('request-repair');
+      if(document.getElementById('view-users-requests')) {
+        self.defaultTab = document.getElementById('view-users-requests');
         self.changeClassValue (self.defaultTab, 'show-item', 'hide-item')
-      }
+      } 
     } else if(self.lastElementClicked && href !== self.lastElementClicked) {
       self.changeClassValue (tabSection, 'hide-item', 'show-item');
       const oldTabSection = document.getElementById(self.lastElementClicked);
@@ -252,6 +252,7 @@ const DomElementActions = class {
       const editBtn = document.createElement('button');
       const deleteBtn = document.createElement('button');
       editBtn.id = `edit-request${requestObj.request.id}`;
+      editBtn.value = `${requestObj.request.id}`;
       editBtn.className = 'submit-button edit-request green-button btn-md';
       editBtn.innerHTML = 'Edit Request';
 
@@ -313,7 +314,7 @@ const DomElementActions = class {
       }
     });
   }
-
+/////////////////////////////////////////////////////////// attention
   displayMessages(responseData) {
     if (responseData.message === 'Invalid Token' || responseData.message === 'Please send a token') {
       storageHandler.redirectUser(responseData)

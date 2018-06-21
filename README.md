@@ -75,6 +75,8 @@ NOTE: ensure you are in test environment before running test. run `export NODE_E
 
 [hosted version of this app](https://mtrackers.herokuapp.com/)
 
+[Documentation](https://mtrackers.herokuapp.com/api/v1/docs)
+
 ---
 
 ## Author and Contributors

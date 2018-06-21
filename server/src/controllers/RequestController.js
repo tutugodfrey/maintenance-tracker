@@ -15,7 +15,7 @@ const RequestController = class {
       adminId,
     } = req.body;
 
-    if (!parseInt(userId, 10) || description.trim() === '' || address.trim() === '' || category.trim() === '') {
+    if (!parseInt(userId, 10) || description.trim() === '' || address.trim() === '' || category.trim() === '' || category.trim() === 'select') {
       return res.status(400).send({ message: 'missing required field' });
     }
     if (!urgent && urgent.trim() !== '') {
@@ -144,12 +144,6 @@ const RequestController = class {
     const userId = parseInt(req.body.decode.id, 10);
     if (!requestId || !userId) {
       return res.status(400).send({ message: 'missing required field' });
-    }
-    if (category === 'select' || category === 'Select') {
-      return res.status(400).send({ message: 'Please select a category for your repair request'})
-    }
-    if (!parseInt(adminId)) {
-      return res.status(400).send({ message: 'please select a service provider'})
     }
     return requests
       .find({

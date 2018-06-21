@@ -1,6 +1,7 @@
 
 // process server response
 const handleResponse = (responseData) => {
+	console.log(responseData);
   if (responseData.message) {
     domElements.showConsoleModal(responseData.message);
     return;
@@ -49,7 +50,7 @@ const processSignUp = function(ele) {
 					if (fieldName === 'password') {
 						password = fieldValue;
 					}
-					if (fieldName === 'password') {
+					if (fieldName === 'confirmPassword') {
 						confirmPassword = fieldValue;
 					}
 					if (password !== confirmPassword) {

@@ -45,16 +45,27 @@ input#urgent-request, input#confirmisAdmin {
   border-radius:2px;
   margin-bottom:15px;
 }
-
+/* in addition to this declaration, the position of logo on users/dashboard and admin/dashboard pages 
+is also determined by the #logo-div */ 
 .logo {
-  position:fixed;
+  position:absolute;
   top:10px;
   left:10px;
   width:75px;
   height:45;
   z-index:500;
+  color:#ffffff;
+  font-style:italic;
+  font-size:25px;
 }
-
+/* the declaration below affects the position of logo on users/dashboard and admin/dashboard pages */
+#logo-div {
+  height:50px;
+  width:120px;
+  position:absolute;
+  top:-40px;
+  left:-75px;
+}
 /* styles link elements */
 .signup-link, .signin-link {
   text-decoration:none;
@@ -199,17 +210,26 @@ button#close-notice-modal, button#close-message-modal {
   top:0px;
   height:27px;
 }
-
-input, select {
+input{
   height:30px;
   border-style:none;
   padding:6px;
   border-radius:2px;
   margin-bottom:15px;
 }
+select {
+  height:40px;
+  border-style:none;
+  padding:6px;
+  border-radius:2px;
+  margin-bottom:15px;
+}
 
-form.form-block input, select, fieldset {
+form.form-block input, form.form-block fieldset {
   width:90%;
+}
+select{
+  width:93%;
 }
 
 form.form-block [type=text] {
@@ -272,14 +292,14 @@ textarea.bg-outline {
 
 #signin-form-container {
   position:relative;
-  top:10px;
+  top:150px;
   display:none;
 }
 
 /* style signup page and form  */
 #signup-head {
   height:50vh;
-  background-color:#7dcc46;
+  background-color:#4d4e49;
 }
 .form-container {
   width:75%;
@@ -291,16 +311,21 @@ textarea.bg-outline {
   padding:30px 15px;
   margin:40px 10px;
 }
-#signup-form-container, #signin2-form-container{
+#signin2-form-container{
   position:relative;
-  top:-250px;
+  top:-200px;
   left:5%;
 }
 #signup-form-container .form-content{
-  height:350px;
-  overflow:scroll;
+  min-height:350px;
+  /* overflow:scroll; */
 }
-
+#signup-form-container {
+  position:relative;
+  top:-200px;
+  width:90%;
+  left:1%;
+}
 
 .form-gradient {
   width:85%;
@@ -318,7 +343,8 @@ textarea.bg-outline {
   background-repeat:no-repeat;
 	background-size:cover;
 	background-position:center;
-	min-height:100vh;
+  min-height:100vh;
+  width:100%;
 	position:relative; 
   top: -1px;
   line-height: 20px;
@@ -330,9 +356,21 @@ textarea.bg-outline {
   position:relative; 
   color:#ffffff;
 }
+
+div#overlay {
+background:rgba(14, 13, 13, 0.4);
+min-height:100vh;
+width:100%;
+}
 #header-title {
   font-size:40px;
   line-height: 35px;
+  position:relative; 
+  top: 100px;
+}
+#index-description {
+  position:relative; 
+  top: 100px;
 }
 #index-body {
   position:relative;
@@ -343,7 +381,6 @@ textarea.bg-outline {
 }
 
 .feature-sections {
-  min-height:70vh;
   padding:10px;
   position:relative;
   top:-65px;
@@ -354,74 +391,73 @@ textarea.bg-outline {
   position:relative;
   top:20px;
 }
-
+/*
 .feature-sections > .section-text > p {
   position:absolute;
   top:30px;
-}
+} */
 #make-requests {
-  background-color:#e7e7d0;
+  height:650px;
+  background-color:#fefefe;
+}
+#make-requests .section-text {
+  position:relative;
+  top:150px;
+}
+#make-requests .section-text .section-description {
+  position:relative;
+  width:200px;
+  left:10%;
+  line-height:25px;
 }
 
 #manage-requests {
-  background-color:#99c20e;
+  height:650px;
+  background-color:#4d4e49;
   color:#ffffff;
 }
-
 #manage-requests .section-text {
   position:relative;
-  top:-15px;
+  top:120px;
+  left:5%;
+  width:90%;
 }
-
 #manage-request-list {
+  width:90%;
   list-style-type:none;
   list-style-image: url(./../images/checklist-white.png);
   list-style-position:outside;
  
 }
-
 #manage-request-list li {
-width:250px;
 padding-left:10px;
 padding-top:12px;
 }
-.section-image {
-  width:100px;
-  height:100pxh;
-  padding:40px 40px;
-}
 
+.section-image {
+  width:95px;
+  height:95px;
+  padding:40px 25px;
+}
 .section-image > img {
   width:48vh;
   height:45vh;
   background-size:cover;
   background-position:center;
 }
-#chat-icaon {
-  width:20px;
-  height:20px
-}
 #make-requests > .section-image {
   position:relative;
   left:-30px;
 }
-
 #manage-requests > .section-image {
   position:relative;
   left:-30px;
-  }
-#manage-requests .section-text {
-  width:200px;
-  left:5%;
-}
-#make-requests .section-text .section-description {
-  position:relative;
-  width:200px;
-  left:15%;
-  top:-10px;
-  line-height:25px;
 }
 
+#chat-icaon {
+  width:20px;
+  height:20px
+}
 .page-header {
   height:90px;
   background-color:#7dcc46;
@@ -544,10 +580,17 @@ li#message-item a {
 /* admin */
 #search-form-container {
   position:relative;
-  top:-25px;
-  left:-40%;
-  width:280px;
+  top:50px;
+  right:1%;
+  width:100%;
+  height:35px
   /* display:none; */
+}
+#search-form.inline-form {
+  position:relative;
+  top:-16px;
+  left:3%;
+  width:250px;
 }
 
 /* content */
@@ -578,15 +621,34 @@ li#message-item a {
   display:none; /* will be change to display grid on tab nav */
 }
 
+#form-control-container {
+  position:relative;
+  top:-15px;
+  display:grid; 
+  grid-template-columns:100%; 
+  justify-content:center;
+}
+#form-control-container input, #form-control-container select {
+  height:20px;
+  padding:6px;
+  border-radius:2px;
+  margin-bottom:10px;
+}
+#signup-admin-section {
+position:relative;
+width:95%;
+left:0%;
+}
+
 #request-form-container {
   position:relative;
   top:30px;
 }
 .requests {
   background-color:#ffffff;
-  box-shadow: 4px 7px 0 0 rgba(0, 0, 0, 0.3);
+  /* box-shadow: 4px 7px 0 0 rgba(0, 0, 0, 0.3); */
   border:2px solid #ffffff;
-  border-left:1px solid #7dcc46;
+  border:1px solid #7dcc46;
   border-radius:5px;
   display:inline-block;
 }
@@ -761,7 +823,7 @@ p#copyright {
   position:relative;
   width:80%;
   top:-40px; 
-  left:5%;
+  left:10%;
   text-align:center;
   padding:2px;
   margin-bottom:5px;
@@ -893,14 +955,9 @@ top:-5px;
 }
 
 @media only screen and (min-width:320px) {
- /* #top-nav-layer {
-    width:30%;
-    left:44%;
-  } */
-/*  #top-nav-layer  ul {
-    right:-5%;
+  #logo-div {
+    left:-85px;
   }
-*/
   div#site-info {
     left:19%;
   }
@@ -909,16 +966,11 @@ top:-5px;
   }
 
   /* admin */
-  #search-form-container {
-    position:relative;
-    top:-70px;
-    left:-30%;
-    width:230px;
-    /* display:none; */
+  
+  #search-form.inline-form {
+    left:20%;
   }
-  [type=search] {
-    width:110px;
-  }
+  
 
   .request-content {
     width:220px;
@@ -944,6 +996,13 @@ top:-5px;
 }
 
 @media only screen and (min-width:420px) {
+  #logo-div {
+    left:-110px;
+  }
+  
+  #search-form.inline-form {
+    left:40%;
+  }
   #make-requests > .section-image {
     left:10%;
   }
@@ -961,7 +1020,7 @@ top:-5px;
     left:10%;
   }
 
-  #signup-form-container, #signin2-form-container, #request-form-container, #contact-form-container {
+#signin2-form-container, #request-form-container, #contact-form-container {
     width:70%;
     left:15%;
   }
@@ -1001,6 +1060,12 @@ top:-5px;
 }
 
 @media only screen and (min-width:520px) {
+  #logo-div {
+    left:-140px;
+  }
+  #search-form.inline-form {
+    left:50%;
+  }
   #make-requests > .section-image {
     left:15%;
   }
@@ -1016,6 +1081,17 @@ top:-5px;
   #signin-form-container {
     display:block;
   }
+  #signup-form-container {
+    left:3%;
+  }
+  #form-control-container { 
+    grid-template-columns:45% 45%; 
+  }
+  #signup-admin-section {
+    position:relative;
+    width:95%;
+    left:5%;
+    }
 
   #index-signin-link {
     display:none;
@@ -1067,6 +1143,12 @@ top:-5px;
 }
 
 @media only screen and (min-width:620px) {
+  #logo-div {
+    left:-160px;
+  }
+  #search-form.inline-form {
+    left:60%;
+  }
   div#notice-modal, div#message-modal {
     width:60%;
   }
@@ -1096,29 +1178,44 @@ top:-5px;
 }
 
 @media only screen and (min-width:720px) {
+  #logo-div {
+    left:-180px;
+  }
+  #search-form.inline-form {
+    left:65%;
+  }
+  #make-requests {
+    height:440px;
+    background-color:#fefefe;
+  }
+  #make-requests .section-text {
+    position:relative;
+    top:10px;
+  }
   #make-requests > .section-image {
     position:absolute;
     left:3%;
   }
   
+  #manage-requests {
+    height:440px;
+  }
   #make-requests > .section-text > .section-description {
     left:50%;
     top:80px;
     width:40%;
   }
-
   #manage-requests > .section-image {
     position:absolute;
     left:55%;
   }
-
   #manage-requests > .section-text {
     position:absolute;
     left:5%;
     top:100px;
   }
 
-  #signup-form-container, #signin2-form-container {
+#signin2-form-container {
     width:60%;
     left:20%;
   }
@@ -1126,13 +1223,14 @@ top:-5px;
   #toggle-navigation-btn {
     left:92%;
   }
-
+/*
   #search-form-container {
-    width:280px;
+    top:-5px;
+    left:86%;
   }
   [type=search] {
     width:183px;
-  }
+  } */
   #footer-div {
     padding:0px 3px;
     width:99%;
@@ -1163,13 +1261,59 @@ top:-5px;
 }
 
 @media only screen and (min-width:820px) {
-  #signup-form-container, #signin2-form-container, #request-form-container, #contact-form-container {
+  #logo-div {
+    left:-200px;
+  }
+  #search-form.inline-form {
+    left:70%;
+  }
+#signin2-form-container, #request-form-container, #contact-form-container {
     width:40%;
     left:30%;
   }
+  #signup-form-container {
+    left:4%;
+  }
+/*  #signup-form-container {
+    width:80%;
+    left:10%;
+    top:-250px
+  }
+  #signup-form-container .form-content{
+    height:350px;
+  } */
+  /*
+  #signup-form-container .form-content form.form-block input, select, fieldset {
+    width:45%;
+  }
+  #signup-form-container  {
+    width:45%;
+  } */
+  
   #footer-div {
     padding:0px 0px;
     width:100%;
+    height:230px;
+  }
+
+  div#site-info {
+    width:90%;
+    left:5%;
+    top:15px;
+    display:flex;
+    flex-direction:row;
+    justify-content:center;
+  }
+  div#social-sharing {
+    width:90%;
+    left:5%;
+    display:flex;
+    flex-direction:row;
+    justify-content:center;
+    top:40px;
+  }
+  p#copyright {
+    top:70px; 
   }
 
   #view-requests, #view-users-requests, #view-approved-requests, #view-resolved-requests {
@@ -1198,6 +1342,12 @@ top:-5px;
 }
 
 @media only screen and (min-width:920px) {
+  #search-form.inline-form {
+    left:75%;
+  }
+  #logo-div {
+    left:-150px;
+  }
   #toggle-navigation-btn {
     display:none;
   }
@@ -1237,6 +1387,7 @@ top:-5px;
     background-color:#ffffff;
     color:#7dcc46;
   }
+  /*
   #search-form-container {
     top:-5px;
     left:86%;
@@ -1244,12 +1395,11 @@ top:-5px;
   [type=search] {
     width:183px;
   }
-  div#site-info {
-    left:40%;
-  }
+  */
+  /*
   div#social-sharing {
     left:87%;
-  }
+  } */
 
   .request-content {
     width:240px;
@@ -1272,6 +1422,12 @@ top:-5px;
 }
 
 @media only screen and (min-width:1024px) {
+  #logo-div {
+    left:-205px;
+  }
+  #search-form.inline-form {
+    right:10%;
+  }
   #make-requests > .section-image {
     position:absolute;
     left:15%;
@@ -1280,20 +1436,31 @@ top:-5px;
     left:50%;
   }
   #manage-requests > .section-text {
+    width:50%;
     left:15%;
   }
 
-  #signup-form-container, #signin2-form-container, #request-form-container, #contact-form-container {
+#signin2-form-container, #request-form-container, #contact-form-container {
     width:30%;
     left:35%;
   }
 
+  #signup-form-container {
+    width:60%;
+    left:20%;
+  }
+  #form-control-container { 
+    grid-template-columns:45% 45%; 
+  }
+
   /* admin */
+  /*
   #search-form-container {
     top:-55px;
     left:88%;
     width:280px;
   }
+  */
 
   div#notice-modal, div#message-modal {
     width:45%;
@@ -1320,10 +1487,10 @@ top:-5px;
   }
 
   #console-modal {
-    width:720px;
-    left:15%;
+    width:60%;
+    left:20%;
   }
   #console-modal > button {
-    left:89%;
+    left:85%;
   }
 }

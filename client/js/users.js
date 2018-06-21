@@ -381,7 +381,7 @@ const domNotifier = function() {
       } 
     }
   }
-  
+
   // updating a request
  	if(document.getElementsByClassName('edit-request')) {
     const editRequestBtn = document.getElementsByClassName('edit-request');
@@ -432,7 +432,18 @@ const domNotifier = function() {
 		for (let requiredField of requiredInputFields) {
 			domElements.newEvent(requiredField, 'focus', domElements.resetRequiredFields, [requiredField, domElements]);
 		}
-	}
+  }
+  
+  if (document.getElementsByClassName('few-description')) {
+    const descriptions = document.getElementsByClassName('few-description');
+    if (descriptions.length === 0) {
+      // do nothing
+    }  else {
+      for (let description of descriptions) {
+        domElements.newEvent(description, 'mouseover', domElements.showFullDescription, description);
+      }
+    }
+  }
 }
 
 domNotifier()

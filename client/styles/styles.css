@@ -734,6 +734,12 @@ dt.category, dd.category {
 
   dd.description {
     left:-20%;
+    height:35px;
+    overflow:hidden;
+  }
+  .display-full-description {
+    position:relative;
+    display:block;
   }
 
   dt.address, dd.address {

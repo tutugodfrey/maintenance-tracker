@@ -278,7 +278,13 @@ const DomElementActions = class {
         listTerm.innerHTML = key;
         listTerm.className = key
         const listDefinition = document.createElement('dd');
-        listDefinition.className = key;
+
+        if (key === 'description') {
+          console.log(key)
+          listDefinition.className = `${key} few-description`;
+        } else {
+          listDefinition.className = key; 
+        }
         listDefinition.innerHTML = value;
         descriptiveList.appendChild(listTerm);
         descriptiveList.appendChild(listDefinition);
@@ -316,7 +322,7 @@ const DomElementActions = class {
   }
 /////////////////////////////////////////////////////////// attention
   displayMessages(responseData) {
-    if (responseData.message === 'Invalid Token' || responseData.message === 'Please send a token') {
+    if (responseData.message === 'authentication fail! invalid Token' || responseData.message === 'authentication fail! please send a token') {
       storageHandler.redirectUser(responseData)
     }
     if (responseData.message) {
@@ -370,6 +376,11 @@ const DomElementActions = class {
   displayProfilePhoto(imgEle) {
     const userData = storageHandler.getDataFromStore('userdata');
     imgEle.src = userData.imgUrl;
+  }
+
+  // display full description of repair request
+  showFullDescription(descriptionEle){
+    console.log(descriptionEle)
   }
 }
 

@@ -418,7 +418,7 @@ const StorageHandler = class {
       window.location.href = '/signin.html';
       return
     }
-    if (userData.message === 'Invalid Token' || userData.message === 'Please send a token') { // userData = response from server on diff operations
+    if (userData.message === 'authentication fail! invalid Token' || userData.message === 'authentication fail! please send a token') { // userData = response from server on diff operations
       // remove userdata from localStorage, redirect user to signin page
       localStorage.removeItem('userdata');
       window.location.href = '/signin.html';

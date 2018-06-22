@@ -1,17 +1,12 @@
 
 import models from './../models/index';
+import { handleResponse } from './../services/Services';
 
 const { requests, users } = models;
 const AdminController = class {
   // get all request for a logged in user
   static getAllRequests(req, res) {
-    const {
-      isAdmin,
-      id,
-    } = req.body.decode;
-    if (!isAdmin) {
-      return res.status(401).send({ message: 'you are not authorized to perform this action' });
-    }
+    const { id } = req.body.decode;
     return requests
     .findAll({
       where: {
@@ -21,7 +16,7 @@ const AdminController = class {
     .then((clientRequests) => {
       if (clientRequests) {
         if (clientRequests.length === 0) {
-          return res.status(200).send([])
+          return handleResponse(res, 200, []);
         }
         const clientsInfo = [];
         clientRequests.forEach((request) => {
@@ -43,29 +38,19 @@ const AdminController = class {
               });
               }
               if (clientsInfo.length === clientRequests.length) {
-                return res.status(200).send(clientsInfo)
+                return handleResponse(res, 200, clientsInfo);
               }
             })
-            .catch(error => res.status(500).send(error));
+            .catch(() => handleResponse(res, 500, 'something went wrong. please try again'));
         })
       }
     })
-    .catch(error => res.status(500).send({ message: 'something went wrong. please try again' }))
+    .catch(() => handleResponse(res, 500, 'something went wrong. please try again'));
   }
 
   static rejectRequest(req, res) {
     const requestId = parseInt(req.params.requestId, 10);
-    const {
-      isAdmin,
-      id,
-    } = req.body.decode;
-    if (!isAdmin) {
-      return res.status(401).send({ message: 'you are not permitted to perform this action' });
-    }
-    if (!requestId) {
-      return res.status(400).send({ message: 'missiging required field' });
-    }
-
+    const { id } = req.body.decode;
     return requests
       .find({
         where: {
@@ -74,7 +59,8 @@ const AdminController = class {
         },
       })
       .then((request) => {
-        return requests
+        if (request) {
+          return requests
           .update(
             {
               id: request.id,
@@ -84,24 +70,17 @@ const AdminController = class {
               status: 'rejected',
             },
           )
-          .then(updatedRequest => res.status(200).send(updatedRequest));
+          .then(updatedRequest => handleResponse(res, 200, updatedRequest))
+          .catch(() => handleResponse(res, 500, 'something went wrong. please try again'));
+        }
+        return handleResponse(res, 404, 'Request does not exist');
       })
-      .catch(error => res.status(404).send(error));
+      .catch(() => handleResponse(res, 500, 'something went wrong. please try again'));
   }
 
   static approveRequest(req, res) {
     const requestId = parseInt(req.params.requestId, 10);
-    const {
-      isAdmin,
-      id,
-    } = req.body.decode;
-    if (!isAdmin) {
-      return res.status(401).send({ message: 'you are not permitted to perform this action' });
-    }
-    if (!requestId) {
-      return res.status(400).send({ message: 'missiging required field' });
-    }
-
+    const { id } = req.body.decode;
     return requests
       .find({
         where: {
@@ -110,7 +89,8 @@ const AdminController = class {
         },
       })
       .then((request) => {
-        return requests
+        if (request) {
+          return requests
           .update(
             {
               id: request.id,
@@ -120,23 +100,17 @@ const AdminController = class {
               status: 'pending',
             },
           )
-          .then(updatedRequest => res.status(200).send(updatedRequest));
+          .then(updatedRequest => handleResponse(res, 200, updatedRequest))
+          .catch(() => handleResponse(res, 500, 'something went wrong. please try again'));
+        }
+        return handleResponse(res, 404, 'Request does not exist');
       })
-      .catch(error => res.status(404).send(error));
+      .catch(() => handleResponse(res, 500, 'something went wrong. please try again'));
   }
 
   static resolveRequest(req, res) {
     const requestId = parseInt(req.params.requestId, 10);
-    const {
-      isAdmin,
-      id,
-    } = req.body.decode;
-    if (!isAdmin) {
-      return res.status(401).send({ message: 'you are not permitted to perform this action' });
-    }
-    if (!requestId) {
-      return res.status(400).send({ message: 'missiging required field' });
-    }
+    const { id } = req.body.decode;
     return requests
       .find({
         where: {
@@ -145,7 +119,8 @@ const AdminController = class {
         },
       })
       .then((request) => {
-        return requests
+        if (request) {
+          return requests
           .update(
             {
               id: request.id,
@@ -155,9 +130,12 @@ const AdminController = class {
               status: 'resolved',
             },
           )
-          .then(updatedRequest => res.status(200).send(updatedRequest));
+          .then(updatedRequest => handleResponse(res, 200, updatedRequest))
+          .catch(() => handleResponse(res, 500, 'something went wrong. please try again'));
+        }
+        return handleResponse(res, 404, 'Request does not exist');
       })
-      .catch(error => res.status(404).send(error));
+      .catch(() => handleResponse(res, 500, 'something went wrong. please try again'));
   }
 };
 export default AdminController;

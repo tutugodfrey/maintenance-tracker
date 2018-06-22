@@ -6,6 +6,14 @@ import AdminController from './../controllers/AdminController';
 import secureRoute from './../middlewares/getToken';
 import usersUpload from './../middlewares/uploadfile';
 import { validateSignup, validateSignin } from './../middlewares/validateUsers';
+import { 
+  validateCreateRequest,
+  validateGetOneRequest,
+  validateUpdateRequest,
+  validateDeleteRequest,
+  validateAdminUpdate,
+  validateAdminGetRequests,
+} from './../middlewares/validateRequestController';
 import swaggerUi from 'swagger-ui-express';
 import swaggerApiDoc from './../../../swaggerApiDoc/swaggerApiDoc.json';
 
@@ -20,17 +28,17 @@ const routes = (app) => {
   app.get('/api/v1/auth/services', UsersController.getServiceName);
 
   // admin routes
-  app.get('/api/v1/requests', secureRoute, AdminController.getAllRequests);
-  app.put('/api/v1/requests/:requestId/disapprove', secureRoute, AdminController.rejectRequest);
-  app.put('/api/v1/requests/:requestId/approve', secureRoute, AdminController.approveRequest);
-  app.put('/api/v1/requests/:requestId/resolve', secureRoute, AdminController.resolveRequest);
+  app.get('/api/v1/requests', secureRoute, validateAdminGetRequests, AdminController.getAllRequests);
+  app.put('/api/v1/requests/:requestId/disapprove', secureRoute, validateAdminUpdate, AdminController.rejectRequest);
+  app.put('/api/v1/requests/:requestId/approve', secureRoute, validateAdminUpdate, AdminController.approveRequest);
+  app.put('/api/v1/requests/:requestId/resolve', secureRoute, validateAdminUpdate, AdminController.resolveRequest);
 
   // user routes
-  app.post('/api/v1/users/requests', secureRoute, RequestController.addRequest);
-  app.get('/api/v1/users/requests/:requestId', secureRoute, RequestController.getOneRequest);
-  app.get('/api/v1/users/requests', secureRoute, RequestController.getAllRequests);
-  app.put('/api/v1/users/requests/:requestId', secureRoute, RequestController.updateRequest);
-  app.delete('/api/v1/users/requests/:requestId', secureRoute, RequestController.deleteRequest);
+  app.post('/api/v1/users/requests', secureRoute, validateCreateRequest, RequestController.addRequest);
+  app.get('/api/v1/users/requests/:requestId', secureRoute, validateGetOneRequest, RequestController.getOneRequest);
+  app.get('/api/v1/users/requests', secureRoute,  RequestController.getAllRequests);
+  app.put('/api/v1/users/requests/:requestId', secureRoute, validateUpdateRequest, RequestController.updateRequest);
+  app.delete('/api/v1/users/requests/:requestId', secureRoute, validateDeleteRequest, RequestController.deleteRequest);
   // routes for contacts model
   app.post('/api/v1/contacts', secureRoute, ContactController.addMessage);
   app.get('/api/v1/contacts', secureRoute, ContactController.getMessages);

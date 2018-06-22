@@ -4,11 +4,17 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
 var _path = require('path');
 
 var _path2 = _interopRequireDefault(_path);
+
+var _swaggerUiExpress = require('swagger-ui-express');
+
+var _swaggerUiExpress2 = _interopRequireDefault(_swaggerUiExpress);
+
+var _swaggerApiDoc = require('./../../../swaggerApiDoc/swaggerApiDoc.json');
+
+var _swaggerApiDoc2 = _interopRequireDefault(_swaggerApiDoc);
 
 var _UsersController = require('./../controllers/UsersController');
 
@@ -34,63 +40,41 @@ var _uploadfile = require('./../middlewares/uploadfile');
 
 var _uploadfile2 = _interopRequireDefault(_uploadfile);
 
-var _swaggerUiExpress = require('swagger-ui-express');
+var _validateUsers = require('./../middlewares/validateUsers');
 
-var _swaggerUiExpress2 = _interopRequireDefault(_swaggerUiExpress);
+var _validateRequestController = require('./../middlewares/validateRequestController');
 
-var _swaggerApiDoc = require('./../../../swaggerApiDoc/swaggerApiDoc.json');
-
-var _swaggerApiDoc2 = _interopRequireDefault(_swaggerApiDoc);
+var _validateContactController = require('./../middlewares/validateContactController');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+var routes = function routes(app) {
+  app.get('/', function (req, res) {
+    res.status(200).sendFile(_path2.default.join(__dirname, './../../../client/index.html'));
+  });
+  app.use('/api/v1/docs', _swaggerUiExpress2.default.serve, _swaggerUiExpress2.default.setup(_swaggerApiDoc2.default));
+  // routes for us
+  app.post('/api/v1/auth/signup', _uploadfile2.default.single('profile-photo'), _validateUsers.validateSignup, _UsersController2.default.signup);
+  app.post('/api/v1/auth/signin', _validateUsers.validateSignin, _UsersController2.default.signin);
+  app.get('/api/v1/auth/services', _UsersController2.default.getServiceName);
 
-// const requestController = new RequestController();
-var Routes = function () {
-  function Routes() {
-    _classCallCheck(this, Routes);
+  // admin routes
+  app.get('/api/v1/requests', _getToken2.default, _validateRequestController.validateAdminGetRequests, _AdminController2.default.getAllRequests);
+  app.put('/api/v1/requests/:requestId/disapprove', _getToken2.default, _validateRequestController.validateAdminUpdate, _AdminController2.default.rejectRequest);
+  app.put('/api/v1/requests/:requestId/approve', _getToken2.default, _validateRequestController.validateAdminUpdate, _AdminController2.default.approveRequest);
+  app.put('/api/v1/requests/:requestId/resolve', _getToken2.default, _validateRequestController.validateAdminUpdate, _AdminController2.default.resolveRequest);
 
-    this.UsersController = _UsersController2.default;
-    this.RequestController = _RequestController2.default;
-    this.ContactController = _ContactController2.default;
-    this.AdminController = _AdminController2.default;
-  }
-  /* eslint-disable class-methods-use-thiss */
+  // user routes
+  app.post('/api/v1/users/requests', _getToken2.default, _validateRequestController.validateCreateRequest, _RequestController2.default.addRequest);
+  app.get('/api/v1/users/requests/:requestId', _getToken2.default, _validateRequestController.validateGetOneRequest, _RequestController2.default.getOneRequest);
+  app.get('/api/v1/users/requests', _getToken2.default, _RequestController2.default.getAllRequests);
+  app.put('/api/v1/users/requests/:requestId', _getToken2.default, _validateRequestController.validateUpdateRequest, _RequestController2.default.updateRequest);
+  app.delete('/api/v1/users/requests/:requestId', _getToken2.default, _validateRequestController.validateDeleteRequest, _RequestController2.default.deleteRequest);
+  // routes for contacts model
+  app.post('/api/v1/contacts', _getToken2.default, _validateContactController.validateAddMessage, _ContactController2.default.addMessage);
+  app.get('/api/v1/contacts', _getToken2.default, _ContactController2.default.getMessages);
+  return app;
+};
 
-
-  _createClass(Routes, [{
-    key: 'routes',
-    value: function routes(app) {
-      app.get('/', function (req, res) {
-        res.status(200).sendFile(_path2.default.join(__dirname, './../../../client/index.html'));
-      });
-      app.use('/api/v1/docs', _swaggerUiExpress2.default.serve, _swaggerUiExpress2.default.setup(_swaggerApiDoc2.default));
-      // routes for us
-      app.post('/api/v1/auth/signup', _uploadfile2.default.single('profile-photo'), this.UsersController.signup);
-      app.post('/api/v1/auth/signin', this.UsersController.signin);
-      app.get('/api/v1/auth/services', this.UsersController.getServiceName);
-
-      // admin routes
-      app.get('/api/v1/requests', _getToken2.default, this.AdminController.getAllRequests);
-      app.put('/api/v1/requests/:requestId/disapprove', _getToken2.default, this.AdminController.rejectRequest);
-      app.put('/api/v1/requests/:requestId/approve', _getToken2.default, this.AdminController.approveRequest);
-      app.put('/api/v1/requests/:requestId/resolve', _getToken2.default, this.AdminController.resolveRequest);
-
-      // user routes
-      app.post('/api/v1/users/requests', _getToken2.default, this.RequestController.addRequest);
-      app.get('/api/v1/users/requests/:requestId', _getToken2.default, this.RequestController.getOneRequest);
-      app.get('/api/v1/users/requests', _getToken2.default, this.RequestController.getAllRequests);
-      app.put('/api/v1/users/requests/:requestId', _getToken2.default, this.RequestController.updateRequest);
-      app.delete('/api/v1/users/requests/:requestId', _getToken2.default, this.RequestController.deleteRequest);
-      // routes for contacts model
-      app.post('/api/v1/contacts', _getToken2.default, this.ContactController.addMessage);
-      app.get('/api/v1/contacts', _getToken2.default, this.ContactController.getMessages);
-    }
-  }]);
-
-  return Routes;
-}();
-
-exports.default = Routes;
+exports.default = routes;
 //# sourceMappingURL=index.js.map

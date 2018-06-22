@@ -22,9 +22,7 @@ var _index = require('./../models/index');
 
 var _index2 = _interopRequireDefault(_index);
 
-var _Services = require('./../helpers/Services');
-
-var _Services2 = _interopRequireDefault(_Services);
+var _Services = require('./../services/Services');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -52,92 +50,11 @@ var UsersController = function () {
           phone = _req$body.phone,
           password = _req$body.password,
           confirmPassword = _req$body.confirmPassword,
-          isAdmin = _req$body.isAdmin;
-      var serviceName = req.body.serviceName;
-      // validate input
+          isAdmin = _req$body.isAdmin,
+          serviceName = _req$body.serviceName,
+          imgUrl = _req$body.imgUrl;
 
-      if (username.trim() === '' || fullname.trim() === '' || email.trim() === '' || password.trim() === '' || confirmPassword.trim() === '') {
-        return res.status(400).send({ message: 'missing required field' });
-      }
-      var emailRegExp = /\w+@\w+\.(net|com|org)/;
-      if (!email.match(emailRegExp)) {
-        return res.status(400).send({ message: 'typeError: invalid email format' });
-      }
 
-      if (password.length < 6 || confirmPassword.length < 6) {
-        return res.status(400).send({ message: 'length of password must not be less than 6' });
-      }
-
-      if (password !== confirmPassword) {
-        return res.status(400).send({ message: 'password does not match' });
-      }
-
-      if (address.trim() === '') {
-        return res.status(400).send({ message: 'missing required field' });
-      }
-
-      if (!isAdmin && isAdmin.trim() !== '') {
-        return res.status(400).send({ message: 'isAdmin must be a true if set' });
-      }
-
-      if (!isAdmin) {
-        serviceName = '';
-      }
-
-      if (Boolean(isAdmin) && serviceName.trim() === '') {
-        return res.status(400).send({ message: 'please provide a service name for users to recognize your services' });
-      }
-      // console.log(req.body)
-      if (!req.file) {
-        return users.find({
-          where: {
-            username: username,
-            email: email
-          }
-        }).then(function (user) {
-          if (!user) {
-            _bcrypt2.default.genSalt(10, function (err, salt) {
-              _bcrypt2.default.hash(password, salt, function (hashErr, hash) {
-                users.create({
-                  fullname: fullname,
-                  email: email,
-                  username: username,
-                  address: address,
-                  phone: phone,
-                  serviceName: serviceName,
-                  password: hash,
-                  isAdmin: Boolean(isAdmin) || false,
-                  imgUrl: '/users-photo/default.png'
-                }).then(function (signup) {
-                  var authenKeys = {
-                    fullname: signup.fullname,
-                    email: signup.email,
-                    username: signup.username,
-                    imgUrl: signup.imgUrl,
-                    id: signup.id,
-                    isAdmin: signup.isAdmin
-                  };
-                  var token = _jsonwebtoken2.default.sign(authenKeys, process.env.SECRET_KEY, { expiresIn: '48h' });
-                  res.status(201).send({
-                    token: token,
-                    email: signup.email,
-                    username: signup.username,
-                    imgUrl: signup.imgUrl,
-                    id: signup.id,
-                    isAdmin: signup.isAdmin
-                  });
-                }).catch(function (error) {
-                  return res.status(400).send({ error: error });
-                });
-              });
-            });
-          } else {
-            res.status(409).send({ message: 'user already exist' });
-          }
-        }).catch(function (error) {
-          return res.status(500).send(error);
-        });
-      }
       return users.find({
         where: {
           username: username,
@@ -146,50 +63,45 @@ var UsersController = function () {
         type: 'or'
       }).then(function (user) {
         if (!user) {
-          // handle uploaded profile pix
-          var destination = _Services2.default.getImgUrl(req.file.path);
-          _bcrypt2.default.genSalt(10, function (err, salt) {
-            _bcrypt2.default.hash(password, salt, function (hashErr, hash) {
-              users.create({
-                fullname: fullname,
-                email: email,
-                username: username,
-                address: address,
-                serviceName: serviceName,
-                phone: phone,
-                imgUrl: destination,
-                password: hash,
-                isAdmin: Boolean(isAdmin) || false
-              }).then(function (signup) {
-                var authenKeys = {
-                  fullname: signup.fullname,
-                  email: signup.email,
-                  username: signup.username,
-                  phone: signup.phone,
-                  imgUrl: signup.imgUrl,
-                  id: signup.id,
-                  isAdmin: signup.isAdmin
-                };
-                var token = _jsonwebtoken2.default.sign(authenKeys, process.env.SECRET_KEY, { expiresIn: '48h' });
-                res.status(201).send({
-                  token: token,
-                  fullname: signup.fullname,
-                  email: signup.email,
-                  username: signup.username,
-                  imgUrl: signup.imgUrl,
-                  id: signup.id,
-                  isAdmin: signup.isAdmin
-                });
-              }).catch(function (error) {
-                return res.status(400).send({ error: error });
-              });
+          var salt = _bcrypt2.default.genSaltSync(10);
+          var hashedPassword = _bcrypt2.default.hashSync(password, salt);
+          return users.create({
+            fullname: fullname,
+            email: email,
+            username: username,
+            address: address,
+            serviceName: serviceName,
+            phone: phone,
+            imgUrl: imgUrl,
+            password: hashedPassword,
+            isAdmin: Boolean(isAdmin) || false
+          }).then(function (signup) {
+            var authenKeys = {
+              fullname: signup.fullname,
+              email: signup.email,
+              username: signup.username,
+              phone: signup.phone,
+              imgUrl: signup.imgUrl,
+              id: signup.id,
+              isAdmin: signup.isAdmin
+            };
+            var token = _jsonwebtoken2.default.sign(authenKeys, process.env.SECRET_KEY, { expiresIn: '48h' });
+            (0, _Services.handleResponse)(res, 201, {
+              token: token,
+              fullname: signup.fullname,
+              email: signup.email,
+              username: signup.username,
+              imgUrl: signup.imgUrl,
+              id: signup.id,
+              isAdmin: signup.isAdmin
             });
+          }).catch(function () {
+            return (0, _Services.handleResponse)(res, 500, 'something went wrong! try again later');
           });
-        } else {
-          res.status(409).send({ message: 'user already exist' });
         }
-      }).catch(function (error) {
-        return res.status(500).send(error);
+        return (0, _Services.handleResponse)(res, 409, 'user already exist');
+      }).catch(function () {
+        return (0, _Services.handleResponse)(res, 500, 'something went wrong! try again later');
       });
     }
 
@@ -202,9 +114,7 @@ var UsersController = function () {
           username = _req$body2.username,
           password = _req$body2.password;
 
-      if (username.trim() === '' || password.trim() === '') {
-        res.status(400).send({ message: 'Please fill in the required fields' });
-      }
+
       return users.find({
         where: {
           username: username
@@ -223,9 +133,8 @@ var UsersController = function () {
               imgUrl: user.imgUrl
             };
             var token = _jsonwebtoken2.default.sign(authenKeys, process.env.SECRET_KEY, { expiresIn: '48h' });
-            res.status(200).send({
+            return (0, _Services.handleResponse)(res, 200, {
               token: token,
-              success: true,
               fullname: user.fullname,
               email: user.email,
               username: user.username,
@@ -233,14 +142,12 @@ var UsersController = function () {
               id: user.id,
               isAdmin: user.isAdmin
             });
-          } else {
-            res.status(401).send({ message: 'authentication fail! check your username or password' });
           }
-        } else {
-          res.status(401).send({ message: 'authentication fail! check your username or password' });
+          return (0, _Services.handleResponse)(res, 404, 'authentication fail! check your username or password');
         }
-      }).catch(function (error) {
-        return res.status(500).send(error);
+        return (0, _Services.handleResponse)(res, 404, 'authentication fail! check your username or password');
+      }).catch(function () {
+        return (0, _Services.handleResponse)(res, 500, 'something went wrong! try again later');
       });
     }
   }, {
@@ -248,11 +155,11 @@ var UsersController = function () {
     value: function getServiceName(req, res) {
       return users.findServiceName().then(function (serviceNames) {
         if (serviceNames) {
-          res.status(200).send(serviceNames);
+          (0, _Services.handleResponse)(res, 200, serviceNames);
         }
-        res.status(404).send({ message: 'service not avialable yet' });
-      }).catch(function (error) {
-        return res.status(500).send(error);
+        return (0, _Services.handleResponse)(res, 404, 'service not avialable yet');
+      }).catch(function () {
+        return (0, _Services.handleResponse)(res, 500, 'something went wrong! try again later');
       });
     }
   }]);

@@ -10,6 +10,8 @@ var _index = require('./../models/index');
 
 var _index2 = _interopRequireDefault(_index);
 
+var _Services = require('./../services/Services');
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -27,30 +29,18 @@ var RequestController = function () {
 
     // add a new request
     value: function addRequest(req, res) {
-      var id = req.body.decode.id;
-
-      var userId = id;
       var _req$body = req.body,
           category = _req$body.category,
           description = _req$body.description,
           address = _req$body.address,
           urgent = _req$body.urgent,
-          adminId = _req$body.adminId;
+          adminId = _req$body.adminId,
+          userId = _req$body.userId;
 
-
-      if (!parseInt(userId, 10) || description.trim() === '' || address.trim() === '' || category.trim() === '') {
-        return res.status(400).send({ message: 'missing required field' });
-      }
-      if (!urgent && urgent.trim() !== '') {
-        return res.status(400).send({ message: 'typeError field urgent must be a boolean' });
-      }
-      if (!parseInt(adminId)) {
-        return res.status(400).send({ message: 'please select a service' });
-      }
 
       return users.findById(parseInt(userId, 10)).then(function (user) {
         if (user) {
-          requests.create({
+          return requests.create({
             userId: userId,
             category: category,
             description: description,
@@ -61,13 +51,14 @@ var RequestController = function () {
             status: 'awaiting confirmation',
             urgent: urgent || false
           }).then(function (request) {
-            return res.status(201).send(request);
-          }).catch(function (error) {
-            return res.status(400).send(error);
+            return (0, _Services.handleResponse)(res, 201, request);
+          }).catch(function () {
+            return (0, _Services.handleResponse)(res, 500, 'something went wrong! please try again later');
           });
         }
-      }).catch(function (error) {
-        return res.status(404).send(error);
+        return (0, _Services.handleResponse)(res, 401, 'user identity not verified! please make sure you are logged in');
+      }).catch(function () {
+        return (0, _Services.handleResponse)(res, 500, 'something went wrong! please try again later');
       });
     }
 
@@ -78,9 +69,6 @@ var RequestController = function () {
     value: function getOneRequest(req, res) {
       var requestId = parseInt(req.params.requestId, 10);
       var userId = parseInt(req.body.decode.id, 10);
-      if (!requestId || !userId) {
-        return res.status(400).send({ message: 'missing required field' });
-      }
       return requests.find({
         where: {
           userId: userId,
@@ -88,22 +76,22 @@ var RequestController = function () {
         }
       }).then(function (request) {
         if (!request) {
-          return res.status(404).send({ message: 'request not found' });
+          return (0, _Services.handleResponse)(res, 404, 'request not found');
         }
         return users.getClient(request.userId).then(function (client) {
           if (client) {
-            return res.status(200).send({
+            return (0, _Services.handleResponse)(res, 200, {
               request: request,
               user: client
             });
           }
-          return res.status(200).send({
+          return (0, _Services.handleResponse)(res, 200, {
             request: request,
             user: { message: 'user not found' }
           });
         });
-      }).catch(function (error) {
-        return res.status(500).send(error);
+      }).catch(function () {
+        return (0, _Services.handleResponse)(res, 500, 'something went wrong. please try again');
       });
     }
 
@@ -113,9 +101,6 @@ var RequestController = function () {
     key: 'getAllRequests',
     value: function getAllRequests(req, res) {
       var userId = parseInt(req.body.decode.id, 10);
-      if (!userId) {
-        return res.status(400).send({ message: 'missing required field' });
-      }
       return requests.findAll({
         where: {
           userId: userId
@@ -123,7 +108,7 @@ var RequestController = function () {
       }).then(function (clientRequests) {
         if (clientRequests) {
           if (clientRequests.length === 0) {
-            return res.status(200).send([]);
+            (0, _Services.handleResponse)(res, 200, []);
           }
           var clientsInfo = [];
           clientRequests.forEach(function (request) {
@@ -142,15 +127,15 @@ var RequestController = function () {
                 });
               }
               if (clientsInfo.length === clientRequests.length) {
-                return res.status(200).send(clientsInfo);
+                return (0, _Services.handleResponse)(res, 200, clientsInfo);
               }
-            }).catch(function (error) {
-              return res.status(500).send(error);
+            }).catch(function () {
+              return (0, _Services.handleResponse)(res, 500, 'something went wrong. please try again');
             });
           });
         }
-      }).catch(function (error) {
-        return res.status(500).send({ message: 'something went wrong. please try again' });
+      }).catch(function () {
+        return (0, _Services.handleResponse)(res, 500, 'something went wrong. please try again');
       });
     }
 
@@ -168,41 +153,35 @@ var RequestController = function () {
 
       var requestId = parseInt(req.params.requestId, 10);
       var userId = parseInt(req.body.decode.id, 10);
-      if (!requestId || !userId) {
-        return res.status(400).send({ message: 'missing required field' });
-      }
-      if (category === 'select' || category === 'Select') {
-        return res.status(400).send({ message: 'Please select a category for your repair request' });
-      }
-      if (!parseInt(adminId)) {
-        return res.status(400).send({ message: 'please select a service provider' });
-      }
       return requests.find({
         where: {
           userId: userId,
           id: requestId
         }
       }).then(function (request) {
-        // users should not be able to modify the status of a request
-        if (request.status === 'approved' || request.status === 'resolved') {
-          return res.status(200).send({ message: 'request cannot be modify after it has been approved or resolved' });
+        if (request) {
+          // users should not be able to modify the status of a request
+          if (request.status === 'approved' || request.status === 'resolved') {
+            return (0, _Services.handleResponse)(res, 200, 'request cannot be modify after it has been approved or resolved');
+          }
+          return requests.update({
+            id: request.id
+          }, {
+            updatedAt: 'now()',
+            category: category || request.category,
+            description: description || request.description,
+            address: address || request.address,
+            adminId: adminId || request.adminId,
+            urgent: urgent || request.urgent
+          }).then(function (newRequest) {
+            return (0, _Services.handleResponse)(res, 200, newRequest);
+          }).catch(function () {
+            return (0, _Services.handleResponse)(res, 500, 'something went wrong. please try again');
+          });
         }
-        return requests.update({
-          id: request.id
-        }, {
-          updatedAt: 'now()',
-          category: category || request.category,
-          description: description || request.description,
-          address: address || request.address,
-          adminId: adminId || request.adminId,
-          urgent: urgent || request.urgent
-        }).then(function (newRequest) {
-          return res.status(200).send(newRequest);
-        }).catch(function (error) {
-          return res.status(500).send(error);
-        });
-      }).catch(function (error) {
-        return res.status(404).send(error);
+        return (0, _Services.handleResponse)(res, 404, 'requests not found');
+      }).catch(function () {
+        return (0, _Services.handleResponse)(res, 505, 'something went wrong. please try again');
       });
     }
   }, {
@@ -210,9 +189,6 @@ var RequestController = function () {
     value: function deleteRequest(req, res) {
       var requestId = parseInt(req.params.requestId, 10);
       var userId = parseInt(req.body.decode.id, 10);
-      if (!requestId || !userId) {
-        return res.status(400).send({ message: 'missing required field' });
-      }
       return requests.destroy({
         where: {
           userId: userId,
@@ -220,11 +196,11 @@ var RequestController = function () {
         }
       }).then(function (rows) {
         if (rows.length === 0) {
-          res.status(404).send({ message: 'request not found, not action taken' });
+          return (0, _Services.handleResponse)(res, 404, 'request not found, not action taken');
         }
-        res.status(200).send({ message: 'request has been deleted' });
-      }).catch(function (error) {
-        return res.status(404).send(error);
+        return (0, _Services.handleResponse)(res, 200, 'request has been deleted');
+      }).catch(function () {
+        return (0, _Services.handleResponse)(res, 500, 'something went wrong. please try again');
       });
     }
   }]);

@@ -10,6 +10,8 @@ var _index = require('./../models/index');
 
 var _index2 = _interopRequireDefault(_index);
 
+var _Services = require('./../services/Services');
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -35,15 +37,6 @@ var ContactController = function () {
       // sender is user with token
 
       var senderId = req.body.decode.id;
-      if (!parseInt(senderId, 10)) {
-        return res.status(400).send({ message: 'you are authorized to perform this action. please make sure you are logged in' });
-      }
-      if (!parseInt(receiverId, 10)) {
-        return res.status(400).send({ message: 'missing required field' });
-      }
-      if (message.trim() === '' || title.trim() === '') {
-        return res.status(400).send({ message: 'missing required field' });
-      }
       return users.findById(senderId).then(function (user) {
         if (user) {
           return contacts.create({
@@ -52,25 +45,20 @@ var ContactController = function () {
             message: message,
             title: title
           }).then(function (newMessage) {
-            res.status(201).send(newMessage);
-          }).catch(function (error) {
-            return res.status(400).send(error);
+            (0, _Services.handleResponse)(res, 201, newMessage);
+          }).catch(function () {
+            return (0, _Services.handleResponse)(res, 500, 'something went wrong. please try again');
           });
         }
-        return res.status(201).send({ messag: 'Your identity could not be verified. Please make sure you are logged in' });
-      }).catch(function (error) {
-        return res.status(404).send(error);
+        return (0, _Services.handleResponse)(res, 404, 'Your identity could not be verified. Please make sure you are logged in');
+      }).catch(function () {
+        return (0, _Services.handleResponse)(res, 500, 'something went wrong. please try again');
       });
     }
   }, {
     key: 'getMessages',
     value: function getMessages(req, res) {
       var userId = parseInt(req.body.decode.id, 10);
-      var isAdmin = req.body.decode.isAdmin;
-
-      if (!(userId || isAdmin)) {
-        return res.status(400).send({ message: 'you are not authorized to perform this action. please make sure you are logged in' });
-      }
       return contacts.findAll({
         where: {
           senderId: userId,
@@ -81,7 +69,7 @@ var ContactController = function () {
         if (messages) {
           // no messages has been send or received
           if (messages.length === 0) {
-            return res.status(200).send([]);
+            return (0, _Services.handleResponse)(res, 200, []);
           }
           var clientsInfo = [];
           messages.forEach(function (message) {
@@ -112,14 +100,14 @@ var ContactController = function () {
                 // push messageObj to collection
                 clientsInfo.push(messageObj);
                 if (clientsInfo.length === messages.length) {
-                  return res.status(200).send(clientsInfo);
+                  return (0, _Services.handleResponse)(res, 200, clientsInfo);
                 }
               });
             });
           });
         }
-      }).catch(function (error) {
-        return res.status(500).send(error);
+      }).catch(function () {
+        return (0, _Services.handleResponse)(res, 500, 'something went wrong. please try again');
       });
     }
   }]);

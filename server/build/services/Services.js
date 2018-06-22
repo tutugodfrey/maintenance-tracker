@@ -24,4 +24,4 @@ var handleResponse = exports.handleResponse = function handleResponse(res, statu
   }
   return res.status(statusCode).send({ message: message });
 };
-//# sourceMappingURL=Services.js.map
+//# sourceMappingURL=services.js.map

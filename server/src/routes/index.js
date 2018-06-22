@@ -1,11 +1,16 @@
 import path from 'path';
+import swaggerUi from 'swagger-ui-express';
+import swaggerApiDoc from './../../../swaggerApiDoc/swaggerApiDoc.json';
 import UsersController from './../controllers/UsersController';
 import RequestController from './../controllers/RequestController';
 import ContactController from './../controllers/ContactController';
 import AdminController from './../controllers/AdminController';
 import secureRoute from './../middlewares/getToken';
 import usersUpload from './../middlewares/uploadfile';
-import { validateSignup, validateSignin } from './../middlewares/validateUsers';
+import { 
+  validateSignup,
+   validateSignin 
+} from './../middlewares/validateUsers';
 import { 
   validateCreateRequest,
   validateGetOneRequest,
@@ -14,8 +19,7 @@ import {
   validateAdminUpdate,
   validateAdminGetRequests,
 } from './../middlewares/validateRequestController';
-import swaggerUi from 'swagger-ui-express';
-import swaggerApiDoc from './../../../swaggerApiDoc/swaggerApiDoc.json';
+import { validateAddMessage } from './../middlewares/validateContactController';
 
 const routes = (app) => {
   app.get('/', (req, res) => {
@@ -40,7 +44,7 @@ const routes = (app) => {
   app.put('/api/v1/users/requests/:requestId', secureRoute, validateUpdateRequest, RequestController.updateRequest);
   app.delete('/api/v1/users/requests/:requestId', secureRoute, validateDeleteRequest, RequestController.deleteRequest);
   // routes for contacts model
-  app.post('/api/v1/contacts', secureRoute, ContactController.addMessage);
+  app.post('/api/v1/contacts', secureRoute, validateAddMessage, ContactController.addMessage);
   app.get('/api/v1/contacts', secureRoute, ContactController.getMessages);
   return app;
 }

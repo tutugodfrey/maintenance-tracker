@@ -1,4 +1,5 @@
 import models from './../models/index';
+import { handleResponse } from './../services/Services';
 
 const { users, contacts } = models;
 const ContactController = class {
@@ -12,15 +13,6 @@ const ContactController = class {
 
     // sender is user with token
     const senderId = req.body.decode.id;
-    if (!parseInt(senderId, 10)) {
-      return res.status(400).send({ message: 'you are authorized to perform this action. please make sure you are logged in' });
-    }
-    if (!parseInt(receiverId, 10)) {
-      return res.status(400).send({ message: 'missing required field' });
-    }
-    if (message.trim() === '' || title.trim() === '') {
-      return res.status(400).send({ message: 'missing required field' });
-    }
     return users
       .findById(senderId)
       .then((user) => {
@@ -33,21 +25,17 @@ const ContactController = class {
               title,
             })
             .then((newMessage) => {
-              res.status(201).send(newMessage);
+              handleResponse(res, 201, newMessage);
             })
-            .catch(error => res.status(400).send(error));
+            .catch(() => handleResponse(res, 500, 'something went wrong. please try again'));
         }
-        return res.status(201).send({ messag: 'Your identity could not be verified. Please make sure you are logged in' });
+        return handleResponse(res, 404, 'Your identity could not be verified. Please make sure you are logged in');
       })
-      .catch(error => res.status(404).send(error));
+      .catch(() => handleResponse(res, 500, 'something went wrong. please try again'));
   }
 
   static getMessages(req, res) {
     const userId = parseInt(req.body.decode.id, 10);
-    const { isAdmin } = req.body.decode;
-    if (!(userId || isAdmin)) {
-      return res.status(400).send({ message: 'you are not authorized to perform this action. please make sure you are logged in' });
-    }
     return contacts
       .findAll({
         where: {
@@ -60,7 +48,7 @@ const ContactController = class {
         if (messages) {
           // no messages has been send or received
           if (messages.length === 0) {
-            return res.status(200).send([])
+            return handleResponse(res, 200, []);
           }
           const clientsInfo = [];
           messages.forEach((message) => {
@@ -98,14 +86,14 @@ const ContactController = class {
                     // push messageObj to collection
                     clientsInfo.push(messageObj);
                     if (clientsInfo.length === messages.length) {
-                      return res.status(200).send(clientsInfo)
+                      return handleResponse(res, 200, clientsInfo);
                     }
                   })
               })
           });
         }
       })
-      .catch(error => res.status(500).send(error));
+      .catch(() => handleResponse(res, 500, 'something went wrong. please try again'));
   }
 };
 

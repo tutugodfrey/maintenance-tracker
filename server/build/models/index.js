@@ -4,15 +4,15 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _DummyDataModel = require('./DummyDataModel');
+var _DataModel = require('./DataModel');
 
-var _DummyDataModel2 = _interopRequireDefault(_DummyDataModel);
+var _DataModel2 = _interopRequireDefault(_DataModel);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var requests = new _DummyDataModel2.default('requests', ['id'], ['category', 'description', 'userId']);
-var contacts = new _DummyDataModel2.default('contacts', ['id'], ['message', 'userId', 'adminId', 'senderId']);
-var users = new _DummyDataModel2.default('users', ['id', 'username', 'email']);
+var requests = new _DataModel2.default('requests');
+var contacts = new _DataModel2.default('contacts');
+var users = new _DataModel2.default('users');
 
 exports.default = {
   requests: requests,

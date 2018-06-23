@@ -10,7 +10,7 @@ var _index = require('./../models/index');
 
 var _index2 = _interopRequireDefault(_index);
 
-var _Services = require('./../services/Services');
+var _services = require('./../services/services');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -45,14 +45,14 @@ var ContactController = function () {
             message: message,
             title: title
           }).then(function (newMessage) {
-            (0, _Services.handleResponse)(res, 201, newMessage);
+            (0, _services.handleResponse)(res, 201, newMessage);
           }).catch(function () {
-            return (0, _Services.handleResponse)(res, 500, 'something went wrong. please try again');
+            return (0, _services.handleResponse)(res, 500, 'something went wrong. please try again');
           });
         }
-        return (0, _Services.handleResponse)(res, 404, 'Your identity could not be verified. Please make sure you are logged in');
+        return (0, _services.handleResponse)(res, 404, 'Your identity could not be verified. Please make sure you are logged in');
       }).catch(function () {
-        return (0, _Services.handleResponse)(res, 500, 'something went wrong. please try again');
+        return (0, _services.handleResponse)(res, 500, 'something went wrong. please try again');
       });
     }
   }, {
@@ -69,7 +69,7 @@ var ContactController = function () {
         if (messages) {
           // no messages has been send or received
           if (messages.length === 0) {
-            return (0, _Services.handleResponse)(res, 200, []);
+            return (0, _services.handleResponse)(res, 200, []);
           }
           var clientsInfo = [];
           messages.forEach(function (message) {
@@ -100,14 +100,14 @@ var ContactController = function () {
                 // push messageObj to collection
                 clientsInfo.push(messageObj);
                 if (clientsInfo.length === messages.length) {
-                  return (0, _Services.handleResponse)(res, 200, clientsInfo);
+                  return (0, _services.handleResponse)(res, 200, clientsInfo);
                 }
               });
             });
           });
         }
       }).catch(function () {
-        return (0, _Services.handleResponse)(res, 500, 'something went wrong. please try again');
+        return (0, _services.handleResponse)(res, 500, 'something went wrong. please try again');
       });
     }
   }]);

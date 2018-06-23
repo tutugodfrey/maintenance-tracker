@@ -10,7 +10,7 @@ var _index = require('./../models/index');
 
 var _index2 = _interopRequireDefault(_index);
 
-var _Services = require('./../services/Services');
+var _services = require('./../services/services');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -51,14 +51,14 @@ var RequestController = function () {
             status: 'awaiting confirmation',
             urgent: urgent || false
           }).then(function (request) {
-            return (0, _Services.handleResponse)(res, 201, request);
+            return (0, _services.handleResponse)(res, 201, request);
           }).catch(function () {
-            return (0, _Services.handleResponse)(res, 500, 'something went wrong! please try again later');
+            return (0, _services.handleResponse)(res, 500, 'something went wrong! please try again later');
           });
         }
-        return (0, _Services.handleResponse)(res, 401, 'user identity not verified! please make sure you are logged in');
+        return (0, _services.handleResponse)(res, 401, 'user identity not verified! please make sure you are logged in');
       }).catch(function () {
-        return (0, _Services.handleResponse)(res, 500, 'something went wrong! please try again later');
+        return (0, _services.handleResponse)(res, 500, 'something went wrong! please try again later');
       });
     }
 
@@ -76,22 +76,22 @@ var RequestController = function () {
         }
       }).then(function (request) {
         if (!request) {
-          return (0, _Services.handleResponse)(res, 404, 'request not found');
+          return (0, _services.handleResponse)(res, 404, 'request not found');
         }
         return users.getClient(request.userId).then(function (client) {
           if (client) {
-            return (0, _Services.handleResponse)(res, 200, {
+            return (0, _services.handleResponse)(res, 200, {
               request: request,
               user: client
             });
           }
-          return (0, _Services.handleResponse)(res, 200, {
+          return (0, _services.handleResponse)(res, 200, {
             request: request,
             user: { message: 'user not found' }
           });
         });
       }).catch(function () {
-        return (0, _Services.handleResponse)(res, 500, 'something went wrong. please try again');
+        return (0, _services.handleResponse)(res, 500, 'something went wrong. please try again');
       });
     }
 
@@ -108,7 +108,7 @@ var RequestController = function () {
       }).then(function (clientRequests) {
         if (clientRequests) {
           if (clientRequests.length === 0) {
-            (0, _Services.handleResponse)(res, 200, []);
+            (0, _services.handleResponse)(res, 200, []);
           }
           var clientsInfo = [];
           clientRequests.forEach(function (request) {
@@ -127,15 +127,15 @@ var RequestController = function () {
                 });
               }
               if (clientsInfo.length === clientRequests.length) {
-                return (0, _Services.handleResponse)(res, 200, clientsInfo);
+                return (0, _services.handleResponse)(res, 200, clientsInfo);
               }
             }).catch(function () {
-              return (0, _Services.handleResponse)(res, 500, 'something went wrong. please try again');
+              return (0, _services.handleResponse)(res, 500, 'something went wrong. please try again');
             });
           });
         }
       }).catch(function () {
-        return (0, _Services.handleResponse)(res, 500, 'something went wrong. please try again');
+        return (0, _services.handleResponse)(res, 500, 'something went wrong. please try again');
       });
     }
 
@@ -162,7 +162,7 @@ var RequestController = function () {
         if (request) {
           // users should not be able to modify the status of a request
           if (request.status === 'approved' || request.status === 'resolved') {
-            return (0, _Services.handleResponse)(res, 200, 'request cannot be modify after it has been approved or resolved');
+            return (0, _services.handleResponse)(res, 200, 'request cannot be modify after it has been approved or resolved');
           }
           return requests.update({
             id: request.id
@@ -174,14 +174,14 @@ var RequestController = function () {
             adminId: adminId || request.adminId,
             urgent: urgent || request.urgent
           }).then(function (newRequest) {
-            return (0, _Services.handleResponse)(res, 200, newRequest);
+            return (0, _services.handleResponse)(res, 200, newRequest);
           }).catch(function () {
-            return (0, _Services.handleResponse)(res, 500, 'something went wrong. please try again');
+            return (0, _services.handleResponse)(res, 500, 'something went wrong. please try again');
           });
         }
-        return (0, _Services.handleResponse)(res, 404, 'requests not found');
+        return (0, _services.handleResponse)(res, 404, 'requests not found');
       }).catch(function () {
-        return (0, _Services.handleResponse)(res, 505, 'something went wrong. please try again');
+        return (0, _services.handleResponse)(res, 505, 'something went wrong. please try again');
       });
     }
   }, {
@@ -196,11 +196,11 @@ var RequestController = function () {
         }
       }).then(function (rows) {
         if (rows.length === 0) {
-          return (0, _Services.handleResponse)(res, 404, 'request not found, not action taken');
+          return (0, _services.handleResponse)(res, 404, 'request not found, not action taken');
         }
-        return (0, _Services.handleResponse)(res, 200, 'request has been deleted');
+        return (0, _services.handleResponse)(res, 200, 'request has been deleted');
       }).catch(function () {
-        return (0, _Services.handleResponse)(res, 500, 'something went wrong. please try again');
+        return (0, _services.handleResponse)(res, 500, 'something went wrong. please try again');
       });
     }
   }]);

@@ -22,7 +22,7 @@ var _index = require('./../models/index');
 
 var _index2 = _interopRequireDefault(_index);
 
-var _Services = require('./../services/Services');
+var _services = require('./../services/services');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -86,7 +86,7 @@ var UsersController = function () {
               isAdmin: signup.isAdmin
             };
             var token = _jsonwebtoken2.default.sign(authenKeys, process.env.SECRET_KEY, { expiresIn: '48h' });
-            (0, _Services.handleResponse)(res, 201, {
+            (0, _services.handleResponse)(res, 201, {
               token: token,
               fullname: signup.fullname,
               email: signup.email,
@@ -96,12 +96,12 @@ var UsersController = function () {
               isAdmin: signup.isAdmin
             });
           }).catch(function () {
-            return (0, _Services.handleResponse)(res, 500, 'something went wrong! try again later');
+            return (0, _services.handleResponse)(res, 500, 'something went wrong! try again later');
           });
         }
-        return (0, _Services.handleResponse)(res, 409, 'user already exist');
+        return (0, _services.handleResponse)(res, 409, 'user already exist');
       }).catch(function () {
-        return (0, _Services.handleResponse)(res, 500, 'something went wrong! try again later');
+        return (0, _services.handleResponse)(res, 500, 'something went wrong! try again later');
       });
     }
 
@@ -133,7 +133,7 @@ var UsersController = function () {
               imgUrl: user.imgUrl
             };
             var token = _jsonwebtoken2.default.sign(authenKeys, process.env.SECRET_KEY, { expiresIn: '48h' });
-            return (0, _Services.handleResponse)(res, 200, {
+            return (0, _services.handleResponse)(res, 200, {
               token: token,
               fullname: user.fullname,
               email: user.email,
@@ -143,11 +143,11 @@ var UsersController = function () {
               isAdmin: user.isAdmin
             });
           }
-          return (0, _Services.handleResponse)(res, 404, 'authentication fail! check your username or password');
+          return (0, _services.handleResponse)(res, 404, 'authentication fail! check your username or password');
         }
-        return (0, _Services.handleResponse)(res, 404, 'authentication fail! check your username or password');
+        return (0, _services.handleResponse)(res, 404, 'authentication fail! check your username or password');
       }).catch(function () {
-        return (0, _Services.handleResponse)(res, 500, 'something went wrong! try again later');
+        return (0, _services.handleResponse)(res, 500, 'something went wrong! try again later');
       });
     }
   }, {
@@ -155,11 +155,11 @@ var UsersController = function () {
     value: function getServiceName(req, res) {
       return users.findServiceName().then(function (serviceNames) {
         if (serviceNames) {
-          (0, _Services.handleResponse)(res, 200, serviceNames);
+          (0, _services.handleResponse)(res, 200, serviceNames);
         }
-        return (0, _Services.handleResponse)(res, 404, 'service not avialable yet');
+        return (0, _services.handleResponse)(res, 404, 'service not avialable yet');
       }).catch(function () {
-        return (0, _Services.handleResponse)(res, 500, 'something went wrong! try again later');
+        return (0, _services.handleResponse)(res, 500, 'something went wrong! try again later');
       });
     }
   }]);

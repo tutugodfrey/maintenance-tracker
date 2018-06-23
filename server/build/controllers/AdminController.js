@@ -10,7 +10,7 @@ var _index = require('./../models/index');
 
 var _index2 = _interopRequireDefault(_index);
 
-var _Services = require('./../services/Services');
+var _services = require('./../services/services');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -38,7 +38,7 @@ var AdminController = function () {
       }).then(function (clientRequests) {
         if (clientRequests) {
           if (clientRequests.length === 0) {
-            return (0, _Services.handleResponse)(res, 200, []);
+            return (0, _services.handleResponse)(res, 200, []);
           }
           var clientsInfo = [];
           clientRequests.forEach(function (request) {
@@ -57,15 +57,15 @@ var AdminController = function () {
                 });
               }
               if (clientsInfo.length === clientRequests.length) {
-                return (0, _Services.handleResponse)(res, 200, clientsInfo);
+                return (0, _services.handleResponse)(res, 200, clientsInfo);
               }
             }).catch(function () {
-              return (0, _Services.handleResponse)(res, 500, 'something went wrong. please try again');
+              return (0, _services.handleResponse)(res, 500, 'something went wrong. please try again');
             });
           });
         }
       }).catch(function () {
-        return (0, _Services.handleResponse)(res, 500, 'something went wrong. please try again');
+        return (0, _services.handleResponse)(res, 500, 'something went wrong. please try again');
       });
     }
   }, {
@@ -87,14 +87,14 @@ var AdminController = function () {
             updatedAt: 'now()',
             status: 'rejected'
           }).then(function (updatedRequest) {
-            return (0, _Services.handleResponse)(res, 200, updatedRequest);
+            return (0, _services.handleResponse)(res, 200, updatedRequest);
           }).catch(function () {
-            return (0, _Services.handleResponse)(res, 500, 'something went wrong. please try again');
+            return (0, _services.handleResponse)(res, 500, 'something went wrong. please try again');
           });
         }
-        return (0, _Services.handleResponse)(res, 404, 'Request does not exist');
+        return (0, _services.handleResponse)(res, 404, 'Request does not exist');
       }).catch(function () {
-        return (0, _Services.handleResponse)(res, 500, 'something went wrong. please try again');
+        return (0, _services.handleResponse)(res, 500, 'something went wrong. please try again');
       });
     }
   }, {
@@ -116,14 +116,14 @@ var AdminController = function () {
             updatedAt: 'now()',
             status: 'pending'
           }).then(function (updatedRequest) {
-            return (0, _Services.handleResponse)(res, 200, updatedRequest);
+            return (0, _services.handleResponse)(res, 200, updatedRequest);
           }).catch(function () {
-            return (0, _Services.handleResponse)(res, 500, 'something went wrong. please try again');
+            return (0, _services.handleResponse)(res, 500, 'something went wrong. please try again');
           });
         }
-        return (0, _Services.handleResponse)(res, 404, 'Request does not exist');
+        return (0, _services.handleResponse)(res, 404, 'Request does not exist');
       }).catch(function () {
-        return (0, _Services.handleResponse)(res, 500, 'something went wrong. please try again');
+        return (0, _services.handleResponse)(res, 500, 'something went wrong. please try again');
       });
     }
   }, {
@@ -145,14 +145,14 @@ var AdminController = function () {
             updatedAt: 'now()',
             status: 'resolved'
           }).then(function (updatedRequest) {
-            return (0, _Services.handleResponse)(res, 200, updatedRequest);
+            return (0, _services.handleResponse)(res, 200, updatedRequest);
           }).catch(function () {
-            return (0, _Services.handleResponse)(res, 500, 'something went wrong. please try again');
+            return (0, _services.handleResponse)(res, 500, 'something went wrong. please try again');
           });
         }
-        return (0, _Services.handleResponse)(res, 404, 'Request does not exist');
+        return (0, _services.handleResponse)(res, 404, 'Request does not exist');
       }).catch(function () {
-        return (0, _Services.handleResponse)(res, 500, 'something went wrong. please try again');
+        return (0, _services.handleResponse)(res, 500, 'something went wrong. please try again');
       });
     }
   }]);

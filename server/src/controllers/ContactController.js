@@ -1,5 +1,5 @@
 import models from './../models/index';
-import { handleResponse } from './../services/Services';
+import { handleResponse } from './../services/services';
 
 const { users, contacts } = models;
 const ContactController = class {

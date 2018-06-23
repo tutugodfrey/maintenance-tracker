@@ -2,7 +2,7 @@ import dotenv from 'dotenv-safe';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import models from './../models/index';
-import { handleResponse } from './../services/Services';
+import { handleResponse } from './../services/services';
 
 dotenv.config();
 

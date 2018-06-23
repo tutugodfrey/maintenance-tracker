@@ -1,6 +1,6 @@
 
 import models from './../models/index';
-import { handleResponse } from './../services/Services';
+import { handleResponse } from './../services/services';
 
 const { requests, users } = models;
 const AdminController = class {

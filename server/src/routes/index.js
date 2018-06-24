@@ -9,7 +9,7 @@ import secureRoute from './../middlewares/getToken';
 import usersUpload from './../middlewares/uploadfile';
 import { 
   validateSignup,
-   validateSignin 
+   validateSignin,
 } from './../middlewares/validateUsers';
 import { 
   validateCreateRequest,

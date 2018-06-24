@@ -112,9 +112,9 @@ const UsersController = class {
               isAdmin: user.isAdmin,
             });
           }
-            return handleResponse(res, 404, 'authentication fail! check your username or password');
+            return handleResponse(res, 401, 'authentication fail! check your username or password');
         } 
-          return handleResponse(res, 404, 'authentication fail! check your username or password');
+          return handleResponse(res, 401, 'authentication fail! check your username or password');
       })
       .catch(() => handleResponse(res, 500, 'something went wrong! try again later'));
   }

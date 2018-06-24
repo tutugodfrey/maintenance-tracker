@@ -1,9 +1,7 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
-import Server from './../app';
+import app from './../app';
 
-const server = new Server();
-const app = server.expressServer();
 const { expect } = chai;
 chai.use(chaiHttp);
 const adminUser = {};
@@ -20,11 +18,12 @@ export default describe('Users controller', () => {
         .field('username', 'johnd')
         .field('email', 'johnd@yahoo.com')
         .field('address', 'market road')
+        .field('phone', '07011111111')
         .field('serviceName', 'mk services')
         .field('password', '123456')
         .field('confirmPassword', '123456')
         .field('isAdmin', 'true')
-        .attach('profile-photo', './fileuploads/tutug.jpeg')
+        .attach('profile-photo', './fileuploads/tutug.jpeg') 
         .then((res) => {
           Object.assign(adminUser, res.body);
           expect(res).to.have.status(201);
@@ -41,6 +40,7 @@ export default describe('Users controller', () => {
         .field('username', 'walterb')
         .field('email', 'walterb@yahoo.com')
         .field('address', 'market road')
+        .field('phone', '07011111111')
         .field('serviceName', '')
         .field('password', '123456')
         .field('confirmPassword', '123456')
@@ -61,6 +61,7 @@ export default describe('Users controller', () => {
         .field('username', 'ryanb')
         .field('email', 'raynb@yahoo.com')
         .field('address', 'market road')
+        .field('phone', '07011111111')
         .field('serviceName', '')
         .field('password', '123456')
         .field('confirmPassword', '123456')
@@ -82,6 +83,7 @@ export default describe('Users controller', () => {
         .field('username', 'walterb')
         .field('email', 'walterb@yahoo.com')
         .field('address', 'market road')
+        .field('phone', '07011111111')
         .field('serviceName', 'mk services')
         .field('password', '123456')
         .field('confirmPassword', '123456')
@@ -102,6 +104,7 @@ export default describe('Users controller', () => {
         .field('username', 'walterbr')
         .field('email', 'walterb@yahoo.com')
         .field('address', 'market road')
+        .field('phone', '07011111111')
         .field('serviceName', 'mk services')
         .field('password', '123456')
         .field('confirmPassword', '123456')
@@ -122,6 +125,7 @@ export default describe('Users controller', () => {
         .field('username', 'walterbr')
         .field('email', 'walterbr@yahoo.com')
         .field('address', 'market road')
+        .field('phone', '07011111111')
         .field('serviceName', '')
         .field('password', '1234567')
         .field('confirmPassword', '123456')
@@ -141,6 +145,7 @@ export default describe('Users controller', () => {
         .field('username', 'walterbr')
         .field('email', 'walterbr@yahoo.com')
         .field('address', 'market road')
+        .field('phone', '07011111111')
         .field('serviceName', '')
         .field('password', '12345')
         .field('confirmPassword', '123456')

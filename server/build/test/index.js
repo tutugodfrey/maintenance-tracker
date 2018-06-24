@@ -1,12 +1,8 @@
 'use strict';
 
-var _serverTest = require('./serverTest');
+var _dataModelTest = require('./dataModelTest');
 
-var _serverTest2 = _interopRequireDefault(_serverTest);
-
-var _dummyDataTest = require('./dummyDataTest');
-
-var _dummyDataTest2 = _interopRequireDefault(_dummyDataTest);
+var _dataModelTest2 = _interopRequireDefault(_dataModelTest);
 
 var _signupTest = require('./signupTest');
 
@@ -36,8 +32,7 @@ if (process.env.NODE_ENV !== 'test') {
   console.log('can\'t run test in non test env. you are in ' + process.env.NODE_ENV + ' environment');
 } else {
   /* eslint-disable no-unused-expressions */
-  _serverTest2.default;
-  _dummyDataTest2.default;
+  _dataModelTest2.default;
   _signupTest2.default;
   _signinTest2.default;
   _userRequestTest2.default;

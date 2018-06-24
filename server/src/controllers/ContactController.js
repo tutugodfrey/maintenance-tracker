@@ -25,7 +25,7 @@ const ContactController = class {
               title,
             })
             .then((newMessage) => {
-              handleResponse(res, 201, newMessage);
+              return handleResponse(res, 201, newMessage);
             })
             .catch(() => handleResponse(res, 500, 'something went wrong. please try again'));
         }

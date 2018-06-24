@@ -14,10 +14,10 @@ var validateAddMessage = exports.validateAddMessage = function validateAddMessag
       message = _req$body.message;
 
   if (!parseInt(receiverId, 10)) {
-    (0, _services.handleResponse)(res, 400, 'missing required field');
+    return (0, _services.handleResponse)(res, 400, 'missing required field');
   }
   if (message.trim() === '') {
-    (0, _services.handleResponse)(res, 400, 'missing required field');
+    return (0, _services.handleResponse)(res, 400, 'missing required field');
   }
 
   next();

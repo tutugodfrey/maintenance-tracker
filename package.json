@@ -7,7 +7,7 @@
     "build": "babel server/src -s -d server/build",
     "start:dev": "npm run babel-node",
     "start": "node ./server/build/server.js",
-    "tests": "npm run drop:tables && npm run create:tables2 && mocha server/build/test/index --timeout 21000 --exit",
+    "test": "npm run drop:tables && npm run create:tables2 && mocha server/build/test/index --timeout 21000 --exit",
     "test:local": "npm run build && npm run drop:tables2 && npm run create:tables && mocha server/build/test/index --timeout 21000 --exit",
     "js:lint": "eslint server/src/",
     "create:tables2": "babel-node ./server/build/models/create.js --exit",

@@ -17,13 +17,13 @@ var validateCreateRequest = exports.validateCreateRequest = function validateCre
 
 
   if (description.trim() === '' || address.trim() === '' || category.trim() === '') {
-    (0, _services.handleResponse)(res, 400, 'missing required field');
+    return (0, _services.handleResponse)(res, 400, 'missing required field');
   }
   if (!urgent && urgent.trim() !== '') {
-    (0, _services.handleResponse)(res, 400, 'typeError field urgent must be a boolean');
+    return (0, _services.handleResponse)(res, 400, 'typeError field urgent must be a boolean');
   }
   if (!parseInt(adminId)) {
-    (0, _services.handleResponse)(res, 400, 'please select a service');
+    return (0, _services.handleResponse)(res, 400, 'please select a service');
   }
   // pass userId to req.body
   req.body.userId = req.body.decode.id;
@@ -33,7 +33,7 @@ var validateCreateRequest = exports.validateCreateRequest = function validateCre
 var validateGetOneRequest = exports.validateGetOneRequest = function validateGetOneRequest(req, res, next) {
   var requestId = parseInt(req.params.requestId, 10);
   if (!requestId) {
-    (0, _services.handleResponse)(res, 400, 'missing required field');
+    return (0, _services.handleResponse)(res, 400, 'missing required field');
   }
 
   next();
@@ -43,7 +43,7 @@ var validateAdminGetRequests = exports.validateAdminGetRequests = function valid
   var isAdmin = req.body.decode.isAdmin;
 
   if (!isAdmin) {
-    (0, _services.handleResponse)(res, 401, 'you are not authorized to perform this action');
+    return (0, _services.handleResponse)(res, 401, 'you are not authorized to perform this action');
   }
 
   next();
@@ -56,10 +56,10 @@ var validateAdminUpdate = exports.validateAdminUpdate = function validateAdminUp
       id = _req$body$decode.id;
 
   if (!isAdmin) {
-    (0, _services.handleResponse)(res, 401, 'you are not authorized to perform this action');
+    return (0, _services.handleResponse)(res, 401, 'you are not authorized to perform this action');
   }
   if (!requestId) {
-    (0, _services.handleResponse)(res, 400, 'missiging required field');
+    return (0, _services.handleResponse)(res, 400, 'missiging required field');
   }
 
   next();
@@ -68,7 +68,7 @@ var validateAdminUpdate = exports.validateAdminUpdate = function validateAdminUp
 var validateUpdateRequest = exports.validateUpdateRequest = function validateUpdateRequest(req, res, next) {
   var requestId = parseInt(req.params.requestId, 10);
   if (!requestId) {
-    (0, _services.handleResponse)(res, 400, 'missing required field');
+    return (0, _services.handleResponse)(res, 400, 'missing required field');
   }
 
   next();
@@ -77,7 +77,7 @@ var validateUpdateRequest = exports.validateUpdateRequest = function validateUpd
 var validateDeleteRequest = exports.validateDeleteRequest = function validateDeleteRequest(req, res, next) {
   var requestId = parseInt(req.params.requestId, 10);
   if (!requestId) {
-    (0, _services.handleResponse)(res, 400, 'missing required field');
+    return (0, _services.handleResponse)(res, 400, 'missing required field');
   }
 
   next();

@@ -1,9 +1,9 @@
 
 import chai from 'chai';
-import DataModel from './../models/DummyDataModel';
+import DataModel from './../models/DataModel';
 
 const { expect } = chai;
-const users = new DataModel('users', ['email'], ['name', 'email']);
+const users = new DataModel('users');
 const user1 = {
   fullname: 'jane doe',
   email: 'jane_doe@somebody.com',

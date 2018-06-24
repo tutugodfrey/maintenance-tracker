@@ -20,8 +20,6 @@ var _signupTest = require('./signupTest');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var server = new _app2.default();
-var app = server.expressServer();
 var expect = _chai2.default.expect;
 
 _chai2.default.use(_chaiHttp2.default);
@@ -29,7 +27,7 @@ var signedInUser = {};
 
 exports.default = describe('Signin', function () {
   it('should signin a User in and give a token', function () {
-    return _chai2.default.request(app).post('/api/v1/auth/signin').send({
+    return _chai2.default.request(_app2.default).post('/api/v1/auth/signin').send({
       username: _signupTest.regularUser1.username,
       password: '123456'
     }).then(function (res) {
@@ -42,7 +40,7 @@ exports.default = describe('Signin', function () {
   });
 
   it('should not signin a user if password is not correct', function () {
-    return _chai2.default.request(app).post('/api/v1/auth/signin').send({
+    return _chai2.default.request(_app2.default).post('/api/v1/auth/signin').send({
       username: _signupTest.regularUser1.username,
       password: '134567'
     }).then(function (res) {
@@ -52,7 +50,7 @@ exports.default = describe('Signin', function () {
   });
 
   it('should not signin a user if username is not correct', function () {
-    return _chai2.default.request(app).post('/api/v1/auth/signin').send({
+    return _chai2.default.request(_app2.default).post('/api/v1/auth/signin').send({
       username: 'someoneelse',
       password: '123456'
     }).then(function (res) {

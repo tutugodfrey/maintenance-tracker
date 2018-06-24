@@ -21,31 +21,31 @@ var validateSignup = exports.validateSignup = function validateSignup(req, res, 
 
 
   if (username.trim() === '' || fullname.trim() === '' || email.trim() === '' || password.trim() === '' || confirmPassword.trim() === '') {
-    (0, _services.handleResponse)(res, 400, 'missing required field');
+    return (0, _services.handleResponse)(res, 400, 'missing required field');
   }
   var emailRegExp = /\w+@\w+\.(net|com|org)/;
   if (!email.match(emailRegExp)) {
-    (0, _services.handleResponse)(res, 400, 'typeError: invalid email format');
+    return (0, _services.handleResponse)(res, 400, 'typeError: invalid email format');
   }
 
   if (password.length < 6 || confirmPassword.length < 6) {
-    (0, _services.handleResponse)(res, 400, 'length of password must not be less than 6');
+    return (0, _services.handleResponse)(res, 400, 'length of password must not be less than 6');
   }
 
   if (password !== confirmPassword) {
-    (0, _services.handleResponse)(res, 400, 'password does not match');
+    return (0, _services.handleResponse)(res, 400, 'password does not match');
   }
 
   if (address.trim() === '') {
-    (0, _services.handleResponse)(res, 400, 'missing required field');
+    return (0, _services.handleResponse)(res, 400, 'missing required field');
   }
 
   if (phone.trim() === '') {
-    (0, _services.handleResponse)(res, 400, 'missing required field');
+    return (0, _services.handleResponse)(res, 400, 'missing required field');
   }
 
   if (!isAdmin && isAdmin.trim() !== '') {
-    (0, _services.handleResponse)(res, 400, 'isAdmin must be a true if set');
+    return (0, _services.handleResponse)(res, 400, 'isAdmin must be a true if set');
   }
 
   if (!isAdmin) {
@@ -53,16 +53,15 @@ var validateSignup = exports.validateSignup = function validateSignup(req, res, 
   }
 
   if (Boolean(isAdmin) && serviceName.trim() === '') {
-    (0, _services.handleResponse)(res, 400, 'please provide a service name for users to recognize your services');
+    return (0, _services.handleResponse)(res, 400, 'please provide a service name for users to recognize your services');
   }
-
+  // console.log(req.body)
   var imgUrl = '/users-photo/default.png';
   if (req.file) {
     // get path to updated file
     imgUrl = (0, _services.getImgUrl)(req.file.path);
   }
   req.body.imgUrl = imgUrl;
-
   next();
 };
 
@@ -72,7 +71,7 @@ var validateSignin = exports.validateSignin = function validateSignin(req, res, 
       password = _req$body2.password;
 
   if (username.trim() === '' || password.trim() === '') {
-    (0, _services.handleResponse)(res, 400, 'Please fill in the required fields');
+    return (0, _services.handleResponse)(res, 400, 'Please fill in the required fields');
   }
 
   next();

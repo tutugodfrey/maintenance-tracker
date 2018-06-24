@@ -143,9 +143,9 @@ var UsersController = function () {
               isAdmin: user.isAdmin
             });
           }
-          return (0, _services.handleResponse)(res, 404, 'authentication fail! check your username or password');
+          return (0, _services.handleResponse)(res, 401, 'authentication fail! check your username or password');
         }
-        return (0, _services.handleResponse)(res, 404, 'authentication fail! check your username or password');
+        return (0, _services.handleResponse)(res, 401, 'authentication fail! check your username or password');
       }).catch(function () {
         return (0, _services.handleResponse)(res, 500, 'something went wrong! try again later');
       });

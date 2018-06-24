@@ -108,7 +108,7 @@ var RequestController = function () {
       }).then(function (clientRequests) {
         if (clientRequests) {
           if (clientRequests.length === 0) {
-            (0, _services.handleResponse)(res, 200, []);
+            return (0, _services.handleResponse)(res, 200, []);
           }
           var clientsInfo = [];
           clientRequests.forEach(function (request) {

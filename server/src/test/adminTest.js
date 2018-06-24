@@ -1,11 +1,9 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
-import Server from './../app';
+import app from './../app';
 import { adminUser, regularUser1 } from './signupTest';
 import { createdRequest1 } from './userRequestTest';
 
-const server = new Server();
-const app = server.expressServer();
 const { expect } = chai;
 chai.use(chaiHttp);
 const signedInUser = {};

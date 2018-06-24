@@ -1,5 +1,4 @@
-import serverTest from './serverTest';
-import modelTest from './dummyDataTest';
+import dataModelTest from './dataModelTest';
 import signupTest from './signupTest';
 import signinTest from './signinTest';
 import userRequestTest from './userRequestTest';
@@ -12,8 +11,7 @@ if (process.env.NODE_ENV !== 'test') {
   console.log(`can't run test in non test env. you are in ${process.env.NODE_ENV} environment`);
 } else {
   /* eslint-disable no-unused-expressions */
-  serverTest;
-  modelTest;
+  dataModelTest;
   signupTest;
   signinTest;
   userRequestTest;

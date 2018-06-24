@@ -45,7 +45,7 @@ var ContactController = function () {
             message: message,
             title: title
           }).then(function (newMessage) {
-            (0, _services.handleResponse)(res, 201, newMessage);
+            return (0, _services.handleResponse)(res, 201, newMessage);
           }).catch(function () {
             return (0, _services.handleResponse)(res, 500, 'something went wrong. please try again');
           });

@@ -83,7 +83,7 @@ const RequestController = class {
       .then((clientRequests) => {
         if (clientRequests) {
           if (clientRequests.length === 0) {
-            handleResponse(res, 200, []);
+            return handleResponse(res, 200, []);
           }
           const clientsInfo = [];
           clientRequests.forEach((request) => {

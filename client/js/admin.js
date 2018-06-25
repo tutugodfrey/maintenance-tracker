@@ -146,6 +146,7 @@ let eventListenerAdded = false;
 let displayRequestCalled = false;
 let viewResolvedRequestCalled = false;
 let viewApprovedRequestCalled = false;
+let eventListenerAddedToToggleNavBtn = false;
 let eventListenerAddedToApproveRequest = false;
 let eventListenerAddedToRejectRequest = false;
 let eventListenerAddedToResolveRequest = false;
@@ -180,7 +181,12 @@ const domNotifier = function() {
   
   if(document.getElementById('toggle-navigation-btn')) {
     const toggleNavBtn = document.getElementById('toggle-navigation-btn');
-      domElements.newEvent(toggleNavBtn, 'click', domElements.showNavigation, [domElements, toggleNavBtn]);
+    if (eventListenerAddedToToggleNavBtn) {
+      // do nothing
+    } else {
+      domElements.newEvent(toggleNavBtn, 'click', domElements.showNavigation, [toggleNavBtn, domElements]);
+      eventListenerAddedToToggleNavBtn = true;
+    }
   }
 
   if(document.getElementsByClassName('nav-link')) {
@@ -190,7 +196,7 @@ const domNotifier = function() {
       // resulting in multiple calls to the domNotifier
     } else {
       for(let size = 0; size < navItems.length; size++) {
-        domElements.newEvent(navItems[size], 'click', domElements.tabNavigation, [domElements, navItems[size]]);
+        domElements.newEvent(navItems[size], 'click', domElements.tabNavigation, [navItems[size], domElements]);
       }
       eventListenerAdded = true;
     } 
@@ -390,7 +396,18 @@ const domNotifier = function() {
 		for (let requiredField of requiredInputFields) {
 			domElements.newEvent(requiredField, 'focus', domElements.resetRequiredFields, [requiredField, domElements]);
 		}
-	}
+  }
+  
+  if (document.getElementsByClassName('few-description')) {
+    const descriptions = document.getElementsByClassName('few-description');
+    if (descriptions.length === 0) {
+      // do nothing
+    }  else {
+      for (let description of descriptions) {
+        domElements.newEvent(description, 'mouseover', domElements.showFullDescription, [description, domElements]);
+      }
+    }
+  }
 }
 
 domNotifier()

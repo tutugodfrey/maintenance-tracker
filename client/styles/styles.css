@@ -537,14 +537,13 @@ li#message-item a {
   list-style:none;
   position:relative;
   top:-16px;
-  height:40px;
+  min-height:40px;
 }
 #bottom-nav-layer > div.nav-bar {
   display:none;
 }
 #bottom-nav-layer > #vertical-nav-bar > ul {
   width:110%;
-  height:100px;
   position:absolute;
   left:-35px;
   top:30px;
@@ -724,7 +723,17 @@ dt.category, dd.category {
    width:40%;
     left:30%;
   }
-
+  dd.display-full-description {
+    background-color:#d1cece;
+    position:absolute;
+    top:80px;
+    left:-40px;
+    min-height:80px;
+    padding:6px 2px;
+    width:90%;
+    z-index:5;
+    /* overflow:scroll; */
+  }
   dt.description, dd.description {
     position:relative;
     left:1%;
@@ -737,10 +746,7 @@ dt.category, dd.category {
     height:35px;
     overflow:hidden;
   }
-  .display-full-description {
-    position:relative;
-    display:block;
-  }
+
 
   dt.address, dd.address {
     position:relative;

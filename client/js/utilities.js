@@ -1,5 +1,5 @@
 
-const DomElementActions = class {
+ class DomElementActions {
   constructor() {
     this.defaultTab;
     this.lastElementClicked;
@@ -43,31 +43,32 @@ const DomElementActions = class {
     let eleClassValue = eleObject.getAttribute('class');
     eleClassValue = eleClassValue.replace(valueToChange, replacement);
     eleObject.setAttribute('class', eleClassValue);
+    return;
   }		//end changeClassValue
 
   // display and close vertical nav button
   showNavigation(arrayOfArgu) {
-    const self = arrayOfArgu[0];
-    const toggleBtn = arrayOfArgu[1];
-    if (self === 'undefined') {
+    const toggleBtn = arrayOfArgu[0];
+    const self = arrayOfArgu[1];
+    if (!self) {
       self = this;
     }
     const verticalNav = document.getElementById('vertical-nav-bar');
     const classValue = verticalNav.getAttribute('class');
-    if(classValue.indexOf('hide-item') >= 0) {
+    if (classValue.indexOf('hide-item') >= 0) {
       self.changeClassValue (verticalNav, 'hide-item', 'show-item');
-    } else if(classValue.indexOf('show-item') >= 0) {
+    } else if (classValue.indexOf('show-item') >= 0) {
       self.changeClassValue (verticalNav, 'show-item', 'hide-item');
     }
   }
 
   tabNavigation(arrayOfArgu) {
-    const self = arrayOfArgu[0];
+    const elem = arrayOfArgu[0]
+    const self = arrayOfArgu[1];
     // self = the instance of this class
-    if (self === 'undefined') {
+    if (!self) {
       self = this;
     }
-    const elem = arrayOfArgu[1]
     // deactive current activeNav
     const activeNav = document.getElementsByClassName('active')[0];
     self.changeClassValue (activeNav, 'active', 'inactive');
@@ -280,7 +281,6 @@ const DomElementActions = class {
         const listDefinition = document.createElement('dd');
 
         if (key === 'description') {
-          console.log(key)
           listDefinition.className = `${key} few-description`;
         } else {
           listDefinition.className = key; 
@@ -320,7 +320,7 @@ const DomElementActions = class {
       }
     });
   }
-/////////////////////////////////////////////////////////// attention
+
   displayMessages(responseData) {
     if (responseData.message === 'authentication fail! invalid Token' || responseData.message === 'authentication fail! please send a token') {
       storageHandler.redirectUser(responseData)
@@ -379,12 +379,22 @@ const DomElementActions = class {
   }
 
   // display full description of repair request
-  showFullDescription(descriptionEle){
-    console.log(descriptionEle)
+  showFullDescription(arrayOfArgu){
+    const descriptionEle = arrayOfArgu[0];
+    const self = arrayOfArgu[1];
+    if (!self) {
+      self = this;
+    }
+    const descriptionEleClass = descriptionEle.className;
+    if (descriptionEleClass.indexOf('display-full-description') >= 0) {
+      self.changeClassValue(descriptionEle, 'display-full-description', 'description');
+    } else {
+      self.changeClassValue(descriptionEle, 'description', 'display-full-description');
+    }
   }
 }
 
-const StorageHandler = class {
+class StorageHandler {
   getDataFromStore (key) {
     if (typeof key !== 'string') {
       return `typeError: expecting a string but got ${typeof key}`;
@@ -447,7 +457,7 @@ const StorageHandler = class {
   }
 }
 
-const RequestHandler = class {
+class RequestHandler {
   createRequest(ele) {
     if (document.getElementsByClassName('form-control')) {
       const formControls = document.getElementsByClassName('request-data');

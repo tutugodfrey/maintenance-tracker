@@ -232,6 +232,7 @@ const clearStorage = () => {
 let eventListenerAdded = false;
 let displayRequestCalled = false;
 let eventListenerAddedToCreateRequest = false;
+let eventListenerAddedToToggleNavBtn = false;
 let eventListenerAddedToEditRequest = false;
 let eventListenerAddedToSendMessage = false;
 let eventListenerAddedToSelectService = false;
@@ -284,7 +285,12 @@ const domNotifier = function() {
   
   if(document.getElementById('toggle-navigation-btn')) {
     const toggleNavBtn = document.getElementById('toggle-navigation-btn');
-      domElements.newEvent(toggleNavBtn, 'click', domElements.showNavigation, [domElements, toggleNavBtn]);
+    if (eventListenerAddedToToggleNavBtn) {
+      // do nothing
+    } else {
+      domElements.newEvent(toggleNavBtn, 'click', domElements.showNavigation, [toggleNavBtn, domElements]);
+      eventListenerAddedToToggleNavBtn = true;
+    }
   }
 
   if(document.getElementsByClassName('nav-link')) {
@@ -294,7 +300,7 @@ const domNotifier = function() {
       // resulting in multiple calls to the domNotifier
     } else {
       for(let size = 0; size < navItems.length; size++) {
-        domElements.newEvent(navItems[size], 'click', domElements.tabNavigation, [domElements, navItems[size]]);
+        domElements.newEvent(navItems[size], 'click', domElements.tabNavigation, [navItems[size],domElements]);
       }
       eventListenerAdded = true;
     } 
@@ -440,7 +446,7 @@ const domNotifier = function() {
       // do nothing
     }  else {
       for (let description of descriptions) {
-        domElements.newEvent(description, 'mouseover', domElements.showFullDescription, description);
+        domElements.newEvent(description, 'mouseover', domElements.showFullDescription, [description, domElements]);
       }
     }
   }

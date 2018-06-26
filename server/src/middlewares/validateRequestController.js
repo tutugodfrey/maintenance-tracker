@@ -9,11 +9,7 @@ export const validateCreateRequest = (req, res, next) => {
     adminId,
   } = req.body;
 
-  if (
-    description.trim() === '' ||
-    address.trim() === '' ||
-    category.trim() === ''
-  ) {
+  if (description.trim() === '' || address.trim() === '' || category.trim() === '') {
     return handleResponse(res, 400, 'missing required field');
   }
   if (!urgent && urgent.trim() !== '') {
@@ -55,7 +51,7 @@ export const validateAdminUpdate = (req, res, next) => {
     return handleResponse(res, 401, 'you are not authorized to perform this action');
   }
   if (!requestId) {
-    return handleResponse(res, 400, 'missiging required field');
+    return handleResponse(res, 400, 'missing required field');
   }
 
   next();

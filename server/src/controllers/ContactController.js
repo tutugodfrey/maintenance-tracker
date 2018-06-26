@@ -10,24 +10,30 @@ const ContactController = class {
       title,
       message,
     } = req.body;
-
     // sender is user with token
     const senderId = req.body.decode.id;
     return users
       .findById(senderId)
       .then((user) => {
         if (user) {
-          return contacts
-            .create({
-              receiverId,
-              senderId,
-              message,
-              title,
+          return users
+            .findById(receiverId)
+            .then((receiver) => {
+              if (receiver) {
+                return contacts
+                  .create({
+                    receiverId,
+                    senderId,
+                    message,
+                    title,
+                  })
+                  .then((newMessage) => {
+                    return handleResponse(res, 201, newMessage);
+                  })
+                  .catch(() => handleResponse(res, 500, 'something went wrong. please try again'));
+              }
+              return handleResponse(res, 404, 'receiver does not exist');
             })
-            .then((newMessage) => {
-              return handleResponse(res, 201, newMessage);
-            })
-            .catch(() => handleResponse(res, 500, 'something went wrong. please try again'));
         }
         return handleResponse(res, 404, 'Your identity could not be verified. Please make sure you are logged in');
       })

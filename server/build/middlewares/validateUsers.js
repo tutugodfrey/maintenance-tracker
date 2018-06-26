@@ -20,7 +20,7 @@ var validateSignup = exports.validateSignup = function validateSignup(req, res, 
       serviceName = _req$body.serviceName;
 
 
-  if (username.trim() === '' || fullname.trim() === '' || email.trim() === '' || password.trim() === '' || confirmPassword.trim() === '') {
+  if (username.trim() === '' || fullname.trim() === '' || email.trim() === '' || password.trim() === '' || confirmPassword.trim() === '' || address.trim() === '' || phone.trim() === '') {
     return (0, _services.handleResponse)(res, 400, 'missing required field');
   }
   var emailRegExp = /\w+@\w+\.(net|com|org)/;
@@ -34,14 +34,6 @@ var validateSignup = exports.validateSignup = function validateSignup(req, res, 
 
   if (password !== confirmPassword) {
     return (0, _services.handleResponse)(res, 400, 'password does not match');
-  }
-
-  if (address.trim() === '') {
-    return (0, _services.handleResponse)(res, 400, 'missing required field');
-  }
-
-  if (phone.trim() === '') {
-    return (0, _services.handleResponse)(res, 400, 'missing required field');
   }
 
   if (!isAdmin && isAdmin.trim() !== '') {
@@ -71,7 +63,7 @@ var validateSignin = exports.validateSignin = function validateSignin(req, res, 
       password = _req$body2.password;
 
   if (username.trim() === '' || password.trim() === '') {
-    return (0, _services.handleResponse)(res, 400, 'Please fill in the required fields');
+    return (0, _services.handleResponse)(res, 400, 'missing required field');
   }
 
   next();

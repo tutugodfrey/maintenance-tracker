@@ -75,25 +75,27 @@ var UsersController = function () {
             imgUrl: imgUrl,
             password: hashedPassword,
             isAdmin: Boolean(isAdmin) || false
-          }).then(function (signup) {
+          }).then(function (createdUser) {
             var authenKeys = {
-              fullname: signup.fullname,
-              email: signup.email,
-              username: signup.username,
-              phone: signup.phone,
-              imgUrl: signup.imgUrl,
-              id: signup.id,
-              isAdmin: signup.isAdmin
+              fullname: createdUser.fullname,
+              email: createdUser.email,
+              username: createdUser.username,
+              phone: createdUser.phone,
+              imgUrl: createdUser.imgUrl,
+              id: createdUser.id,
+              isAdmin: createdUser.isAdmin,
+              serviceName: createdUser.serviceName
             };
             var token = _jsonwebtoken2.default.sign(authenKeys, process.env.SECRET_KEY, { expiresIn: '48h' });
             (0, _services.handleResponse)(res, 201, {
               token: token,
-              fullname: signup.fullname,
-              email: signup.email,
-              username: signup.username,
-              imgUrl: signup.imgUrl,
-              id: signup.id,
-              isAdmin: signup.isAdmin
+              fullname: createdUser.fullname,
+              email: createdUser.email,
+              username: createdUser.username,
+              imgUrl: createdUser.imgUrl,
+              id: createdUser.id,
+              isAdmin: createdUser.isAdmin,
+              serviceName: createdUser.serviceName
             });
           }).catch(function () {
             return (0, _services.handleResponse)(res, 500, 'something went wrong! try again later');
@@ -130,7 +132,8 @@ var UsersController = function () {
               fullname: user.fullname,
               isAdmin: user.isAdmin,
               id: user.id,
-              imgUrl: user.imgUrl
+              imgUrl: user.imgUrl,
+              serviceName: user.serviceName
             };
             var token = _jsonwebtoken2.default.sign(authenKeys, process.env.SECRET_KEY, { expiresIn: '48h' });
             return (0, _services.handleResponse)(res, 200, {
@@ -140,7 +143,8 @@ var UsersController = function () {
               username: user.username,
               imgUrl: user.imgUrl,
               id: user.id,
-              isAdmin: user.isAdmin
+              isAdmin: user.isAdmin,
+              serviceName: user.serviceName
             });
           }
           return (0, _services.handleResponse)(res, 401, 'authentication fail! check your username or password');
@@ -155,7 +159,7 @@ var UsersController = function () {
     value: function getServiceName(req, res) {
       return users.findServiceName().then(function (serviceNames) {
         if (serviceNames) {
-          (0, _services.handleResponse)(res, 200, serviceNames);
+          return (0, _services.handleResponse)(res, 200, serviceNames);
         }
         return (0, _services.handleResponse)(res, 404, 'service not avialable yet');
       }).catch(function () {

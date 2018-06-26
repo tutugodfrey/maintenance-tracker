@@ -87,12 +87,27 @@ var AdminController = function () {
             updatedAt: 'now()',
             status: 'rejected'
           }).then(function (updatedRequest) {
-            return (0, _services.handleResponse)(res, 200, updatedRequest);
+            if (updatedRequest) {
+              return users.getClient(updatedRequest.userId).then(function (user) {
+                if (user) {
+                  return (0, _services.handleResponse)(res, 200, {
+                    user: user,
+                    request: updatedRequest
+                  });
+                }
+                return (0, _services.handleResponse)(res, 200, {
+                  user: { message: 'user not found' },
+                  request: updatedRequest
+                });
+              }).catch(function () {
+                return (0, _services.handleResponse)(res, 500, 'something went wrong. please try again');
+              });
+            }
           }).catch(function () {
             return (0, _services.handleResponse)(res, 500, 'something went wrong. please try again');
           });
         }
-        return (0, _services.handleResponse)(res, 404, 'Request does not exist');
+        return (0, _services.handleResponse)(res, 404, 'request not found');
       }).catch(function () {
         return (0, _services.handleResponse)(res, 500, 'something went wrong. please try again');
       });
@@ -116,12 +131,27 @@ var AdminController = function () {
             updatedAt: 'now()',
             status: 'pending'
           }).then(function (updatedRequest) {
-            return (0, _services.handleResponse)(res, 200, updatedRequest);
+            if (updatedRequest) {
+              return users.getClient(updatedRequest.userId).then(function (user) {
+                if (user) {
+                  return (0, _services.handleResponse)(res, 200, {
+                    user: user,
+                    request: updatedRequest
+                  });
+                }
+                return (0, _services.handleResponse)(res, 200, {
+                  user: { message: 'user not found' },
+                  request: updatedRequest
+                });
+              }).catch(function () {
+                return (0, _services.handleResponse)(res, 500, 'something went wrong. please try again');
+              });
+            }
           }).catch(function () {
             return (0, _services.handleResponse)(res, 500, 'something went wrong. please try again');
           });
         }
-        return (0, _services.handleResponse)(res, 404, 'Request does not exist');
+        return (0, _services.handleResponse)(res, 404, 'request not found');
       }).catch(function () {
         return (0, _services.handleResponse)(res, 500, 'something went wrong. please try again');
       });
@@ -145,12 +175,27 @@ var AdminController = function () {
             updatedAt: 'now()',
             status: 'resolved'
           }).then(function (updatedRequest) {
-            return (0, _services.handleResponse)(res, 200, updatedRequest);
+            if (updatedRequest) {
+              return users.getClient(updatedRequest.userId).then(function (user) {
+                if (user) {
+                  return (0, _services.handleResponse)(res, 200, {
+                    user: user,
+                    request: updatedRequest
+                  });
+                }
+                return (0, _services.handleResponse)(res, 200, {
+                  user: { message: 'user not found' },
+                  request: updatedRequest
+                });
+              }).catch(function () {
+                return (0, _services.handleResponse)(res, 500, 'something went wrong. please try again');
+              });
+            }
           }).catch(function () {
             return (0, _services.handleResponse)(res, 500, 'something went wrong. please try again');
           });
         }
-        return (0, _services.handleResponse)(res, 404, 'Request does not exist');
+        return (0, _services.handleResponse)(res, 404, 'request not found');
       }).catch(function () {
         return (0, _services.handleResponse)(res, 500, 'something went wrong. please try again');
       });

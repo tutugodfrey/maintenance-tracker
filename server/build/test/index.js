@@ -12,6 +12,10 @@ var _signinTest = require('./signinTest');
 
 var _signinTest2 = _interopRequireDefault(_signinTest);
 
+var _getServiceTest = require('./getServiceTest');
+
+var _getServiceTest2 = _interopRequireDefault(_getServiceTest);
+
 var _userRequestTest = require('./userRequestTest');
 
 var _userRequestTest2 = _interopRequireDefault(_userRequestTest);
@@ -35,6 +39,7 @@ if (process.env.NODE_ENV !== 'test') {
   _dataModelTest2.default;
   _signupTest2.default;
   _signinTest2.default;
+  _getServiceTest2.default;
   _userRequestTest2.default;
   _adminTest2.default;
   _contactTest2.default;

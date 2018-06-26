@@ -33,11 +33,10 @@ var request4 = {
   description: '',
   urgent: true,
   address: 'somewhere in the world',
-  userId: 2,
   status: 'awaiting confirmation'
 };
 
-exports.default = describe('Users controller', function () {
+exports.default = describe('Requests controller', function () {
   it('should signin a User in and give a token', function () {
     return _chai2.default.request(_app2.default).post('/api/v1/auth/signin').send({
       username: _signupTest.regularUser1.username,
@@ -48,13 +47,16 @@ exports.default = describe('Users controller', function () {
       expect(res.body).to.be.an('Object');
       expect(res.body).to.have.property('token');
       expect(res.body.token).to.be.a('string');
+      expect(res.body.isAdmin).to.equal(false);
     });
   });
 
-  describe('Empty request model', function () {
+  describe('empty table', function () {
     it('should return an empty array', function () {
       return _chai2.default.request(_app2.default).get('/api/v1/users/requests').set('token', signedInUser.token).then(function (res) {
         expect(res).to.have.status(200);
+        expect(res.body).to.be.an('array');
+        expect(res.body.length).to.equal(0);
       });
     });
 
@@ -67,7 +69,7 @@ exports.default = describe('Users controller', function () {
     });
   });
 
-  describe('Create requests', function () {
+  describe('Create requests method', function () {
     it('should create a new request', function () {
       var request1 = {
         category: 'electrical',
@@ -104,17 +106,19 @@ exports.default = describe('Users controller', function () {
         expect(res.body).to.have.any.keys('adminId');
       });
     });
-    it('should not create request for users that does not exist', function () {
+    it('should not create request for a service (adminId) that does not exist', function () {
       var request3 = {
         category: 'electrical',
         description: 'Socket burned',
         urgent: true,
         address: 'somewhere in the world',
-        userId: 9
+        adminId: 9
       };
       return _chai2.default.request(_app2.default).post('/api/v1/users/requests').set('token', signedInUser.token).send(request3).then(function (res) {
-        expect(res).to.have.status(400);
+        expect(res).to.have.status(404);
         expect(res.body).to.be.an('object');
+        expect(res.body).to.have.property('message');
+        expect(res.body.message).to.equal('service not found');
       });
     });
 
@@ -122,20 +126,25 @@ exports.default = describe('Users controller', function () {
       return _chai2.default.request(_app2.default).post('/api/v1/users/requests').set('token', signedInUser.token).send(request4).then(function (res) {
         expect(res).to.have.status(400);
         expect(res.body).to.be.an('object');
+        expect(res.body).to.have.property('message');
         expect(res.body).to.eql({ message: 'missing required field' });
       });
     });
   });
 
   // test for get ../users/requests/:requestId
-  describe('get one request', function () {
+  describe('get one request method ', function () {
     it('should return a request with the given id for a logged in user', function () {
       var id = createdRequest1.id;
 
       return _chai2.default.request(_app2.default).get('/api/v1/users/requests/' + id).set('token', signedInUser.token).then(function (res) {
         expect(res).to.have.status(200);
         expect(res.body).to.be.an('object');
+        expect(res.body).to.have.property('request');
+        expect(res.body).to.have.property('user');
         expect(res.body.request).to.have.any.keys('userId');
+        expect(res.body.request.userId).to.equal(signedInUser.id);
+        expect(res.body.user.serviceName).to.equal(_signupTest.adminUser.serviceName);
       });
     });
 
@@ -143,6 +152,7 @@ exports.default = describe('Users controller', function () {
       return _chai2.default.request(_app2.default).get('/api/v1/users/requests/20').set('token', signedInUser.token).then(function (res) {
         expect(res).to.have.status(404);
         expect(res.body).to.be.an('object');
+        expect(res.body).to.have.property('message');
         expect(res.body).to.eql({ message: 'request not found' });
       });
     });
@@ -153,6 +163,7 @@ exports.default = describe('Users controller', function () {
       return _chai2.default.request(_app2.default).get('/api/v1/users/requests/' + id).set('token', _signupTest.regularUser2.token).then(function (res) {
         expect(res).to.have.status(404);
         expect(res.body).to.be.an('object');
+        expect(res.body).to.have.property('message');
         expect(res.body).to.eql({ message: 'request not found' });
       });
     });
@@ -161,31 +172,57 @@ exports.default = describe('Users controller', function () {
       return _chai2.default.request(_app2.default).get('/api/v1/users/requests/0').set('token', signedInUser.token).then(function (res) {
         expect(res).to.have.status(400);
         expect(res.body).to.be.an('object');
+        expect(res.body).to.have.property('message');
         expect(res.body).to.eql({ message: 'missing required field' });
       });
     });
 
-    it('should return bad request if neither userId nor requestId is valid', function () {
-      return _chai2.default.request(_app2.default).get('/api/v1/users/requests/0').set('token', signedInUser.token).then(function (res) {
-        expect(res).to.have.status(400);
+    it('should return authorization error when token is invalid', function () {
+      var id = createdRequest1.id;
+
+      return _chai2.default.request(_app2.default).get('/api/v1/users/requests/' + id).set('token', 'signedInUser.token.invalidtoken').then(function (res) {
+        expect(res).to.have.status(401);
         expect(res.body).to.be.an('object');
-        expect(res.body).to.eql({ message: 'missing required field' });
+        expect(res.body).to.have.property('message');
+        expect(res.body).to.eql({ message: 'authentication fail! invalid token' });
       });
     });
   });
 
   // test for get ../users/requests
   describe('get all request', function () {
+    it('should return authorization error if token is invalid', function () {
+      return _chai2.default.request(_app2.default).get('/api/v1/users/requests').set('token', 'regularUser2.tokeninvalidtoken').then(function (res) {
+        expect(res).to.have.status(401);
+        expect(res.body).to.be.an('Object');
+        expect(res.body).to.have.property('message');
+        expect(res.body.message).to.equal('authentication fail! invalid token');
+      });
+    });
+
+    it('should return authorization error if token is not provided', function () {
+      return _chai2.default.request(_app2.default).get('/api/v1/users/requests').then(function (res) {
+        expect(res).to.have.status(401);
+        expect(res.body).to.be.an('Object');
+        expect(res.body).to.have.property('message');
+        expect(res.body.message).to.equal('authentication fail! please send a token');
+      });
+    });
+
     it('should return all request for logged in user', function () {
       return _chai2.default.request(_app2.default).get('/api/v1/users/requests').set('token', signedInUser.token).then(function (res) {
         expect(res).to.have.status(200);
         expect(res.body).to.be.an('array');
         expect(res.body).to.have.length.of.at.least(1);
-        // expect(res.body[0].request).to.deep.include.members([createdRequest1]);
+        expect(res.body[0]).to.have.property('request');
+        expect(res.body[0]).to.have.property('user');
+        expect(res.body[0].user).to.have.property('serviceName');
+        expect(res.body[0].user.serviceName).to.equal(_signupTest.adminUser.serviceName);
+        expect(res.body[0].request).to.eql(createdRequest1);
       });
     });
 
-    it('should return an empty array if no matching userId is found', function () {
+    it('should return an empty array if no request exist for the logged in user', function () {
       return _chai2.default.request(_app2.default).get('/api/v1/users/requests').set('token', _signupTest.regularUser2.token).then(function (res) {
         expect(res).to.have.status(200);
         expect(res.body).to.be.an('array');
@@ -194,7 +231,7 @@ exports.default = describe('Users controller', function () {
     });
   });
 
-  describe('Users request update', function () {
+  describe('Update request method', function () {
     it('users should be able to modify the other field except the status of a request', function () {
       var id = createdRequest1.id,
           adminId = createdRequest1.adminId;
@@ -205,11 +242,11 @@ exports.default = describe('Users controller', function () {
       }).then(function (res) {
         expect(res).to.have.status(200);
         expect(res.body).to.be.an('object');
-        expect(res.body.description).to.equal('wall socket got burned and need replacement');
+        expect(res.body.request.description).to.equal('wall socket got burned and need replacement');
       });
     });
 
-    it('users should not be able to modify the status of a request', function () {
+    it('users should not modify the status of a request', function () {
       var id = createdRequest1.id,
           adminId = createdRequest1.adminId;
 
@@ -219,7 +256,7 @@ exports.default = describe('Users controller', function () {
       }).then(function (res) {
         expect(res).to.have.status(200);
         expect(res.body).to.be.an('object');
-        expect(res.body.status).to.equal('awaiting confirmation');
+        expect(res.body.request.status).to.equal('awaiting confirmation');
       });
     });
 
@@ -232,31 +269,36 @@ exports.default = describe('Users controller', function () {
       }).then(function (res) {
         expect(res).to.have.status(404);
         expect(res.body).to.be.an('object');
+        expect(res.body).to.have.property('message');
+        expect(res.body.message).to.equal('request not found');
       });
     });
 
-    it('should return not found for a request if userId does not match', function () {
+    it('should return authorization error for invalid token', function () {
       var id = createdRequest1.id,
           adminId = createdRequest1.adminId;
 
-      return _chai2.default.request(_app2.default).put('/api/v1/users/requests/' + id).set('token', _signupTest.regularUser2.token).send({
+      return _chai2.default.request(_app2.default).put('/api/v1/users/requests/' + id).set('token', 'regularUser2.tokeninvalidtoken').send({
         adminId: adminId,
         description: 'wall socket got burned and need replacement'
       }).then(function (res) {
-        expect(res).to.have.status(404);
+        expect(res).to.have.status(401);
         expect(res.body).to.be.an('object');
+        expect(res.body).to.have.property('message');
+        expect(res.body.message).to.equal('authentication fail! invalid token');
       });
     });
   });
 
   // test for delete ../users/requests/:requestId
-  describe('delete request', function () {
+  describe('delete request method', function () {
     it('should delete a request', function () {
       var id = createdRequest2.id;
 
       return _chai2.default.request(_app2.default).delete('/api/v1/users/requests/' + id).set('token', signedInUser.token).then(function (res) {
         expect(res).to.have.status(200);
         expect(res.body).to.be.an('object');
+        expect(res.body).to.have.property('message');
         expect(res.body).to.eql({ message: 'request has been deleted' });
       });
     });
@@ -265,6 +307,7 @@ exports.default = describe('Users controller', function () {
       return _chai2.default.request(_app2.default).delete('/api/v1/users/requests/15').set('token', signedInUser.token).then(function (res) {
         expect(res).to.have.status(404);
         expect(res.body).to.be.an('object');
+        expect(res.body).to.have.property('message');
         expect(res.body).to.eql({ message: 'request not found, not action taken' });
       });
     });
@@ -273,14 +316,16 @@ exports.default = describe('Users controller', function () {
       return _chai2.default.request(_app2.default).delete('/api/v1/users/requests/0').set('token', signedInUser.token).then(function (res) {
         expect(res).to.have.status(400);
         expect(res.body).to.be.an('object');
+        expect(res.body).to.have.property('message');
         expect(res.body).to.eql({ message: 'missing required field' });
       });
     });
 
-    it('should return bad request if requestId and userId is invalid', function () {
+    it('should return bad request if requestId is not valid', function () {
       return _chai2.default.request(_app2.default).delete('/api/v1/users/requests/0').set('token', signedInUser.token).then(function (res) {
         expect(res).to.have.status(400);
         expect(res.body).to.be.an('object');
+        expect(res.body).to.have.property('message');
         expect(res.body).to.eql({ message: 'missing required field' });
       });
     });

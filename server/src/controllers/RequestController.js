@@ -18,20 +18,27 @@ const RequestController = class {
     return users.findById(parseInt(userId, 10))
       .then((user) => {
         if (user) {
-          return requests
-            .create({
-              userId,
-              category,
-              description,
-              address,
-              adminId,
-              issueDate: 'now()',
-              updatedAt: 'now()',
-              status: 'awaiting confirmation',
-              urgent: urgent || false,
+          return users
+            .findById(parseInt(adminId, 10))
+            .then((admin) => {
+              if (admin && admin.serviceName) {
+                return requests
+                .create({
+                  userId,
+                  category,
+                  description,
+                  address,
+                  adminId,
+                  issueDate: 'now()',
+                  updatedAt: 'now()',
+                  status: 'awaiting confirmation',
+                  urgent: urgent || false,
+                })
+                .then(request => handleResponse(res, 201, request))
+                .catch(() => handleResponse(res, 500, 'something went wrong! please try again later'));
+              }
+              return handleResponse(res, 404, 'service not found')
             })
-            .then(request => handleResponse(res, 201, request))
-            .catch(() => handleResponse(res, 500, 'something went wrong! please try again later'));
         }
         return handleResponse(res, 401, 'user identity not verified! please make sure you are logged in')
       })
@@ -54,7 +61,7 @@ const RequestController = class {
           return handleResponse(res,404, 'request not found');
         }
         return users
-        .getClient(request.userId)
+        .getClient(request.adminId)
         .then((client) => {
           if (client) {
             return handleResponse(res, 200,  {
@@ -137,7 +144,7 @@ const RequestController = class {
         if (request) {
           // users should not be able to modify the status of a request
           if (request.status === 'approved' || request.status === 'resolved') {
-            return handleResponse(res, 200, 'request cannot be modify after it has been approved or resolved')
+            return handleResponse(res, 200, 'request cannot be modify after it has been approved or resolved');
           }
           return requests
             .update(
@@ -153,10 +160,27 @@ const RequestController = class {
                 urgent: urgent || request.urgent,
               },
             )
-            .then(newRequest => handleResponse(res, 200, newRequest))
+            .then((newRequest) => {
+              // get the associated admin
+              return users
+              .getClient(newRequest.adminId)
+              .then((admin) => {
+                if (admin) {
+                  return handleResponse(res, 200, {
+                    request: newRequest,
+                    user: admin,
+                  });
+                }
+                return handleResponse(res, 200, {
+                  request: newRequest,
+                  user: { message: 'user not found' },
+                })
+              })
+              .catch(() => handleResponse(res, 500, 'something went wrong. please try again'));
+            })
             .catch(() => handleResponse(res, 500, 'something went wrong. please try again'));
         }
-        return handleResponse(res, 404, 'requests not found')
+        return handleResponse(res, 404, 'request not found')
       })
       .catch(() => handleResponse(res, 505, 'something went wrong. please try again'));
   }

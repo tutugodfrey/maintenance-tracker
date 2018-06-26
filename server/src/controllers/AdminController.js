@@ -70,10 +70,28 @@ const AdminController = class {
               status: 'rejected',
             },
           )
-          .then(updatedRequest => handleResponse(res, 200, updatedRequest))
+          .then((updatedRequest) => {
+            if (updatedRequest) {
+              return users
+                .getClient(updatedRequest.userId)
+                .then((user) => {
+                  if (user) {
+                    return handleResponse(res, 200, {
+                      user,
+                      request: updatedRequest,
+                    })
+                  }
+                  return handleResponse(res, 200, {
+                    user: {message: 'user not found'},
+                    request: updatedRequest,
+                  })
+                })
+                .catch(() =>  handleResponse(res, 500, 'something went wrong. please try again'))
+            }
+          })
           .catch(() => handleResponse(res, 500, 'something went wrong. please try again'));
         }
-        return handleResponse(res, 404, 'Request does not exist');
+        return handleResponse(res, 404, 'request not found');
       })
       .catch(() => handleResponse(res, 500, 'something went wrong. please try again'));
   }
@@ -100,10 +118,28 @@ const AdminController = class {
               status: 'pending',
             },
           )
-          .then(updatedRequest => handleResponse(res, 200, updatedRequest))
+          .then((updatedRequest) => {
+            if (updatedRequest) {
+              return users
+                .getClient(updatedRequest.userId)
+                .then((user) => {
+                  if (user) {
+                    return handleResponse(res, 200, {
+                      user,
+                      request: updatedRequest,
+                    })
+                  }
+                  return handleResponse(res, 200, {
+                    user: {message: 'user not found'},
+                    request: updatedRequest,
+                  })
+                })
+                .catch(() =>  handleResponse(res, 500, 'something went wrong. please try again'))
+            }
+          })
           .catch(() => handleResponse(res, 500, 'something went wrong. please try again'));
         }
-        return handleResponse(res, 404, 'Request does not exist');
+        return handleResponse(res, 404, 'request not found');
       })
       .catch(() => handleResponse(res, 500, 'something went wrong. please try again'));
   }
@@ -130,10 +166,28 @@ const AdminController = class {
               status: 'resolved',
             },
           )
-          .then(updatedRequest => handleResponse(res, 200, updatedRequest))
+          .then((updatedRequest) => {
+            if (updatedRequest) {
+              return users
+                .getClient(updatedRequest.userId)
+                .then((user) => {
+                  if (user) {
+                    return handleResponse(res, 200, {
+                      user,
+                      request: updatedRequest,
+                    })
+                  }
+                  return handleResponse(res, 200, {
+                    user: { message: 'user not found' },
+                    request: updatedRequest,
+                  })
+                })
+                .catch(() =>  handleResponse(res, 500, 'something went wrong. please try again'))
+            }
+          })
           .catch(() => handleResponse(res, 500, 'something went wrong. please try again'));
         }
-        return handleResponse(res, 404, 'Request does not exist');
+        return handleResponse(res, 404, 'request not found');
       })
       .catch(() => handleResponse(res, 500, 'something went wrong. please try again'));
   }

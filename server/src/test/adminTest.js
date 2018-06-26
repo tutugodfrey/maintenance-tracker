@@ -34,6 +34,9 @@ export default describe('Admin controller test', () => {
           expect(res).to.have.status(200);
           expect(res.body).to.be.an('array');
           expect(res.body).to.have.length.of.at.least(1);
+          expect(res.body[0]).to.have.property('request');
+          expect(res.body[0]).to.have.property('user');
+          expect(res.body[0].user.fullname).to.equal(regularUser1.fullname);
         });
     });
 
@@ -43,6 +46,9 @@ export default describe('Admin controller test', () => {
         .set('token', regularUser1.token)
         .then((res) => {
           expect(res).to.have.status(401);
+          expect(res.body).to.be.an('object')
+          expect(res.body).to.have.property('message');
+          expect(res.body.message).to.equal('you are not authorized to perform this action');
         });
     });
   });
@@ -56,7 +62,9 @@ export default describe('Admin controller test', () => {
           .then((res) => {
             expect(res).to.have.status(200);
             expect(res.body).to.be.an('object');
-            expect(res.body.status).to.equal('pending');
+            expect(res.body).to.have.property('request');
+            expect(res.body).to.have.property('user');
+            expect(res.body.request.status).to.equal('pending');
           });
       });
 
@@ -67,6 +75,8 @@ export default describe('Admin controller test', () => {
           .then((res) => {
             expect(res).to.have.status(401);
             expect(res.body).to.be.an('object');
+            expect(res.body).to.have.property('message');
+            expect(res.body.message).to.eql('you are not authorized to perform this action')
           });
       });
 
@@ -77,6 +87,8 @@ export default describe('Admin controller test', () => {
           .then((res) => {
             expect(res).to.have.status(404);
             expect(res.body).to.be.an('object');
+            expect(res.body).to.have.property('message');
+            expect(res.body.message).to.equal('request not found');
           });
       });
 
@@ -87,6 +99,8 @@ export default describe('Admin controller test', () => {
           .then((res) => {
             expect(res).to.have.status(400);
             expect(res.body).to.be.an('object');
+            expect(res.body).to.have.property('message');
+            expect(res.body.message).to.equal('missing required field');
           });
       });
     });
@@ -99,7 +113,9 @@ export default describe('Admin controller test', () => {
           .then((res) => {
             expect(res).to.have.status(200);
             expect(res.body).to.be.an('object');
-            expect(res.body.status).to.equal('rejected');
+            expect(res.body).to.have.property('request');
+            expect(res.body).to.have.property('user');
+            expect(res.body.request.status).to.equal('rejected');
           });
       });
 
@@ -110,6 +126,8 @@ export default describe('Admin controller test', () => {
           .then((res) => {
             expect(res).to.have.status(401);
             expect(res.body).to.be.an('object');
+            expect(res.body).to.have.property('message');
+            expect(res.body.message).to.eql('you are not authorized to perform this action')
           });
       });
 
@@ -120,6 +138,8 @@ export default describe('Admin controller test', () => {
           .then((res) => {
             expect(res).to.have.status(404);
             expect(res.body).to.be.an('object');
+            expect(res.body).to.have.property('message');
+            expect(res.body.message).to.equal('request not found');
           });
       });
 
@@ -130,6 +150,8 @@ export default describe('Admin controller test', () => {
           .then((res) => {
             expect(res).to.have.status(400);
             expect(res.body).to.be.an('object');
+            expect(res.body).to.have.property('message');
+            expect(res.body.message).to.equal('missing required field');
           });
       });
     });
@@ -142,7 +164,9 @@ export default describe('Admin controller test', () => {
           .then((res) => {
             expect(res).to.have.status(200);
             expect(res.body).to.be.an('object');
-            expect(res.body.status).to.equal('resolved');
+            expect(res.body).to.have.property('request');
+            expect(res.body).to.have.property('user');
+            expect(res.body.request.status).to.equal('resolved');
           });
       });
 
@@ -153,6 +177,8 @@ export default describe('Admin controller test', () => {
           .then((res) => {
             expect(res).to.have.status(401);
             expect(res.body).to.be.an('object');
+            expect(res.body).to.have.property('message');
+            expect(res.body.message).to.eql('you are not authorized to perform this action')
           });
       });
 
@@ -163,6 +189,8 @@ export default describe('Admin controller test', () => {
           .then((res) => {
             expect(res).to.have.status(404);
             expect(res.body).to.be.an('object');
+            expect(res.body).to.have.property('message');
+            expect(res.body.message).to.equal('request not found');
           });
       });
 
@@ -173,6 +201,8 @@ export default describe('Admin controller test', () => {
           .then((res) => {
             expect(res).to.have.status(400);
             expect(res.body).to.be.an('object');
+            expect(res.body).to.have.property('message');
+            expect(res.body.message).to.equal('missing required field');
           });
       });
     });

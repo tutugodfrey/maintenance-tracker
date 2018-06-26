@@ -1,11 +1,7 @@
 import client from './connection';
 /* eslint-disable no-underscore-dangle */
-const DummyDataModel = class {
+const DataModel = class {
   constructor(modelName) {
-    /*
-    if (!Array.isArray(uniqueKeys) || !Array.isArray(requiredFields)) {
-      return { typeError: 'argument2 and argument3 must be of type array' };
-    } */
     this.modelName = modelName;
     this.singleModel = modelName.substring(0, modelName.length - 1);
     this._generateCreateQuery = this._generateCreateQuery;
@@ -279,4 +275,4 @@ const DummyDataModel = class {
   }
 };
 
-export default DummyDataModel;
+export default DataModel;

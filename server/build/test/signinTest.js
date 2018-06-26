@@ -26,16 +26,27 @@ _chai2.default.use(_chaiHttp2.default);
 var signedInUser = {};
 
 exports.default = describe('Signin', function () {
-  it('should signin a User in and give a token', function () {
+  it('should not signin a user if password is not provided', function () {
     return _chai2.default.request(_app2.default).post('/api/v1/auth/signin').send({
       username: _signupTest.regularUser1.username,
+      password: ''
+    }).then(function (res) {
+      expect(res).to.have.status(400);
+      expect(res.body).to.be.an('Object');
+      expect(res.body).to.have.property('message');
+      expect(res.body.message).to.equal('missing required field');
+    });
+  });
+
+  it('should not signin a user if username is not provided', function () {
+    return _chai2.default.request(_app2.default).post('/api/v1/auth/signin').send({
+      username: '',
       password: '123456'
     }).then(function (res) {
-      Object.assign(signedInUser, res.body);
-      expect(res).to.have.status(200);
+      expect(res).to.have.status(400);
       expect(res.body).to.be.an('Object');
-      expect(res.body).to.have.property('token');
-      expect(res.body.token).to.be.a('string');
+      expect(res.body).to.have.property('message');
+      expect(res.body.message).to.equal('missing required field');
     });
   });
 
@@ -46,6 +57,8 @@ exports.default = describe('Signin', function () {
     }).then(function (res) {
       expect(res).to.have.status(401);
       expect(res.body).to.be.an('Object');
+      expect(res.body).to.have.property('message');
+      expect(res.body.message).to.equal('authentication fail! check your username or password');
     });
   });
 
@@ -56,6 +69,21 @@ exports.default = describe('Signin', function () {
     }).then(function (res) {
       expect(res).to.have.status(401);
       expect(res.body).to.be.an('Object');
+      expect(res.body).to.have.property('message');
+      expect(res.body.message).to.equal('authentication fail! check your username or password');
+    });
+  });
+
+  it('should signin a User in and give a token', function () {
+    return _chai2.default.request(_app2.default).post('/api/v1/auth/signin').send({
+      username: _signupTest.regularUser1.username,
+      password: '123456'
+    }).then(function (res) {
+      Object.assign(signedInUser, res.body);
+      expect(res).to.have.status(200);
+      expect(res.body).to.be.an('Object');
+      expect(res.body).to.have.property('token');
+      expect(res.body.token).to.be.a('string');
     });
   });
 });

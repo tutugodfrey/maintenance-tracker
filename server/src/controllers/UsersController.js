@@ -47,25 +47,27 @@ const UsersController = class {
               password: hashedPassword,
               isAdmin: Boolean(isAdmin) || false,
             })
-            .then((signup) => {
+            .then((createdUser) => {
               const authenKeys = {
-                fullname: signup.fullname,
-                email: signup.email,
-                username: signup.username,
-                phone: signup.phone,
-                imgUrl: signup.imgUrl,
-                id: signup.id,
-                isAdmin: signup.isAdmin,
+                fullname: createdUser.fullname,
+                email: createdUser.email,
+                username: createdUser.username,
+                phone: createdUser.phone,
+                imgUrl: createdUser.imgUrl,
+                id: createdUser.id,
+                isAdmin: createdUser.isAdmin,
+                serviceName: createdUser.serviceName,
               };
               const token = jwt.sign(authenKeys, process.env.SECRET_KEY, { expiresIn: '48h' });
               handleResponse(res, 201, {
                 token,
-                fullname: signup.fullname,
-                email: signup.email,
-                username: signup.username,
-                imgUrl: signup.imgUrl,
-                id: signup.id,
-                isAdmin: signup.isAdmin,
+                fullname: createdUser.fullname,
+                email: createdUser.email,
+                username: createdUser.username,
+                imgUrl: createdUser.imgUrl,
+                id: createdUser.id,
+                isAdmin: createdUser.isAdmin,
+                serviceName: createdUser.serviceName,
               })
             })
             .catch(() => handleResponse(res, 500, 'something went wrong! try again later'));
@@ -100,6 +102,7 @@ const UsersController = class {
               isAdmin: user.isAdmin,
               id: user.id,
               imgUrl: user.imgUrl,
+              serviceName: user.serviceName,
             };
             const token = jwt.sign(authenKeys, process.env.SECRET_KEY, { expiresIn: '48h' });
             return handleResponse(res, 200, {
@@ -110,6 +113,7 @@ const UsersController = class {
               imgUrl: user.imgUrl,
               id: user.id,
               isAdmin: user.isAdmin,
+              serviceName: user.serviceName,
             });
           }
             return handleResponse(res, 401, 'authentication fail! check your username or password');
@@ -124,7 +128,7 @@ const UsersController = class {
       .findServiceName()
       .then((serviceNames) => {
         if (serviceNames) {
-          handleResponse(res, 200, serviceNames);
+          return handleResponse(res, 200, serviceNames);
         }
         return handleResponse(res, 404, 'service not avialable yet');
       })

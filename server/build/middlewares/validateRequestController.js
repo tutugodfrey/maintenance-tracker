@@ -59,7 +59,7 @@ var validateAdminUpdate = exports.validateAdminUpdate = function validateAdminUp
     return (0, _services.handleResponse)(res, 401, 'you are not authorized to perform this action');
   }
   if (!requestId) {
-    return (0, _services.handleResponse)(res, 400, 'missiging required field');
+    return (0, _services.handleResponse)(res, 400, 'missing required field');
   }
 
   next();

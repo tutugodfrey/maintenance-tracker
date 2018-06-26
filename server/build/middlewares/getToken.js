@@ -18,7 +18,7 @@ var getToken = function getToken(req, res, next) {
     if (token) {
       _jsonwebtoken2.default.verify(token, process.env.SECRET_KEY, function (err, decode) {
         if (err) {
-          resolve(res.status(401).send({ message: 'authentication fail! invalid Token' }));
+          resolve(res.status(401).send({ message: 'authentication fail! invalid token' }));
         } else {
           req.body.decode = decode;
           resolve(next());

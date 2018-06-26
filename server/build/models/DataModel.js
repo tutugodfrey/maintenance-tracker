@@ -17,14 +17,10 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 /* eslint-disable no-underscore-dangle */
-var DummyDataModel = function () {
-  function DummyDataModel(modelName) {
-    _classCallCheck(this, DummyDataModel);
+var DataModel = function () {
+  function DataModel(modelName) {
+    _classCallCheck(this, DataModel);
 
-    /*
-    if (!Array.isArray(uniqueKeys) || !Array.isArray(requiredFields)) {
-      return { typeError: 'argument2 and argument3 must be of type array' };
-    } */
     this.modelName = modelName;
     this.singleModel = modelName.substring(0, modelName.length - 1);
     this._generateCreateQuery = this._generateCreateQuery;
@@ -33,7 +29,7 @@ var DummyDataModel = function () {
     this._generateDeleteQuery = this._generateDeleteQuery;
   }
 
-  _createClass(DummyDataModel, [{
+  _createClass(DataModel, [{
     key: '_generateCreateQuery',
     value: function _generateCreateQuery(condition) {
       if (!condition) {
@@ -333,8 +329,8 @@ var DummyDataModel = function () {
     }
   }]);
 
-  return DummyDataModel;
+  return DataModel;
 }();
 
-exports.default = DummyDataModel;
+exports.default = DataModel;
 //# sourceMappingURL=DataModel.js.map

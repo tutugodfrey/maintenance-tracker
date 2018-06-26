@@ -13,7 +13,7 @@ export const validateSignup = (req, res, next) => {
   } = req.body;
 
   if (username.trim() === '' || fullname.trim() === '' || email.trim() === ''
-  || password.trim() === '' || confirmPassword.trim() === '') {
+  || password.trim() === '' || confirmPassword.trim() === '' || address.trim() === '' || phone.trim() === '') {
     return handleResponse(res, 400, 'missing required field');
   }
   const emailRegExp = /\w+@\w+\.(net|com|org)/;
@@ -27,14 +27,6 @@ export const validateSignup = (req, res, next) => {
 
   if (password !== confirmPassword) {
     return handleResponse(res, 400, 'password does not match');
-  }
-
-  if (address.trim() === '') {
-    return handleResponse(res, 400, 'missing required field');
-  }
-
-  if (phone.trim() === '') {
-    return handleResponse(res, 400, 'missing required field');
   }
   
   if (!isAdmin && isAdmin.trim() !== '') {
@@ -64,7 +56,7 @@ export const validateSignin = (req, res, next) => {
     password,
   } = req.body;
   if (username.trim() === '' || password.trim() === '') {
-    return handleResponse(res, 400, 'Please fill in the required fields');
+    return handleResponse(res, 400, 'missing required field');
   }
 
   next();

@@ -33,21 +33,25 @@ var ContactController = function () {
           receiverId = _req$body.receiverId,
           title = _req$body.title,
           message = _req$body.message;
-
       // sender is user with token
 
       var senderId = req.body.decode.id;
       return users.findById(senderId).then(function (user) {
         if (user) {
-          return contacts.create({
-            receiverId: receiverId,
-            senderId: senderId,
-            message: message,
-            title: title
-          }).then(function (newMessage) {
-            return (0, _services.handleResponse)(res, 201, newMessage);
-          }).catch(function () {
-            return (0, _services.handleResponse)(res, 500, 'something went wrong. please try again');
+          return users.findById(receiverId).then(function (receiver) {
+            if (receiver) {
+              return contacts.create({
+                receiverId: receiverId,
+                senderId: senderId,
+                message: message,
+                title: title
+              }).then(function (newMessage) {
+                return (0, _services.handleResponse)(res, 201, newMessage);
+              }).catch(function () {
+                return (0, _services.handleResponse)(res, 500, 'something went wrong. please try again');
+              });
+            }
+            return (0, _services.handleResponse)(res, 404, 'receiver does not exist');
           });
         }
         return (0, _services.handleResponse)(res, 404, 'Your identity could not be verified. Please make sure you are logged in');

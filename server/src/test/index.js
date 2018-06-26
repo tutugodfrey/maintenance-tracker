@@ -1,6 +1,7 @@
 import dataModelTest from './dataModelTest';
 import signupTest from './signupTest';
 import signinTest from './signinTest';
+import getServiceTest from './getServiceTest';
 import userRequestTest from './userRequestTest';
 import adminTest from './adminTest';
 import contactTest from './contactTest';
@@ -14,6 +15,7 @@ if (process.env.NODE_ENV !== 'test') {
   dataModelTest;
   signupTest;
   signinTest;
+  getServiceTest;
   userRequestTest;
   adminTest;
   contactTest;

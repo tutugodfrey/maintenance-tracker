@@ -14,11 +14,10 @@ const request4 = {
   description: '',
   urgent: true,
   address: 'somewhere in the world',
-  userId: 2,
   status: 'awaiting confirmation',
 };
 
-export default describe('Users controller', () => {
+export default describe('Requests controller', () => {
   it('should signin a User in and give a token', () => {
     return chai.request(app)
       .post('/api/v1/auth/signin')
@@ -32,16 +31,19 @@ export default describe('Users controller', () => {
         expect(res.body).to.be.an('Object');
         expect(res.body).to.have.property('token');
         expect(res.body.token).to.be.a('string');
+        expect(res.body.isAdmin).to.equal(false);
       });
   });
 
-  describe('Empty request model', () => {
+  describe('empty table', () => {
     it('should return an empty array', () => {
       return chai.request(app)
         .get('/api/v1/users/requests')
         .set('token', signedInUser.token)
         .then((res) => {
           expect(res).to.have.status(200);
+          expect(res.body).to.be.an('array');
+          expect(res.body.length).to.equal(0);
         });
     });
 
@@ -57,7 +59,7 @@ export default describe('Users controller', () => {
     });
   });
 
-  describe('Create requests', () => {
+  describe('Create requests method', () => {
     it('should create a new request', () => {
       const request1 = {
         category: 'electrical',
@@ -102,21 +104,23 @@ export default describe('Users controller', () => {
           expect(res.body).to.have.any.keys('adminId');
         });
     });
-    it('should not create request for users that does not exist', () => {
+    it('should not create request for a service (adminId) that does not exist', () => {
       const request3 = {
         category: 'electrical',
         description: 'Socket burned',
         urgent: true,
         address: 'somewhere in the world',
-        userId: 9,
+        adminId: 9,
       };
       return chai.request(app)
         .post('/api/v1/users/requests')
         .set('token', signedInUser.token)
         .send(request3)
         .then((res) => {
-          expect(res).to.have.status(400);
+          expect(res).to.have.status(404);
           expect(res.body).to.be.an('object');
+          expect(res.body).to.have.property('message');
+          expect(res.body.message).to.equal('service not found');
         });
     });
 
@@ -128,13 +132,14 @@ export default describe('Users controller', () => {
         .then((res) => {
           expect(res).to.have.status(400);
           expect(res.body).to.be.an('object');
+          expect(res.body).to.have.property('message')
           expect(res.body).to.eql({ message: 'missing required field' });
         });
     });
   });
 
   // test for get ../users/requests/:requestId
-  describe('get one request', () => {
+  describe('get one request method ', () => {
     it('should return a request with the given id for a logged in user', () => {
       const { id } = createdRequest1;
       return chai.request(app)
@@ -143,7 +148,11 @@ export default describe('Users controller', () => {
         .then((res) => {
           expect(res).to.have.status(200);
           expect(res.body).to.be.an('object');
+          expect(res.body).to.have.property('request');
+          expect(res.body).to.have.property('user');
           expect(res.body.request).to.have.any.keys('userId');
+          expect(res.body.request.userId).to.equal(signedInUser.id);
+          expect(res.body.user.serviceName).to.equal(adminUser.serviceName);
         });
     });
 
@@ -154,6 +163,7 @@ export default describe('Users controller', () => {
         .then((res) => {
           expect(res).to.have.status(404);
           expect(res.body).to.be.an('object');
+          expect(res.body).to.have.property('message');
           expect(res.body).to.eql({ message: 'request not found' });
         });
     });
@@ -166,6 +176,7 @@ export default describe('Users controller', () => {
         .then((res) => {
           expect(res).to.have.status(404);
           expect(res.body).to.be.an('object');
+          expect(res.body).to.have.property('message')
           expect(res.body).to.eql({ message: 'request not found' });
         });
     });
@@ -177,24 +188,50 @@ export default describe('Users controller', () => {
         .then((res) => {
           expect(res).to.have.status(400);
           expect(res.body).to.be.an('object');
+          expect(res.body).to.have.property('message');
           expect(res.body).to.eql({ message: 'missing required field' });
         });
     });
 
-    it('should return bad request if neither userId nor requestId is valid', () => {
+    it('should return authorization error when token is invalid', () => {
+      const { id } = createdRequest1;
       return chai.request(app)
-        .get('/api/v1/users/requests/0')
-        .set('token', signedInUser.token)
+        .get(`/api/v1/users/requests/${id}`)
+        .set('token', 'signedInUser.token.invalidtoken')
         .then((res) => {
-          expect(res).to.have.status(400);
+          expect(res).to.have.status(401);
           expect(res.body).to.be.an('object');
-          expect(res.body).to.eql({ message: 'missing required field' });
+          expect(res.body).to.have.property('message');
+          expect(res.body).to.eql({ message: 'authentication fail! invalid token' });
         });
     });
   });
 
   // test for get ../users/requests
   describe('get all request', () => {
+    it('should return authorization error if token is invalid', () => {
+      return chai.request(app)
+        .get('/api/v1/users/requests')
+        .set('token', 'regularUser2.tokeninvalidtoken')
+        .then((res) => {
+          expect(res).to.have.status(401);
+          expect(res.body).to.be.an('Object');
+          expect(res.body).to.have.property('message');
+          expect(res.body.message).to.equal('authentication fail! invalid token')
+        });
+    });
+
+    it('should return authorization error if token is not provided', () => {
+      return chai.request(app)
+        .get('/api/v1/users/requests')
+        .then((res) => {
+          expect(res).to.have.status(401);
+          expect(res.body).to.be.an('Object');
+          expect(res.body).to.have.property('message');
+          expect(res.body.message).to.equal('authentication fail! please send a token')
+        });
+    });
+
     it('should return all request for logged in user', () => {
       return chai.request(app)
         .get('/api/v1/users/requests')
@@ -203,11 +240,15 @@ export default describe('Users controller', () => {
           expect(res).to.have.status(200);
           expect(res.body).to.be.an('array');
           expect(res.body).to.have.length.of.at.least(1);
-          // expect(res.body[0].request).to.deep.include.members([createdRequest1]);
+          expect(res.body[0]).to.have.property('request');
+          expect(res.body[0]).to.have.property('user');
+          expect(res.body[0].user).to.have.property('serviceName');
+          expect(res.body[0].user.serviceName).to.equal(adminUser.serviceName);
+          expect(res.body[0].request).to.eql(createdRequest1);
         });
     });
 
-    it('should return an empty array if no matching userId is found', () => {
+    it('should return an empty array if no request exist for the logged in user', () => {
       return chai.request(app)
         .get('/api/v1/users/requests')
         .set('token', regularUser2.token)
@@ -219,7 +260,7 @@ export default describe('Users controller', () => {
     });
   });
 
-  describe('Users request update', () => {
+  describe('Update request method', () => {
     it('users should be able to modify the other field except the status of a request', () => {
       const { id, adminId } = createdRequest1;
       return chai.request(app)
@@ -232,11 +273,11 @@ export default describe('Users controller', () => {
         .then((res) => {
           expect(res).to.have.status(200);
           expect(res.body).to.be.an('object');
-          expect(res.body.description).to.equal('wall socket got burned and need replacement');
+          expect(res.body.request.description).to.equal('wall socket got burned and need replacement');
         });
     });
 
-    it('users should not be able to modify the status of a request', () => {
+    it('users should not modify the status of a request', () => {
       const { id, adminId } = createdRequest1;
       return chai.request(app)
         .put(`/api/v1/users/requests/${id}`)
@@ -248,7 +289,7 @@ export default describe('Users controller', () => {
         .then((res) => {
           expect(res).to.have.status(200);
           expect(res.body).to.be.an('object');
-          expect(res.body.status).to.equal('awaiting confirmation');
+          expect(res.body.request.status).to.equal('awaiting confirmation');
         });
     });
 
@@ -264,27 +305,31 @@ export default describe('Users controller', () => {
         .then((res) => {
           expect(res).to.have.status(404);
           expect(res.body).to.be.an('object');
+          expect(res.body).to.have.property('message');
+          expect(res.body.message).to.equal('request not found');
         });
     });
 
-    it('should return not found for a request if userId does not match', () => {
+    it('should return authorization error for invalid token', () => {
       const { id, adminId } = createdRequest1;
       return chai.request(app)
         .put(`/api/v1/users/requests/${id}`)
-        .set('token', regularUser2.token)
+        .set('token', 'regularUser2.tokeninvalidtoken')
         .send({
           adminId,
           description: 'wall socket got burned and need replacement',
         })
         .then((res) => {
-          expect(res).to.have.status(404);
+          expect(res).to.have.status(401);
           expect(res.body).to.be.an('object');
+          expect(res.body).to.have.property('message');
+          expect(res.body.message).to.equal('authentication fail! invalid token');
         });
     });
   });
 
   // test for delete ../users/requests/:requestId
-  describe('delete request', () => {
+  describe('delete request method', () => {
     it('should delete a request', () => {
       const { id } = createdRequest2;
       return chai.request(app)
@@ -293,6 +338,7 @@ export default describe('Users controller', () => {
         .then((res) => {
           expect(res).to.have.status(200);
           expect(res.body).to.be.an('object');
+          expect(res.body).to.have.property('message');
           expect(res.body).to.eql({ message: 'request has been deleted' });
         });
     });
@@ -304,6 +350,7 @@ export default describe('Users controller', () => {
         .then((res) => {
           expect(res).to.have.status(404);
           expect(res.body).to.be.an('object');
+          expect(res.body).to.have.property('message');
           expect(res.body).to.eql({ message: 'request not found, not action taken' });
         });
     });
@@ -315,17 +362,19 @@ export default describe('Users controller', () => {
         .then((res) => {
           expect(res).to.have.status(400);
           expect(res.body).to.be.an('object');
+          expect(res.body).to.have.property('message');
           expect(res.body).to.eql({ message: 'missing required field' });
         });
     });
 
-    it('should return bad request if requestId and userId is invalid', () => {
+    it('should return bad request if requestId is not valid', () => {
       return chai.request(app)
         .delete('/api/v1/users/requests/0')
         .set('token', signedInUser.token)
         .then((res) => {
           expect(res).to.have.status(400);
           expect(res.body).to.be.an('object');
+          expect(res.body).to.have.property('message');
           expect(res.body).to.eql({ message: 'missing required field' });
         });
     });

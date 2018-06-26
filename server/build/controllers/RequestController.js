@@ -40,20 +40,25 @@ var RequestController = function () {
 
       return users.findById(parseInt(userId, 10)).then(function (user) {
         if (user) {
-          return requests.create({
-            userId: userId,
-            category: category,
-            description: description,
-            address: address,
-            adminId: adminId,
-            issueDate: 'now()',
-            updatedAt: 'now()',
-            status: 'awaiting confirmation',
-            urgent: urgent || false
-          }).then(function (request) {
-            return (0, _services.handleResponse)(res, 201, request);
-          }).catch(function () {
-            return (0, _services.handleResponse)(res, 500, 'something went wrong! please try again later');
+          return users.findById(parseInt(adminId, 10)).then(function (admin) {
+            if (admin && admin.serviceName) {
+              return requests.create({
+                userId: userId,
+                category: category,
+                description: description,
+                address: address,
+                adminId: adminId,
+                issueDate: 'now()',
+                updatedAt: 'now()',
+                status: 'awaiting confirmation',
+                urgent: urgent || false
+              }).then(function (request) {
+                return (0, _services.handleResponse)(res, 201, request);
+              }).catch(function () {
+                return (0, _services.handleResponse)(res, 500, 'something went wrong! please try again later');
+              });
+            }
+            return (0, _services.handleResponse)(res, 404, 'service not found');
           });
         }
         return (0, _services.handleResponse)(res, 401, 'user identity not verified! please make sure you are logged in');
@@ -78,7 +83,7 @@ var RequestController = function () {
         if (!request) {
           return (0, _services.handleResponse)(res, 404, 'request not found');
         }
-        return users.getClient(request.userId).then(function (client) {
+        return users.getClient(request.adminId).then(function (client) {
           if (client) {
             return (0, _services.handleResponse)(res, 200, {
               request: request,
@@ -174,12 +179,26 @@ var RequestController = function () {
             adminId: adminId || request.adminId,
             urgent: urgent || request.urgent
           }).then(function (newRequest) {
-            return (0, _services.handleResponse)(res, 200, newRequest);
+            // get the associated admin
+            return users.getClient(newRequest.adminId).then(function (admin) {
+              if (admin) {
+                return (0, _services.handleResponse)(res, 200, {
+                  request: newRequest,
+                  user: admin
+                });
+              }
+              return (0, _services.handleResponse)(res, 200, {
+                request: newRequest,
+                user: { message: 'user not found' }
+              });
+            }).catch(function () {
+              return (0, _services.handleResponse)(res, 500, 'something went wrong. please try again');
+            });
           }).catch(function () {
             return (0, _services.handleResponse)(res, 500, 'something went wrong. please try again');
           });
         }
-        return (0, _services.handleResponse)(res, 404, 'requests not found');
+        return (0, _services.handleResponse)(res, 404, 'request not found');
       }).catch(function () {
         return (0, _services.handleResponse)(res, 505, 'something went wrong. please try again');
       });

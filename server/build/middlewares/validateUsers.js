@@ -54,7 +54,7 @@ var validateSignup = exports.validateSignup = function validateSignup(req, res, 
     imgUrl = (0, _services.getImgUrl)(req.file.path);
   }
   req.body.imgUrl = imgUrl;
-  next();
+  return next();
 };
 
 var validateSignin = exports.validateSignin = function validateSignin(req, res, next) {
@@ -66,6 +66,6 @@ var validateSignin = exports.validateSignin = function validateSignin(req, res, 
     return (0, _services.handleResponse)(res, 400, 'missing required field');
   }
 
-  next();
+  return next();
 };
 //# sourceMappingURL=validateUsers.js.map

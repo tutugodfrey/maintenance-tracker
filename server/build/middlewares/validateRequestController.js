@@ -22,12 +22,12 @@ var validateCreateRequest = exports.validateCreateRequest = function validateCre
   if (!urgent && urgent.trim() !== '') {
     return (0, _services.handleResponse)(res, 400, 'typeError field urgent must be a boolean');
   }
-  if (!parseInt(adminId)) {
+  if (!parseInt(adminId, 10)) {
     return (0, _services.handleResponse)(res, 400, 'please select a service');
   }
   // pass userId to req.body
   req.body.userId = req.body.decode.id;
-  next();
+  return next();
 };
 
 var validateGetOneRequest = exports.validateGetOneRequest = function validateGetOneRequest(req, res, next) {
@@ -36,7 +36,7 @@ var validateGetOneRequest = exports.validateGetOneRequest = function validateGet
     return (0, _services.handleResponse)(res, 400, 'missing required field');
   }
 
-  next();
+  return next();
 };
 
 var validateAdminGetRequests = exports.validateAdminGetRequests = function validateAdminGetRequests(req, res, next) {
@@ -46,14 +46,12 @@ var validateAdminGetRequests = exports.validateAdminGetRequests = function valid
     return (0, _services.handleResponse)(res, 401, 'you are not authorized to perform this action');
   }
 
-  next();
+  return next();
 };
 
 var validateAdminUpdate = exports.validateAdminUpdate = function validateAdminUpdate(req, res, next) {
   var requestId = parseInt(req.params.requestId, 10);
-  var _req$body$decode = req.body.decode,
-      isAdmin = _req$body$decode.isAdmin,
-      id = _req$body$decode.id;
+  var isAdmin = req.body.decode.isAdmin;
 
   if (!isAdmin) {
     return (0, _services.handleResponse)(res, 401, 'you are not authorized to perform this action');
@@ -62,7 +60,7 @@ var validateAdminUpdate = exports.validateAdminUpdate = function validateAdminUp
     return (0, _services.handleResponse)(res, 400, 'missing required field');
   }
 
-  next();
+  return next();
 };
 
 var validateUpdateRequest = exports.validateUpdateRequest = function validateUpdateRequest(req, res, next) {
@@ -71,7 +69,7 @@ var validateUpdateRequest = exports.validateUpdateRequest = function validateUpd
     return (0, _services.handleResponse)(res, 400, 'missing required field');
   }
 
-  next();
+  return next();
 };
 
 var validateDeleteRequest = exports.validateDeleteRequest = function validateDeleteRequest(req, res, next) {
@@ -80,6 +78,6 @@ var validateDeleteRequest = exports.validateDeleteRequest = function validateDel
     return (0, _services.handleResponse)(res, 400, 'missing required field');
   }
 
-  next();
+  return next();
 };
 //# sourceMappingURL=validateRequestController.js.map

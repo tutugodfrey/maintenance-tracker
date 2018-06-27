@@ -79,7 +79,7 @@ export default describe('contacts controller', () => {
           expect(res).to.have.status(404);
           expect(res.body).to.be.an('object');
           expect(res.body).to.have.property('message');
-          expect(res.body.message).to.equal('receiver does not exist')
+          expect(res.body.message).to.equal('receiver does not exist');
         });
     });
 
@@ -154,7 +154,7 @@ export default describe('contacts controller', () => {
   describe('get messages', () => {
     it('should return all messages for the given userId', () => {
       return chai.request(app)
-        .get(`/api/v1/contacts`)
+        .get('/api/v1/contacts')
         .set('token', signedInUser.token)
         .then((res) => {
           expect(res).to.have.status(200);

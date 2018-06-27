@@ -17,7 +17,6 @@ const UsersController = class {
       address,
       phone,
       password,
-      confirmPassword,
       isAdmin,
       serviceName,
       imgUrl,
@@ -68,7 +67,7 @@ const UsersController = class {
                 id: createdUser.id,
                 isAdmin: createdUser.isAdmin,
                 serviceName: createdUser.serviceName,
-              })
+              });
             })
             .catch(() => handleResponse(res, 500, 'something went wrong! try again later'));
         }
@@ -116,9 +115,9 @@ const UsersController = class {
               serviceName: user.serviceName,
             });
           }
-            return handleResponse(res, 401, 'authentication fail! check your username or password');
-        } 
           return handleResponse(res, 401, 'authentication fail! check your username or password');
+        }
+        return handleResponse(res, 401, 'authentication fail! check your username or password');
       })
       .catch(() => handleResponse(res, 500, 'something went wrong! try again later'));
   }

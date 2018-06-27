@@ -46,7 +46,7 @@ export default describe('Admin controller test', () => {
         .set('token', regularUser1.token)
         .then((res) => {
           expect(res).to.have.status(401);
-          expect(res.body).to.be.an('object')
+          expect(res.body).to.be.an('object');
           expect(res.body).to.have.property('message');
           expect(res.body.message).to.equal('you are not authorized to perform this action');
         });
@@ -76,7 +76,7 @@ export default describe('Admin controller test', () => {
             expect(res).to.have.status(401);
             expect(res.body).to.be.an('object');
             expect(res.body).to.have.property('message');
-            expect(res.body.message).to.eql('you are not authorized to perform this action')
+            expect(res.body.message).to.eql('you are not authorized to perform this action');
           });
       });
 
@@ -127,7 +127,7 @@ export default describe('Admin controller test', () => {
             expect(res).to.have.status(401);
             expect(res.body).to.be.an('object');
             expect(res.body).to.have.property('message');
-            expect(res.body.message).to.eql('you are not authorized to perform this action')
+            expect(res.body.message).to.eql('you are not authorized to perform this action');
           });
       });
 
@@ -178,7 +178,7 @@ export default describe('Admin controller test', () => {
             expect(res).to.have.status(401);
             expect(res.body).to.be.an('object');
             expect(res.body).to.have.property('message');
-            expect(res.body.message).to.eql('you are not authorized to perform this action')
+            expect(res.body.message).to.eql('you are not authorized to perform this action');
           });
       });
 

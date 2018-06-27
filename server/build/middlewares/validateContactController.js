@@ -7,10 +7,10 @@ exports.validateAddMessage = undefined;
 
 var _services = require('./../services/services');
 
+/*  eslint-disable import/prefer-default-export */
 var validateAddMessage = exports.validateAddMessage = function validateAddMessage(req, res, next) {
   var _req$body = req.body,
       receiverId = _req$body.receiverId,
-      title = _req$body.title,
       message = _req$body.message;
 
   if (!parseInt(receiverId, 10)) {
@@ -20,6 +20,6 @@ var validateAddMessage = exports.validateAddMessage = function validateAddMessag
     return (0, _services.handleResponse)(res, 400, 'missing required field');
   }
 
-  next();
+  return next();
 };
 //# sourceMappingURL=validateContactController.js.map

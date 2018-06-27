@@ -1,4 +1,5 @@
-import { getImgUrl, handleResponse } from './../services/services'
+import { getImgUrl, handleResponse } from './../services/services';
+
 export const validateSignup = (req, res, next) => {
   const {
     fullname,
@@ -9,7 +10,7 @@ export const validateSignup = (req, res, next) => {
     password,
     confirmPassword,
     isAdmin,
-    serviceName
+    serviceName,
   } = req.body;
 
   if (username.trim() === '' || fullname.trim() === '' || email.trim() === ''
@@ -28,7 +29,7 @@ export const validateSignup = (req, res, next) => {
   if (password !== confirmPassword) {
     return handleResponse(res, 400, 'password does not match');
   }
-  
+
   if (!isAdmin && isAdmin.trim() !== '') {
     return handleResponse(res, 400, 'isAdmin must be a true if set');
   }
@@ -44,11 +45,11 @@ export const validateSignup = (req, res, next) => {
   let imgUrl = '/users-photo/default.png';
   if (req.file) {
   // get path to updated file
-  imgUrl = getImgUrl(req.file.path);
+    imgUrl = getImgUrl(req.file.path);
   }
   req.body.imgUrl = imgUrl;
-  next();
-}
+  return next();
+};
 
 export const validateSignin = (req, res, next) => {
   const {
@@ -59,5 +60,5 @@ export const validateSignin = (req, res, next) => {
     return handleResponse(res, 400, 'missing required field');
   }
 
-  next();
-}
+  return next();
+};

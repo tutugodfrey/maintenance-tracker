@@ -3,6 +3,7 @@ import models from './../models/index';
 import { handleResponse } from './../services/services';
 
 const { requests, users } = models;
+/* eslint-disable consistent-return */
 const RequestController = class {
   // add a new request
   static addRequest(req, res) {
@@ -23,24 +24,24 @@ const RequestController = class {
             .then((admin) => {
               if (admin && admin.serviceName) {
                 return requests
-                .create({
-                  userId,
-                  category,
-                  description,
-                  address,
-                  adminId,
-                  issueDate: 'now()',
-                  updatedAt: 'now()',
-                  status: 'awaiting confirmation',
-                  urgent: urgent || false,
-                })
-                .then(request => handleResponse(res, 201, request))
-                .catch(() => handleResponse(res, 500, 'something went wrong! please try again later'));
+                  .create({
+                    userId,
+                    category,
+                    description,
+                    address,
+                    adminId,
+                    issueDate: 'now()',
+                    updatedAt: 'now()',
+                    status: 'awaiting confirmation',
+                    urgent: urgent || false,
+                  })
+                  .then(request => handleResponse(res, 201, request))
+                  .catch(() => handleResponse(res, 500, 'something went wrong! please try again later'));
               }
-              return handleResponse(res, 404, 'service not found')
-            })
+              return handleResponse(res, 404, 'service not found');
+            });
         }
-        return handleResponse(res, 401, 'user identity not verified! please make sure you are logged in')
+        return handleResponse(res, 401, 'user identity not verified! please make sure you are logged in');
       })
       .catch(() => handleResponse(res, 500, 'something went wrong! please try again later'));
   }
@@ -58,24 +59,24 @@ const RequestController = class {
       })
       .then((request) => {
         if (!request) {
-          return handleResponse(res,404, 'request not found');
+          return handleResponse(res, 404, 'request not found');
         }
         return users
-        .getClient(request.adminId)
-        .then((client) => {
-          if (client) {
-            return handleResponse(res, 200,  {
+          .getClient(request.adminId)
+          .then((client) => {
+            if (client) {
+              return handleResponse(res, 200, {
+                request,
+                user: client,
+              });
+            }
+            return handleResponse(res, 200, {
               request,
-              user: client,
+              user: { message: 'user not found' },
             });
-          }
-          return handleResponse(res, 200,  {
-            request,
-            user: { message: 'user not found' },
           });
-        })
       })
-      .catch(() =>  handleResponse(res, 500, 'something went wrong. please try again'));
+      .catch(() => handleResponse(res, 500, 'something went wrong. please try again'));
   }
 
   // get all request for a logged in user
@@ -99,7 +100,7 @@ const RequestController = class {
               .then((clientInfo) => {
                 return clientInfo;
               })
-              .then(clientInfo => {
+              .then((clientInfo) => {
                 if (clientInfo) {
                   clientsInfo.push({
                     request,
@@ -109,17 +110,17 @@ const RequestController = class {
                   clientsInfo.push({
                     request,
                     user: { message: 'user not found' },
-                });
+                  });
                 }
                 if (clientsInfo.length === clientRequests.length) {
-                  return handleResponse(res, 200, clientsInfo );
+                  return handleResponse(res, 200, clientsInfo);
                 }
               })
               .catch(() => handleResponse(res, 500, 'something went wrong. please try again'));
-          })
+          });
         }
       })
-      .catch(() =>  handleResponse(res, 500, 'something went wrong. please try again'));
+      .catch(() => handleResponse(res, 500, 'something went wrong. please try again'));
   }
 
   // update a request
@@ -163,24 +164,24 @@ const RequestController = class {
             .then((newRequest) => {
               // get the associated admin
               return users
-              .getClient(newRequest.adminId)
-              .then((admin) => {
-                if (admin) {
+                .getClient(newRequest.adminId)
+                .then((admin) => {
+                  if (admin) {
+                    return handleResponse(res, 200, {
+                      request: newRequest,
+                      user: admin,
+                    });
+                  }
                   return handleResponse(res, 200, {
                     request: newRequest,
-                    user: admin,
+                    user: { message: 'user not found' },
                   });
-                }
-                return handleResponse(res, 200, {
-                  request: newRequest,
-                  user: { message: 'user not found' },
                 })
-              })
-              .catch(() => handleResponse(res, 500, 'something went wrong. please try again'));
+                .catch(() => handleResponse(res, 500, 'something went wrong. please try again'));
             })
             .catch(() => handleResponse(res, 500, 'something went wrong. please try again'));
         }
-        return handleResponse(res, 404, 'request not found')
+        return handleResponse(res, 404, 'request not found');
       })
       .catch(() => handleResponse(res, 505, 'something went wrong. please try again'));
   }
@@ -191,13 +192,13 @@ const RequestController = class {
     return requests
       .destroy({
         where: {
-          userId: userId,
+          userId,
           id: requestId,
         },
       })
       .then((rows) => {
         if (rows.length === 0) {
-          return handleResponse(res, 404, 'request not found, not action taken')
+          return handleResponse(res, 404, 'request not found, not action taken');
         }
         return handleResponse(res, 200, 'request has been deleted');
       })

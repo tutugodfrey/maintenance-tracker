@@ -24,7 +24,7 @@ export default describe('Users controller', () => {
         .field('password', '123456')
         .field('confirmPassword', '123456')
         .field('isAdmin', 'true')
-        .attach('profile-photo', './fileuploads/tutug.jpeg') 
+        .attach('profile-photo', './fileuploads/tutug.jpeg')
         .then((res) => {
           Object.assign(adminUser, res.body);
           expect(res).to.have.status(201);
@@ -103,7 +103,7 @@ export default describe('Users controller', () => {
           Object.assign(regularUser3, res.body);
           expect(res).to.have.status(201);
           expect(res.body).to.be.an('Object');
-          expect(res.body).to.have.property('token')
+          expect(res.body).to.have.property('token');
           expect(res.body.isAdmin).to.equal(false);
           expect(res.body.serviceName).to.equal('');
         });
@@ -126,7 +126,7 @@ export default describe('Users controller', () => {
         .then((res) => {
           expect(res).to.have.status(409);
           expect(res.body).to.be.an('Object');
-          expect(res.body).to.have.property('message')
+          expect(res.body).to.have.property('message');
           expect(res.body.message).to.equal('user already exist');
         });
     });
@@ -148,7 +148,7 @@ export default describe('Users controller', () => {
         .then((res) => {
           expect(res).to.have.status(409);
           expect(res.body).to.be.an('Object');
-          expect(res.body).to.have.property('message')
+          expect(res.body).to.have.property('message');
           expect(res.body.message).to.equal('user already exist');
         });
     });
@@ -170,7 +170,7 @@ export default describe('Users controller', () => {
         .then((res) => {
           expect(res).to.have.status(400);
           expect(res.body).to.be.an('Object');
-          expect(res.body).to.have.property('message')
+          expect(res.body).to.have.property('message');
           expect(res.body.message).to.equal('missing required field');
         });
     });
@@ -192,7 +192,7 @@ export default describe('Users controller', () => {
         .then((res) => {
           expect(res).to.have.status(400);
           expect(res.body).to.be.an('Object');
-          expect(res.body).to.have.property('message')
+          expect(res.body).to.have.property('message');
           expect(res.body.message).to.equal('missing required field');
         });
     });
@@ -214,7 +214,7 @@ export default describe('Users controller', () => {
         .then((res) => {
           expect(res).to.have.status(400);
           expect(res.body).to.be.an('Object');
-          expect(res.body).to.have.property('message')
+          expect(res.body).to.have.property('message');
           expect(res.body.message).to.equal('missing required field');
         });
     });
@@ -236,7 +236,7 @@ export default describe('Users controller', () => {
         .then((res) => {
           expect(res).to.have.status(400);
           expect(res.body).to.be.an('Object');
-          expect(res.body).to.have.property('message')
+          expect(res.body).to.have.property('message');
           expect(res.body.message).to.equal('typeError: invalid email format');
         });
     });
@@ -258,7 +258,7 @@ export default describe('Users controller', () => {
         .then((res) => {
           expect(res).to.have.status(400);
           expect(res.body).to.be.an('Object');
-          expect(res.body).to.have.property('message')
+          expect(res.body).to.have.property('message');
           expect(res.body.message).to.equal('missing required field');
         });
     });
@@ -280,7 +280,7 @@ export default describe('Users controller', () => {
         .then((res) => {
           expect(res).to.have.status(400);
           expect(res.body).to.be.an('Object');
-          expect(res.body).to.have.property('message')
+          expect(res.body).to.have.property('message');
           expect(res.body.message).to.equal('missing required field');
         });
     });

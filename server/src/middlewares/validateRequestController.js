@@ -15,22 +15,22 @@ export const validateCreateRequest = (req, res, next) => {
   if (!urgent && urgent.trim() !== '') {
     return handleResponse(res, 400, 'typeError field urgent must be a boolean');
   }
-  if (!parseInt(adminId)) {
+  if (!parseInt(adminId, 10)) {
     return handleResponse(res, 400, 'please select a service');
   }
   // pass userId to req.body
   req.body.userId = req.body.decode.id;
-  next();
-}
+  return next();
+};
 
 export const validateGetOneRequest = (req, res, next) => {
   const requestId = parseInt(req.params.requestId, 10);
   if (!requestId) {
-    return handleResponse(res, 400, 'missing required field' );
+    return handleResponse(res, 400, 'missing required field');
   }
 
-  next();
-}
+  return next();
+};
 
 export const validateAdminGetRequests = (req, res, next) => {
   const { isAdmin } = req.body.decode;
@@ -38,14 +38,13 @@ export const validateAdminGetRequests = (req, res, next) => {
     return handleResponse(res, 401, 'you are not authorized to perform this action');
   }
 
-  next();
-}
+  return next();
+};
 
 export const validateAdminUpdate = (req, res, next) => {
   const requestId = parseInt(req.params.requestId, 10);
   const {
     isAdmin,
-    id,
   } = req.body.decode;
   if (!isAdmin) {
     return handleResponse(res, 401, 'you are not authorized to perform this action');
@@ -54,23 +53,23 @@ export const validateAdminUpdate = (req, res, next) => {
     return handleResponse(res, 400, 'missing required field');
   }
 
-  next();
-} 
+  return next();
+};
 
 export const validateUpdateRequest = (req, res, next) => {
   const requestId = parseInt(req.params.requestId, 10);
   if (!requestId) {
-    return handleResponse(res, 400, 'missing required field' );
+    return handleResponse(res, 400, 'missing required field');
   }
 
-  next();
-}
+  return next();
+};
 
 export const validateDeleteRequest = (req, res, next) => {
   const requestId = parseInt(req.params.requestId, 10);
   if (!requestId) {
-    return handleResponse(res, 400, 'missing required field' );
+    return handleResponse(res, 400, 'missing required field');
   }
 
-  next();
-}
+  return next();
+};

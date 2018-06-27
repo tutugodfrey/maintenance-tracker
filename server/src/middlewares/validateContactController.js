@@ -1,8 +1,8 @@
-import { handleResponse } from './../services/services'
+import { handleResponse } from './../services/services';
+/*  eslint-disable import/prefer-default-export */
 export const validateAddMessage = (req, res, next) => {
   const {
     receiverId,
-    title,
     message,
   } = req.body;
   if (!parseInt(receiverId, 10)) {
@@ -12,5 +12,5 @@ export const validateAddMessage = (req, res, next) => {
     return handleResponse(res, 400, 'missing required field');
   }
 
-  next();
-}
+  return next();
+};

@@ -132,7 +132,7 @@ export default describe('Requests controller', () => {
         .then((res) => {
           expect(res).to.have.status(400);
           expect(res.body).to.be.an('object');
-          expect(res.body).to.have.property('message')
+          expect(res.body).to.have.property('message');
           expect(res.body).to.eql({ message: 'missing required field' });
         });
     });
@@ -176,7 +176,7 @@ export default describe('Requests controller', () => {
         .then((res) => {
           expect(res).to.have.status(404);
           expect(res.body).to.be.an('object');
-          expect(res.body).to.have.property('message')
+          expect(res.body).to.have.property('message');
           expect(res.body).to.eql({ message: 'request not found' });
         });
     });
@@ -217,7 +217,7 @@ export default describe('Requests controller', () => {
           expect(res).to.have.status(401);
           expect(res.body).to.be.an('Object');
           expect(res.body).to.have.property('message');
-          expect(res.body.message).to.equal('authentication fail! invalid token')
+          expect(res.body.message).to.equal('authentication fail! invalid token');
         });
     });
 
@@ -228,7 +228,7 @@ export default describe('Requests controller', () => {
           expect(res).to.have.status(401);
           expect(res.body).to.be.an('Object');
           expect(res.body).to.have.property('message');
-          expect(res.body.message).to.equal('authentication fail! please send a token')
+          expect(res.body.message).to.equal('authentication fail! please send a token');
         });
     });
 
@@ -267,7 +267,7 @@ export default describe('Requests controller', () => {
         .put(`/api/v1/users/requests/${id}`)
         .set('token', signedInUser.token)
         .send({
-          adminId: adminId,
+          adminId,
           description: 'wall socket got burned and need replacement',
         })
         .then((res) => {
@@ -283,7 +283,7 @@ export default describe('Requests controller', () => {
         .put(`/api/v1/users/requests/${id}`)
         .set('token', signedInUser.token)
         .send({
-          adminId: adminId,
+          adminId,
           status: 'approved',
         })
         .then((res) => {

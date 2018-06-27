@@ -18,6 +18,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 var users = _index2.default.users,
     contacts = _index2.default.contacts;
+/* eslint-disable consistent-return */
 
 var ContactController = function () {
   function ContactController() {

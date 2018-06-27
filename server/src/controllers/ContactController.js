@@ -2,6 +2,7 @@ import models from './../models/index';
 import { handleResponse } from './../services/services';
 
 const { users, contacts } = models;
+/* eslint-disable consistent-return */
 const ContactController = class {
   // create a new message
   static addMessage(req, res) {
@@ -33,7 +34,7 @@ const ContactController = class {
                   .catch(() => handleResponse(res, 500, 'something went wrong. please try again'));
               }
               return handleResponse(res, 404, 'receiver does not exist');
-            })
+            });
         }
         return handleResponse(res, 404, 'Your identity could not be verified. Please make sure you are logged in');
       })
@@ -50,7 +51,7 @@ const ContactController = class {
         },
         type: 'or',
       })
-      .then((messages) => { 
+      .then((messages) => {
         if (messages) {
           // no messages has been send or received
           if (messages.length === 0) {
@@ -68,7 +69,7 @@ const ContactController = class {
               .then((sender) => {
                 return sender;
               })
-              .then(sender => {
+              .then((sender) => {
                 if (sender) {
                   messageObj.sender = sender;
                 } else {
@@ -82,7 +83,7 @@ const ContactController = class {
                   .then((receiver) => {
                     return receiver;
                   })
-                  .then(receiver => {
+                  .then((receiver) => {
                     if (receiver) {
                       messageObj.receiver = receiver;
                     } else {
@@ -94,8 +95,8 @@ const ContactController = class {
                     if (clientsInfo.length === messages.length) {
                       return handleResponse(res, 200, clientsInfo);
                     }
-                  })
-              })
+                  });
+              });
           });
         }
       })

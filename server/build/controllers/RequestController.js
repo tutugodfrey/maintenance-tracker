@@ -18,6 +18,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 var requests = _index2.default.requests,
     users = _index2.default.users;
+/* eslint-disable consistent-return */
 
 var RequestController = function () {
   function RequestController() {

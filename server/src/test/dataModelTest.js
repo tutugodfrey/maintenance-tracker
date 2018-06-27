@@ -34,7 +34,7 @@ const updateUser2 = {
   address: 'now living in planet earth',
 };
 
-export default describe('Dummy Data Model', () => {
+export default describe('Data Model test', () => {
   describe('DataModel', () => {
     it('should export a function', () => {
       expect(DataModel).to.be.a('function');

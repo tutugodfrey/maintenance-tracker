@@ -47,7 +47,7 @@ var updateUser2 = {
   address: 'now living in planet earth'
 };
 
-exports.default = describe('Dummy Data Model', function () {
+exports.default = describe('Data Model test', function () {
   describe('DataModel', function () {
     it('should export a function', function () {
       expect(_DataModel2.default).to.be.a('function');

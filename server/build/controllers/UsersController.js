@@ -49,7 +49,6 @@ var UsersController = function () {
           address = _req$body.address,
           phone = _req$body.phone,
           password = _req$body.password,
-          confirmPassword = _req$body.confirmPassword,
           isAdmin = _req$body.isAdmin,
           serviceName = _req$body.serviceName,
           imgUrl = _req$body.imgUrl;

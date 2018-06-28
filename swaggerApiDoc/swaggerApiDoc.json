@@ -48,6 +48,9 @@
                   "address": {
                     "$ref": "#/components/schemas/user/address"
                   },
+                  "profile-photo": {
+                    "$ref": "#/components/schemas/user/profile-photo"
+                  },
                   "isAdmin": {
                     "$ref": "#/components/schemas/user/isAdmin"
                   },
@@ -67,7 +70,8 @@
         },
         "responses": {
           "201": {
-            "description": "Response when signup is successful",
+            "summary": "Response when signup is successful",
+            "description": "Data returned represent the info about the user who is logged in. For a none admin user it is expected that isAdmin = \"false\" and serviceName = ''. If user does not post a profile photo a default photo will be used instead with url given in imgUrl",
             "content": {
               "application/json": {
                 "schema": {
@@ -84,6 +88,9 @@
                     },
                     "username": {
                       "$ref": "#/components/schemas/user/username"
+                    },
+                    "serviceName": {
+                      "$ref": "#/components/schemas/user/serviceName"
                     },
                     "email": {
                       "$ref": "#/components/schemas/user/email"
@@ -154,6 +161,9 @@
                     "username": {
                       "$ref": "#/components/schemas/user/username"
                     },
+                    "serviceName": {
+                      "$ref": "#/components/schemas/user/serviceName"
+                    },
                     "email": {
                       "$ref": "#/components/schemas/user/email"
                     },
@@ -172,7 +182,7 @@
             "$ref": "#/components/schemas/responses/400Response"
           },
           "401": {
-            "$ref": "#/components/schemas/responses/400Response"
+            "$ref": "#/components/schemas/responses/401Response"
           },
           "500": {
             "$ref": "#/components/schemas/responses/500Response"
@@ -184,23 +194,27 @@
       "get": {
         "summary": "get services",
         "description": "This route return the id and services name of services providers",
+        "operationId": "get services",
         "responses": {
           "200": {
             "description": "successfully fetch services",
             "content": {
               "application/json": {
+                "type": "array",
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "id": {
-                      "$ref": "#/components/schemas/id"
-                    },
-                    "servicename": {
-                      "$ref": "#/components/schemas/user/serviceName"
-                    },
-                    "phone": {
-                      "$ref": "#/components/schemas/user/phone"
-                    }
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "$ref": "#/components/schemas/id"
+                      },
+                      "servicename": {
+                        "$ref": "#/components/schemas/user/serviceName"
+                      },
+                      "phone": {
+                        "$ref": "#/components/schemas/user/phone"
+                      }
+                    } 
                   }
                 }
               }
@@ -219,6 +233,7 @@
       "post": {
         "summary": "posting repair requests",
         "description": "Route to submit repair request. requests should be targeted at a service provider identified by their user id",
+        "operationId": "PostRequest",
         "parameters": [
           {
             "$ref": "#/components/schemas/parameters/token"
@@ -275,7 +290,9 @@
         }
       },
       "get": {
+        "summary": "user get their repair request",
         "description": "Route for users to get all their requests. will return an array of objects containing the requests. each object return hold the request object and object holding the basic info about the service provider",
+        "operationId": "userGetAllRequests",
         "parameters": [
           {
             "$ref": "#/components/schemas/parameters/token"
@@ -283,7 +300,7 @@
         ],
         "responses": {
           "200": {
-            "description": "sucessfully fetch all requests made my user whose id is contained in the token variable",
+            "description": "sucessfully fetch all requests made my user whose id is contained in the token variable. The return value is an array of objects. Each object further contain the request data  in request, and the associated service provider in the user object",
             "content": {
               "application/json": {
                 "type": "array",
@@ -326,9 +343,6 @@
           "401": {
             "$ref": "#/components/schemas/responses/401Response"
           },
-          "404": {
-            "$ref": "#/components/schemas/responses/404Response"
-          },
           "500": {
             "$ref": "#/components/schemas/responses/500Response"
           }
@@ -337,7 +351,9 @@
     },
     "/users/requests/{requestId}": {
       "get": {
+        "summary": "user get a signle request",
         "description": "route that allows logged in users get the request with requestId",
+        "operationId": "userGetOneRequest",
         "parameters": [
           {
             "$ref": "#/components/schemas/parameters/token"
@@ -397,6 +413,7 @@
         }
       },
       "put": {
+        "summary": "user update a request with the id requestId",
         "description": "Route for user to update a request with the id given in requestId",
         "operationId": "userUpdateRequest",
         "parameters": [
@@ -439,7 +456,32 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/request"
+                  "type": "object",
+                  "properties": {
+                    "request": {
+                      "$ref": "#/components/schemas/request"
+                    },
+                    "user": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "$ref": "#/components/schemas/id"
+                        },
+                        "fullname": {
+                          "$ref": "#/components/schemas/user/fullname"
+                        },
+                        "servicename": {
+                          "$ref": "#/components/schemas/user/serviceName"
+                        },
+                        "email": {
+                          "$ref": "#/components/schemas/user/email"
+                        },
+                        "phone": {
+                          "$ref": "#/components/schemas/user/phone"
+                        }     
+                      }
+                    }
+                  }
                 }
               }
             }
@@ -488,20 +530,22 @@
             }
           },
           "400": {
-            "$ref": "#/components/schemas/responses/400Responses"
+            "$ref": "#/components/schemas/responses/400Response"
           },
           "401": {
-            "$ref": "#/components/schemas/responses/401Responses"
+            "$ref": "#/components/schemas/responses/401Response"
           },
           "500": {
-            "$ref": "#/components/schemas/responses/500Responses"
+            "$ref": "#/components/schemas/responses/500Response"
           }
         }
       }
     },
     "/requests": {
       "get": {
+        "summary": "admin get all requests",
         "description": "Route for users to get all their requests. will return an array of objects containing the requests. each object return hold the request object and object holding the basic info about the service provider",
+        "operationId": "adminGetAllRequests",
         "parameters": [
           {
             "$ref": "#/components/schemas/parameters/token"
@@ -509,7 +553,7 @@
         ],
         "responses": {
           "200": {
-            "description": "sucessfully fetch all requests made my user whose id is contained in the token variable",
+            "description": "sucessfully fetch all requests that is targeted at the admin whose id is contained in the token. If there is no request in the database an empty array is returned with 200 status",
             "content": {
               "application/json": {
                 "type": "array",
@@ -546,14 +590,8 @@
               }
             }
           },
-          "400": {
-            "$ref": "#/components/schemas/responses/400Response"
-          },
           "401": {
             "$ref": "#/components/schemas/responses/401Response"
-          },
-          "404": {
-            "$ref": "#/components/schemas/responses/404Response"
           },
           "500": {
             "$ref": "#/components/schemas/responses/500Response"
@@ -564,7 +602,9 @@
     },
     "/requests/{requestId}/approve": {
       "put": {
+        "summary": "admin approve request with id = requestId",
         "description": "This route allows an admin/service provider to approve a request",
+        "operationId": "approveRequest",
         "parameters": [
           {
             "$ref": "#/components/schemas/parameters/token"
@@ -579,7 +619,32 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/request"
+                  "type": "object",
+                  "properties": {
+                    "request": {
+                      "$ref": "#/components/schemas/request"
+                    },
+                    "user": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "$ref": "#/components/schemas/id"
+                        },
+                        "fullname": {
+                          "$ref": "#/components/schemas/user/fullname"
+                        },
+                        "servicename": {
+                          "$ref": "#/components/schemas/user/serviceName"
+                        },
+                        "email": {
+                          "$ref": "#/components/schemas/user/email"
+                        },
+                        "phone": {
+                          "$ref": "#/components/schemas/user/phone"
+                        }     
+                      }
+                    }
+                  }
                 }
               }
             }
@@ -601,7 +666,9 @@
     },
     "/requests/{requestId}/disapprove": {
       "put": {
+        "summary": "admin disapprove request with id = requestId",
         "description": "This route allows an admin/service provider to approve a request",
+        "operationId": "disapproveRequest",
         "parameters": [
           {
             "$ref": "#/components/schemas/parameters/token"
@@ -612,11 +679,36 @@
         ],
         "responses": {
           "200": {
-            "description": "The requiest with requestId was successfully update the status to rejected",
+            "description": "The request with requestId was successfully update the status to rejected",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/request"
+                  "type": "object",
+                  "properties": {
+                    "request": {
+                      "$ref": "#/components/schemas/request"
+                    },
+                    "user": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "$ref": "#/components/schemas/id"
+                        },
+                        "fullname": {
+                          "$ref": "#/components/schemas/user/fullname"
+                        },
+                        "servicename": {
+                          "$ref": "#/components/schemas/user/serviceName"
+                        },
+                        "email": {
+                          "$ref": "#/components/schemas/user/email"
+                        },
+                        "phone": {
+                          "$ref": "#/components/schemas/user/phone"
+                        }     
+                      }
+                    }
+                  }
                 }
               }
             }
@@ -638,7 +730,9 @@
     },
     "/requests/{requestId}/resolve": {
       "put": {
+        "summary": "resolve request with id = requestId",
         "description": "This route allows an admin/service provider to approve a request",
+        "operationId": "resolveRequest",
         "parameters": [
           {
             "$ref": "#/components/schemas/parameters/token"
@@ -653,7 +747,32 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/request"
+                  "type": "object",
+                  "properties": {
+                    "request": {
+                      "$ref": "#/components/schemas/request"
+                    },
+                    "user": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "$ref": "#/components/schemas/id"
+                        },
+                        "fullname": {
+                          "$ref": "#/components/schemas/user/fullname"
+                        },
+                        "servicename": {
+                          "$ref": "#/components/schemas/user/serviceName"
+                        },
+                        "email": {
+                          "$ref": "#/components/schemas/user/email"
+                        },
+                        "phone": {
+                          "$ref": "#/components/schemas/user/phone"
+                        }     
+                      }
+                    }
+                  }
                 }
               }
             }
@@ -720,8 +839,8 @@
           "400": {
             "$ref": "#/components/schemas/responses/400Response"
           },
-          "402": {
-            "$ref": "#/components/schemas/responses/402Response"
+          "401": {
+            "$ref": "#/components/schemas/responses/401Response"
           },
           "500": {
             "$ref": "#/components/schemas/responses/500Response"
@@ -729,7 +848,9 @@
         }
       },
       "get": {
+        "summary": "get messages",
         "description": "Route allows users/admin get messages that are connected to them. ie if they are the sender or receiver",
+        "operationId": "getMessages",
         "parameters": [
           {
             "$ref": "#/components/schemas/parameters/token"
@@ -797,8 +918,8 @@
           "400": {
             "$ref": "#/components/schemas/responses/400Response"
           },
-          "402": {
-            "$ref": "#/components/schemas/responses/402Response"
+          "401": {
+            "$ref": "#/components/schemas/responses/401Response"
           },
           "500": {
             "$ref": "#/components/schemas/responses/500Response"
@@ -826,30 +947,44 @@
           "$ref": "#/components/schemas/id"
         },
         "fullname": {
+          "required": true,
           "type": "string",
           "example": "John Doe"
         },
         "username": {
+          "required": true,
+          "unique": true,
           "type": "string",
           "example": "john"
         },
         "email": {
+          "required": true,
+          "unique": true,
           "type": "string",
           "example": "johnd@example.com"
         },
         "phone": {
+          "required": true,
           "type": "string",
           "example": "07011223344"
         },
         "address": {
+          "required": true,
           "type": "string",
           "example": "address of user"
         },
+        "profile-photo": {
+          "required": false,
+          "type": "string",
+          "format": "binary"
+        },
         "password": {
+          "required": true,
           "type": "string",
           "example": "123ac12"
         },
         "confirmPassword": {
+          "required": true,
           "type": "string",
           "example": "123ac12"
         },
@@ -873,14 +1008,17 @@
             "example": "2018-06-17T23:00:00.000Z"
           },
           "category": {
+            "required": true,
             "type": "string",
             "example": "electrical"
           },
           "description": {
+            "required": true,
             "type": "string",
             "example": "my wall socket got burnt and need replacement"
           },
           "address": {
+            "required": true,
             "type": "string",
             "example": "provide for user making request"
           },
@@ -888,11 +1026,8 @@
             "type": "boolean",
             "example": true
           },
-          "userId": {
-            "type": "integer",
-            "example": 1
-          },
           "adminId": {
+            "required": true,
             "type": "integer",
             "example": 1
           },
@@ -917,6 +1052,7 @@
             "example": "short title"
           },
           "message": {
+            "required": true,
             "type": "string",
             "example": "longer description of message"
           },
@@ -932,6 +1068,7 @@
       },
       "parameters": {
         "token": {
+          "required": true,
           "name": "token",
           "in": "header",
           "description": "Access token generated for the login users upon signup and when he/she sign in",
@@ -940,6 +1077,7 @@
           }
         },
         "receiverId": {
+          "required": true,
           "name": "receiverId",
           "in": "body",
           "description": "the id of the user who the target when sending a messages",
@@ -948,6 +1086,7 @@
           }
         },
         "requestId": {
+          "required": true,
           "name": "requestId",
           "in": "path",
           "description": "unique id assigned to the request when it was created",
@@ -958,7 +1097,8 @@
       },
       "responses": {
         "209Response": {
-          "description": "The response received when trying to create a model with a unique properties that already exist",
+          "summary": "The response received the record already exist",
+          "description": "The response received when trying to create a record with a unique properties that already exist",
           "content": {
             "application/json": {
               "schema": {
@@ -974,7 +1114,8 @@
           }
         },
         "400Response": {
-          "description": "The response receive when a required field is not supplied",
+          "summary": "Missing required field(s)",
+          "description": "The response receive when a required field(s) is not filled when making request",
           "content": {
             "application/json": {
               "schema": {
@@ -990,7 +1131,8 @@
           }
         },
         "401Response": {
-          "description": "The response receive when a required field is not supplied",
+          "summary": "The response when user authenticated fails",
+          "description": "This status code is indicative of error in authenticating user when performing users action. this error may be because user does not send a token along with the request, the token has expired or the token is not valid. it can also result if a user is trying to perform an action that is not legitimate to the user (like a none admin user trying to modify the status of a repair request",
           "content": {
             "application/json": {
               "schema": {
@@ -1006,7 +1148,8 @@
           }
         },
         "404Response": {
-          "description": "The response received when a model is not found",
+          "summary": "The response received when a model is not found",
+          "description": "The response received when The data you are trying to fetch could not found from the database. This error can occur if you provide the data (id) for identifying the requested data",
           "content": {
             "application/json": {
               "schema": {
@@ -1022,7 +1165,8 @@
           }
         },
         "500Response": {
-          "description": "The response received when the request could not be proces be cause the server could not be reached or something when wrong while processing the request",
+          "summary": "Response when an error occur while the server is processing you request",
+          "description": "The response received when the request could not be process because the server could not be reached or something when wrong while processing the request. To avoid such error always ensure all fields are supplied and properly named. Fields can be null string ('') in which case it will be catch by 400 response if it is required",
           "content": {
             "application/json": {
               "schema": {

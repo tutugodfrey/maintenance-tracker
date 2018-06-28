@@ -144,7 +144,7 @@ const RequestController = class {
       .then((request) => {
         if (request) {
           // users should not be able to modify the status of a request
-          if (request.status === 'approved' || request.status === 'resolved') {
+          if (request.status === 'pending' || request.status === 'resolved') {
             return handleResponse(res, 200, 'request cannot be modify after it has been approved or resolved');
           }
           return requests

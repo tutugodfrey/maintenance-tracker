@@ -88,7 +88,7 @@ const displayPhone = () => {
 }
 
 const displayRequests = (responseData) => {
-  if (responseData.message === 'authentication fail! invalid Token' || responseData.message === 'authentication fail! please send a token') {
+  if (responseData.message === 'authentication fail! invalid token' || responseData.message === 'authentication fail! please send a token') {
     storageHandler.redirectUser(responseData)
   }
   if (responseData.message) {

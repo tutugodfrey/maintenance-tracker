@@ -128,6 +128,7 @@ var UsersController = function () {
           if (passwordConfirmed) {
             var authenKeys = {
               username: user.username,
+              email: user.email,
               fullname: user.fullname,
               isAdmin: user.isAdmin,
               id: user.id,

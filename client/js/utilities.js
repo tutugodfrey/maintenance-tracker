@@ -159,7 +159,7 @@
 
   showMessageModal (self) {
     // self = the instance of this class
-    if (self === 'undefined') {
+    if (!self) {
       self = this;
     }
     if(document.getElementById('message-modal')) {
@@ -322,7 +322,7 @@
   }
 
   displayMessages(responseData) {
-    if (responseData.message === 'authentication fail! invalid Token' || responseData.message === 'authentication fail! please send a token') {
+    if (responseData.message === 'authentication fail! invalid token' || responseData.message === 'authentication fail! please send a token') {
       storageHandler.redirectUser(responseData)
     }
     if (responseData.message) {
@@ -439,7 +439,7 @@ class StorageHandler {
       window.location.href = '/signin.html';
       return
     }
-    if (userData.message === 'authentication fail! invalid Token' || userData.message === 'authentication fail! please send a token') { // userData = response from server on diff operations
+    if (userData.message === 'authentication fail! invalid token' || userData.message === 'authentication fail! please send a token') { // userData = response from server on diff operations
       // remove userdata from localStorage, redirect user to signin page
       localStorage.removeItem('userdata');
       window.location.href = '/signin.html';

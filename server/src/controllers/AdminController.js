@@ -45,6 +45,7 @@ const AdminController = class {
               .catch(() => handleResponse(res, 500, 'something went wrong. please try again'));
           });
         }
+        // return handleResponse(res, 200, []);
       })
       .catch(() => handleResponse(res, 500, 'something went wrong. please try again'));
   }

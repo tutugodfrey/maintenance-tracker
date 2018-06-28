@@ -65,6 +65,7 @@ var AdminController = function () {
             });
           });
         }
+        // return handleResponse(res, 200, []);
       }).catch(function () {
         return (0, _services.handleResponse)(res, 500, 'something went wrong. please try again');
       });

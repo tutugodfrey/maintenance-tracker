@@ -12,12 +12,11 @@ export const validateSignup = (req, res, next) => {
     isAdmin,
     serviceName,
   } = req.body;
-
   if (username.trim() === '' || fullname.trim() === '' || email.trim() === ''
   || password.trim() === '' || confirmPassword.trim() === '' || address.trim() === '' || phone.trim() === '') {
     return handleResponse(res, 400, 'missing required field');
   }
-  const emailRegExp = /\w+@\w+\.(net|com|org)/;
+  const emailRegExp = /\w+@\w+\.(net|com|org)/i;
   if (!email.match(emailRegExp)) {
     return handleResponse(res, 400, 'typeError: invalid email format');
   }

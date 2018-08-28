@@ -19,11 +19,10 @@ var validateSignup = exports.validateSignup = function validateSignup(req, res, 
       isAdmin = _req$body.isAdmin,
       serviceName = _req$body.serviceName;
 
-
   if (username.trim() === '' || fullname.trim() === '' || email.trim() === '' || password.trim() === '' || confirmPassword.trim() === '' || address.trim() === '' || phone.trim() === '') {
     return (0, _services.handleResponse)(res, 400, 'missing required field');
   }
-  var emailRegExp = /\w+@\w+\.(net|com|org)/;
+  var emailRegExp = /\w+@\w+\.(net|com|org)/i;
   if (!email.match(emailRegExp)) {
     return (0, _services.handleResponse)(res, 400, 'typeError: invalid email format');
   }

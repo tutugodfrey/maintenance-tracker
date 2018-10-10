@@ -35,7 +35,13 @@ const RequestController = class {
                     status: 'awaiting confirmation',
                     urgent: urgent || false,
                   })
-                  .then(request => handleResponse(res, 201, request))
+                  .then(request => {
+                    const newRequest = {
+                      request,
+                      user:  admin,
+                    };
+                    return handleResponse(res, 201, newRequest)
+                  })
                   .catch(() => handleResponse(res, 500, 'something went wrong! please try again later'));
               }
               return handleResponse(res, 404, 'service not found');

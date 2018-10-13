@@ -54,7 +54,11 @@ var RequestController = function () {
                 status: 'awaiting confirmation',
                 urgent: urgent || false
               }).then(function (request) {
-                return (0, _services.handleResponse)(res, 201, request);
+                var newRequest = {
+                  request: request,
+                  user: admin
+                };
+                return (0, _services.handleResponse)(res, 201, newRequest);
               }).catch(function () {
                 return (0, _services.handleResponse)(res, 500, 'something went wrong! please try again later');
               });

@@ -66,7 +66,7 @@ exports.default = describe('Admin controller test', function () {
   describe('Update requests', function () {
     describe('approve request method', function () {
       it('should update a request status to pending when approved', function () {
-        return _chai2.default.request(_app2.default).put('/api/v1/requests/' + _userRequestTest.createdRequest1.id + '/approve').set('token', signedInUser.token).then(function (res) {
+        return _chai2.default.request(_app2.default).put('/api/v1/requests/' + _userRequestTest.createdRequest1.request.id + '/approve').set('token', signedInUser.token).then(function (res) {
           expect(res).to.have.status(200);
           expect(res.body).to.be.an('object');
           expect(res.body).to.have.property('request');
@@ -76,7 +76,7 @@ exports.default = describe('Admin controller test', function () {
       });
 
       it('users should not be able to mark their requests as approve', function () {
-        return _chai2.default.request(_app2.default).put('/api/v1/requests/' + _userRequestTest.createdRequest1.id + '/approve').set('token', _signupTest.regularUser1.token).then(function (res) {
+        return _chai2.default.request(_app2.default).put('/api/v1/requests/' + _userRequestTest.createdRequest1.request.id + '/approve').set('token', _signupTest.regularUser1.token).then(function (res) {
           expect(res).to.have.status(401);
           expect(res.body).to.be.an('object');
           expect(res.body).to.have.property('message');
@@ -105,7 +105,7 @@ exports.default = describe('Admin controller test', function () {
 
     describe('reject request method', function () {
       it('should reject a request', function () {
-        return _chai2.default.request(_app2.default).put('/api/v1/requests/' + _userRequestTest.createdRequest1.id + '/disapprove').set('token', signedInUser.token).then(function (res) {
+        return _chai2.default.request(_app2.default).put('/api/v1/requests/' + _userRequestTest.createdRequest1.request.id + '/disapprove').set('token', signedInUser.token).then(function (res) {
           expect(res).to.have.status(200);
           expect(res.body).to.be.an('object');
           expect(res.body).to.have.property('request');
@@ -144,7 +144,7 @@ exports.default = describe('Admin controller test', function () {
 
     describe('resolve request method', function () {
       it('should mark a request as resolve', function () {
-        return _chai2.default.request(_app2.default).put('/api/v1/requests/' + _userRequestTest.createdRequest1.id + '/resolve').set('token', signedInUser.token).then(function (res) {
+        return _chai2.default.request(_app2.default).put('/api/v1/requests/' + _userRequestTest.createdRequest1.request.id + '/resolve').set('token', signedInUser.token).then(function (res) {
           expect(res).to.have.status(200);
           expect(res.body).to.be.an('object');
           expect(res.body).to.have.property('request');
@@ -154,7 +154,7 @@ exports.default = describe('Admin controller test', function () {
       });
 
       it('users should not be able to resolve their requests', function () {
-        return _chai2.default.request(_app2.default).put('/api/v1/requests/' + _userRequestTest.createdRequest1.id + '/resolve').set('token', _signupTest.regularUser1.token).then(function (res) {
+        return _chai2.default.request(_app2.default).put('/api/v1/requests/' + _userRequestTest.createdRequest1.request.id + '/resolve').set('token', _signupTest.regularUser1.token).then(function (res) {
           expect(res).to.have.status(401);
           expect(res.body).to.be.an('object');
           expect(res.body).to.have.property('message');

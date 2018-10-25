@@ -57,7 +57,7 @@ export default describe('Admin controller test', () => {
     describe('approve request method', () => {
       it('should update a request status to pending when approved', () => {
         return chai.request(app)
-          .put(`/api/v1/requests/${createdRequest1.id}/approve`)
+          .put(`/api/v1/requests/${createdRequest1.request.id}/approve`)
           .set('token', signedInUser.token)
           .then((res) => {
             expect(res).to.have.status(200);
@@ -70,7 +70,7 @@ export default describe('Admin controller test', () => {
 
       it('users should not be able to mark their requests as approve', () => {
         return chai.request(app)
-          .put(`/api/v1/requests/${createdRequest1.id}/approve`)
+          .put(`/api/v1/requests/${createdRequest1.request.id}/approve`)
           .set('token', regularUser1.token)
           .then((res) => {
             expect(res).to.have.status(401);
@@ -108,7 +108,7 @@ export default describe('Admin controller test', () => {
     describe('reject request method', () => {
       it('should reject a request', () => {
         return chai.request(app)
-          .put(`/api/v1/requests/${createdRequest1.id}/disapprove`)
+          .put(`/api/v1/requests/${createdRequest1.request.id}/disapprove`)
           .set('token', signedInUser.token)
           .then((res) => {
             expect(res).to.have.status(200);
@@ -159,7 +159,7 @@ export default describe('Admin controller test', () => {
     describe('resolve request method', () => {
       it('should mark a request as resolve', () => {
         return chai.request(app)
-          .put(`/api/v1/requests/${createdRequest1.id}/resolve`)
+          .put(`/api/v1/requests/${createdRequest1.request.id}/resolve`)
           .set('token', signedInUser.token)
           .then((res) => {
             expect(res).to.have.status(200);
@@ -172,7 +172,7 @@ export default describe('Admin controller test', () => {
 
       it('users should not be able to resolve their requests', () => {
         return chai.request(app)
-          .put(`/api/v1/requests/${createdRequest1.id}/resolve`)
+          .put(`/api/v1/requests/${createdRequest1.request.id}/resolve`)
           .set('token', regularUser1.token)
           .then((res) => {
             expect(res).to.have.status(401);

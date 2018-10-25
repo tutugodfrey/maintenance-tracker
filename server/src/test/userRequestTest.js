@@ -76,8 +76,9 @@ export default describe('Requests controller', () => {
           Object.assign(createdRequest1, res.body);
           expect(res).to.have.status(201);
           expect(res.body).to.be.an('object');
-          expect(res.body.id).to.equal(1);
-          expect(res.body).to.have.any.keys(['description', 'category', 'userId']);
+          expect(res.body.request.id).to.equal(1);
+          expect(res.body).to.have.property('user');
+          expect(res.body.request).to.have.any.keys(['description', 'category', 'userId']);
         });
     });
 
@@ -97,11 +98,11 @@ export default describe('Requests controller', () => {
           Object.assign(createdRequest2, res.body);
           expect(res).to.have.status(201);
           expect(res.body).to.be.an('object');
-          expect(res.body.id).to.equal(2);
-          expect(res.body).to.have.any.keys('description');
-          expect(res.body).to.have.any.keys('category');
-          expect(res.body).to.have.any.keys('userId');
-          expect(res.body).to.have.any.keys('adminId');
+          expect(res.body.request.id).to.equal(2);
+          expect(res.body.request).to.have.any.keys('description');
+          expect(res.body.request).to.have.any.keys('category');
+          expect(res.body.request).to.have.any.keys('userId');
+          expect(res.body.request).to.have.any.keys('adminId');
         });
     });
     it('should not create request for a service (adminId) that does not exist', () => {
@@ -141,7 +142,7 @@ export default describe('Requests controller', () => {
   // test for get ../users/requests/:requestId
   describe('get one request method ', () => {
     it('should return a request with the given id for a logged in user', () => {
-      const { id } = createdRequest1;
+      const { id } = createdRequest1.request;
       return chai.request(app)
         .get(`/api/v1/users/requests/${id}`)
         .set('token', signedInUser.token)
@@ -169,7 +170,7 @@ export default describe('Requests controller', () => {
     });
 
     it('should return not found for the requestId with no matching userId', () => {
-      const { id } = createdRequest1;
+      const { id } = createdRequest1.request;
       return chai.request(app)
         .get(`/api/v1/users/requests/${id}`)
         .set('token', regularUser2.token)
@@ -194,7 +195,7 @@ export default describe('Requests controller', () => {
     });
 
     it('should return authorization error when token is invalid', () => {
-      const { id } = createdRequest1;
+      const { id } = createdRequest1.request;
       return chai.request(app)
         .get(`/api/v1/users/requests/${id}`)
         .set('token', 'signedInUser.token.invalidtoken')
@@ -244,7 +245,7 @@ export default describe('Requests controller', () => {
           expect(res.body[0]).to.have.property('user');
           expect(res.body[0].user).to.have.property('serviceName');
           expect(res.body[0].user.serviceName).to.equal(adminUser.serviceName);
-          expect(res.body[0].request).to.eql(createdRequest1);
+          expect(res.body[0].request).to.eql(createdRequest1.request);
         });
     });
 
@@ -262,7 +263,7 @@ export default describe('Requests controller', () => {
 
   describe('Update request method', () => {
     it('users should be able to modify the other field except the status of a request', () => {
-      const { id, adminId } = createdRequest1;
+      const { id, adminId } = createdRequest1.request;
       return chai.request(app)
         .put(`/api/v1/users/requests/${id}`)
         .set('token', signedInUser.token)
@@ -278,7 +279,7 @@ export default describe('Requests controller', () => {
     });
 
     it('users should not modify the status of a request', () => {
-      const { id, adminId } = createdRequest1;
+      const { id, adminId } = createdRequest1.request;
       return chai.request(app)
         .put(`/api/v1/users/requests/${id}`)
         .set('token', signedInUser.token)
@@ -294,7 +295,7 @@ export default describe('Requests controller', () => {
     });
 
     it('should return not found for a request that does not exist', () => {
-      const { adminId } = createdRequest1;
+      const { adminId } = createdRequest1.request;
       return chai.request(app)
         .put('/api/v1/users/requests/20')
         .set('token', signedInUser.token)
@@ -311,7 +312,7 @@ export default describe('Requests controller', () => {
     });
 
     it('should return authorization error for invalid token', () => {
-      const { id, adminId } = createdRequest1;
+      const { id, adminId } = createdRequest1.request;
       return chai.request(app)
         .put(`/api/v1/users/requests/${id}`)
         .set('token', 'regularUser2.tokeninvalidtoken')
@@ -331,7 +332,7 @@ export default describe('Requests controller', () => {
   // test for delete ../users/requests/:requestId
   describe('delete request method', () => {
     it('should delete a request', () => {
-      const { id } = createdRequest2;
+      const { id } = createdRequest2.request;
       return chai.request(app)
         .delete(`/api/v1/users/requests/${id}`)
         .set('token', signedInUser.token)

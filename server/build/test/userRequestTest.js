@@ -82,8 +82,9 @@ exports.default = describe('Requests controller', function () {
         Object.assign(createdRequest1, res.body);
         expect(res).to.have.status(201);
         expect(res.body).to.be.an('object');
-        expect(res.body.id).to.equal(1);
-        expect(res.body).to.have.any.keys(['description', 'category', 'userId']);
+        expect(res.body.request.id).to.equal(1);
+        expect(res.body).to.have.property('user');
+        expect(res.body.request).to.have.any.keys(['description', 'category', 'userId']);
       });
     });
 
@@ -99,11 +100,11 @@ exports.default = describe('Requests controller', function () {
         Object.assign(createdRequest2, res.body);
         expect(res).to.have.status(201);
         expect(res.body).to.be.an('object');
-        expect(res.body.id).to.equal(2);
-        expect(res.body).to.have.any.keys('description');
-        expect(res.body).to.have.any.keys('category');
-        expect(res.body).to.have.any.keys('userId');
-        expect(res.body).to.have.any.keys('adminId');
+        expect(res.body.request.id).to.equal(2);
+        expect(res.body.request).to.have.any.keys('description');
+        expect(res.body.request).to.have.any.keys('category');
+        expect(res.body.request).to.have.any.keys('userId');
+        expect(res.body.request).to.have.any.keys('adminId');
       });
     });
     it('should not create request for a service (adminId) that does not exist', function () {
@@ -135,7 +136,7 @@ exports.default = describe('Requests controller', function () {
   // test for get ../users/requests/:requestId
   describe('get one request method ', function () {
     it('should return a request with the given id for a logged in user', function () {
-      var id = createdRequest1.id;
+      var id = createdRequest1.request.id;
 
       return _chai2.default.request(_app2.default).get('/api/v1/users/requests/' + id).set('token', signedInUser.token).then(function (res) {
         expect(res).to.have.status(200);
@@ -158,7 +159,7 @@ exports.default = describe('Requests controller', function () {
     });
 
     it('should return not found for the requestId with no matching userId', function () {
-      var id = createdRequest1.id;
+      var id = createdRequest1.request.id;
 
       return _chai2.default.request(_app2.default).get('/api/v1/users/requests/' + id).set('token', _signupTest.regularUser2.token).then(function (res) {
         expect(res).to.have.status(404);
@@ -178,7 +179,7 @@ exports.default = describe('Requests controller', function () {
     });
 
     it('should return authorization error when token is invalid', function () {
-      var id = createdRequest1.id;
+      var id = createdRequest1.request.id;
 
       return _chai2.default.request(_app2.default).get('/api/v1/users/requests/' + id).set('token', 'signedInUser.token.invalidtoken').then(function (res) {
         expect(res).to.have.status(401);
@@ -218,7 +219,7 @@ exports.default = describe('Requests controller', function () {
         expect(res.body[0]).to.have.property('user');
         expect(res.body[0].user).to.have.property('serviceName');
         expect(res.body[0].user.serviceName).to.equal(_signupTest.adminUser.serviceName);
-        expect(res.body[0].request).to.eql(createdRequest1);
+        expect(res.body[0].request).to.eql(createdRequest1.request);
       });
     });
 
@@ -233,8 +234,9 @@ exports.default = describe('Requests controller', function () {
 
   describe('Update request method', function () {
     it('users should be able to modify the other field except the status of a request', function () {
-      var id = createdRequest1.id,
-          adminId = createdRequest1.adminId;
+      var _createdRequest1$requ = createdRequest1.request,
+          id = _createdRequest1$requ.id,
+          adminId = _createdRequest1$requ.adminId;
 
       return _chai2.default.request(_app2.default).put('/api/v1/users/requests/' + id).set('token', signedInUser.token).send({
         adminId: adminId,
@@ -247,8 +249,9 @@ exports.default = describe('Requests controller', function () {
     });
 
     it('users should not modify the status of a request', function () {
-      var id = createdRequest1.id,
-          adminId = createdRequest1.adminId;
+      var _createdRequest1$requ2 = createdRequest1.request,
+          id = _createdRequest1$requ2.id,
+          adminId = _createdRequest1$requ2.adminId;
 
       return _chai2.default.request(_app2.default).put('/api/v1/users/requests/' + id).set('token', signedInUser.token).send({
         adminId: adminId,
@@ -261,7 +264,7 @@ exports.default = describe('Requests controller', function () {
     });
 
     it('should return not found for a request that does not exist', function () {
-      var adminId = createdRequest1.adminId;
+      var adminId = createdRequest1.request.adminId;
 
       return _chai2.default.request(_app2.default).put('/api/v1/users/requests/20').set('token', signedInUser.token).send({
         adminId: adminId,
@@ -275,8 +278,9 @@ exports.default = describe('Requests controller', function () {
     });
 
     it('should return authorization error for invalid token', function () {
-      var id = createdRequest1.id,
-          adminId = createdRequest1.adminId;
+      var _createdRequest1$requ3 = createdRequest1.request,
+          id = _createdRequest1$requ3.id,
+          adminId = _createdRequest1$requ3.adminId;
 
       return _chai2.default.request(_app2.default).put('/api/v1/users/requests/' + id).set('token', 'regularUser2.tokeninvalidtoken').send({
         adminId: adminId,
@@ -293,7 +297,7 @@ exports.default = describe('Requests controller', function () {
   // test for delete ../users/requests/:requestId
   describe('delete request method', function () {
     it('should delete a request', function () {
-      var id = createdRequest2.id;
+      var id = createdRequest2.request.id;
 
       return _chai2.default.request(_app2.default).delete('/api/v1/users/requests/' + id).set('token', signedInUser.token).then(function (res) {
         expect(res).to.have.status(200);

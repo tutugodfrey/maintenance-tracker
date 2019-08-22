@@ -1,4 +1,4 @@
-
+/* eslint-disable class-methods-use-this */
  class DomElementActions {
   constructor() {
     this.defaultTab;
@@ -11,7 +11,7 @@
     // this._changeClassValue = this._changeClassValue;
   }
   // add eventlistener to elements
-  newEvent (elementObject,  eventType, callBack, callBackArgument) {
+  newEvent (elementObject, eventType, callBack, callBackArgument) {
     elementObject.addEventListener(eventType, function(event) {
     event.preventDefault(); 
       if(callBackArgument === undefined) {
@@ -19,21 +19,20 @@
       } else {
         callBack(callBackArgument);
       }
-    },
-    false );
-  }   // end newEvent
+    }, false);
+  } // end newEvent
 
   // change the attribute of elements
-  changeAttribute (eleObject, attrToChange, newAttr, removeAttr) {
+  changeAttribute(eleObject, attrToChange, newAttr, removeAttr) {
     const eleAttr = eleObject.getAttribute(attrToChange);
     if (eleAttr === null || eleAttr !== newAttr) 	{
       //set the attribute and the image become large
       eleObject.setAttribute(attrToChange, newAttr);
     } else if (eleAttr === newAttr && removeAttr === 'yes') {
       eleObject.removeAttribute(attrToChange);
-    }  else if (eleAttr === newAttr && removeAttr === 'no') {
+    } else if (eleAttr === newAttr && removeAttr === 'no') {
       //no action taken
-    } else if(eleAttr === newAttr && (removeAttr !== 'yes' || removeAttr !== 'no' || removeAttr !== "undefined")){
+    } else if (eleAttr === newAttr && (removeAttr !== 'yes' || removeAttr !== 'no' || removeAttr !== "undefined")){
       eleObject.setAttribute(attrToChange, removeAttr);
     } 
   }		//end changeClass
@@ -452,7 +451,8 @@ class StorageHandler {
   }
 
   signout() {
-    window.location.href = '/signin.html';
+    window.localStorage.clear();
+    window.location.href = '/';
     return
   }
 }
